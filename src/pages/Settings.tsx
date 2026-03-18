@@ -77,8 +77,8 @@ export default function Settings() {
             <Key size={18} className="text-lecko-blue" />
             <h2 className="font-bold text-foreground">Clé API OpenAI</h2>
             {apiKey ? (
-              <span className="ml-auto text-xs font-semibold text-green-600 dark:text-green-400 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+              <span className="ml-auto text-xs font-semibold text-lecko-green flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-lecko-green inline-block" />
                 Configurée
               </span>
             ) : (
