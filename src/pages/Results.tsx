@@ -334,6 +334,13 @@ export default function Results() {
             </div>
           </div>
 
+          {/* ROI Calculator */}
+          <RoiCalculator
+            hoursPerWeek={result.heures_economisees_semaine}
+            metier={result.metier}
+            onParamsChange={handleRoiParams}
+          />
+
           {/* Free mode upsell banner */}
           {analysisSource === "local" && (
             <motion.div
