@@ -4,6 +4,7 @@ import { ArrowRight, Target, Bot, BarChart3, Sparkles, Users } from "lucide-reac
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ApiKeyModal from "@/components/ApiKeyModal";
+import Footer from "@/components/Footer";
 import { getApiKey } from "@/lib/aiProvider";
 import { findInLocalDatabase, FREE_JOB_LABELS, getSimilarJobs } from "@/data/jobDatabase";
 
