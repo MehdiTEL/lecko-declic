@@ -224,6 +224,10 @@ export default function Results() {
               >
                 Réessayer
               </button>
+              <p className="text-xs text-foreground-muted">
+                💡 Vous pouvez aussi essayer avec un autre fournisseur dans les{" "}
+                <Link to="/parametres" className="text-lecko-blue hover:underline">paramètres</Link>.
+              </p>
             </div>
           </div>
         </div>
