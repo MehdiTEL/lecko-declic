@@ -10,6 +10,7 @@ import TaskCard from "@/components/TaskCard";
 import LeckoCTA from "@/components/LeckoCTA";
 import MicroCTA from "@/components/MicroCTA";
 import Footer from "@/components/Footer";
+import RoiCalculator from "@/components/RoiCalculator";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
 import { saveToHistory } from "@/lib/history";
@@ -49,6 +50,13 @@ export default function Results() {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
   const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
+  // ROI state
+  const [roiHourlyRate, setRoiHourlyRate] = useState(45);
+  const [roiNbPeople, setRoiNbPeople] = useState(1);
+  const handleRoiParams = useCallback((r: number, p: number) => {
+    setRoiHourlyRate(r);
+    setRoiNbPeople(p);
+  }, []);
 
   const minLoadMs = 3000;
 
@@ -326,6 +334,13 @@ export default function Results() {
             </div>
           </div>
 
+          {/* ROI Calculator */}
+          <RoiCalculator
+            hoursPerWeek={result.heures_economisees_semaine}
+            metier={result.metier}
+            onParamsChange={handleRoiParams}
+          />
+
           {/* Free mode upsell banner */}
           {analysisSource === "local" && (
             <motion.div
@@ -439,7 +454,12 @@ export default function Results() {
           {/* Task cards */}
           <div className="space-y-3">
             {filteredTasks.map((task, i) => (
-              <TaskCard key={task.nom + i} task={task} index={i} />
+              <TaskCard
+                key={task.nom + i}
+                task={task}
+                index={i}
+                roiPerWeek={task.temps_gagne_heures_semaine * roiHourlyRate * roiNbPeople}
+              />
             ))}
             {filteredTasks.length === 0 && (
               <div className="lecko-card p-8 text-center text-foreground-muted">

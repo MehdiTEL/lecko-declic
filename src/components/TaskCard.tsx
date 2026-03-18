@@ -35,9 +35,10 @@ const toolConfig: Record<ToolType, { icon: string; badgeClass: string }> = {
 interface TaskCardProps {
   task: AnalysisTask;
   index: number;
+  roiPerWeek?: number; // €/week for this task
 }
 
-export default function TaskCard({ task, index }: TaskCardProps) {
+export default function TaskCard({ task, index, roiPerWeek }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
   const cat = categoryConfig[task.categorie];
   const tool = toolConfig[task.type_outil];
@@ -101,9 +102,16 @@ export default function TaskCard({ task, index }: TaskCardProps) {
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${tool.badgeClass}`}>
                   {tool.icon} {task.type_outil}
                 </span>
-                <span className="flex items-center gap-1 text-sm font-bold text-lecko-blue">
-                  <Clock size={13} />⏱ ~{task.temps_gagne_heures_semaine}h / semaine
-                </span>
+                <div className="flex items-center gap-3">
+                  {roiPerWeek !== undefined && roiPerWeek > 0 && (
+                    <span className="text-sm font-bold text-lecko-blue">
+                      💶 ~{Math.round(roiPerWeek).toLocaleString("fr-FR")}&nbsp;€/sem.
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1 text-sm font-bold text-lecko-blue">
+                    <Clock size={13} />⏱ ~{task.temps_gagne_heures_semaine}h / semaine
+                  </span>
+                </div>
               </div>
             </div>
           </motion.div>
