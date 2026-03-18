@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { ArrowRight, Search, BarChart3, Wrench, Play, Award, ChevronLeft, ChevronRight, Users } from "lucide-react";
+import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ApiKeyModal from "@/components/ApiKeyModal";
 import Footer from "@/components/Footer";
 import { getApiKey } from "@/lib/aiProvider";
 import { findInLocalDatabase, FREE_JOB_LABELS, getSimilarJobs } from "@/data/jobDatabase";
+import { supabase } from "@/integrations/supabase/client";
 
 const DECLIC_PHASES = [
   {
@@ -46,26 +47,6 @@ const DECLIC_PHASES = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote: "La méthode DÉCLIC nous a permis d'identifier 12 automatisations prioritaires en une journée. En 3 mois, nous avons récupéré l'équivalent d'un mi-temps.",
-    name: "Marie Dupont",
-    title: "Directrice des opérations, Groupe bancaire",
-    initials: "MD",
-  },
-  {
-    quote: "Ce qui m'a frappé, c'est la rigueur de l'approche : on n'automatise pas pour automatiser. On commence par comprendre. Résultat : zéro projet abandonné.",
-    name: "Thomas Laurent",
-    title: "DSI, Collectivité territoriale",
-    initials: "TL",
-  },
-  {
-    quote: "L'outil de diagnostic m'a ouvert les yeux sur des tâches que je faisais depuis des années sans questionner. En 2 semaines, j'avais mon premier workflow en production.",
-    name: "Sophie Martin",
-    title: "Chef de projet, Équipementier automobile",
-    initials: "SM",
-  },
-];
 
 // ── No-match modal ─────────────────────────────────────────────────────────────
 
@@ -139,6 +120,114 @@ function NoMatchModal({ metier, onClose, onUseApi, similarJobs, onPickJob }: NoM
 
 // ── Main Page ──────────────────────────────────────────────────────────────────
 
+// ── Contact Form ───────────────────────────────────────────────────────────────
+
+function ContactSection() {
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
+  const [entreprise, setEntreprise] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !prenom.trim() || !nom.trim()) return;
+    setSending(true);
+    setErr(null);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from("leads") as any).insert({
+        nom: `${prenom.trim()} ${nom.trim()}`,
+        email: email.trim(),
+        message: entreprise.trim() ? `Entreprise : ${entreprise.trim()}` : null,
+        source: "contact_accueil",
+      });
+      if (error) throw error;
+      setSent(true);
+    } catch {
+      setErr("Une erreur est survenue. Réessayez ou écrivez-nous à contact@lecko.fr");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (sent) {
+    return (
+      <div className="text-center py-12">
+        <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle size={24} className="text-emerald-600" />
+        </div>
+        <h3 className="text-xl font-bold text-foreground mb-2">Message envoyé !</h3>
+        <p className="text-foreground-secondary">Notre équipe vous recontactera dans les 48h.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Prénom *</label>
+        <div className="relative">
+          <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            required value={prenom} onChange={e => setPrenom(e.target.value)}
+            placeholder="Jean"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Nom *</label>
+        <div className="relative">
+          <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            required value={nom} onChange={e => setNom(e.target.value)}
+            placeholder="Dupont"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Email *</label>
+        <div className="relative">
+          <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            type="email" required value={email} onChange={e => setEmail(e.target.value)}
+            placeholder="jean.dupont@entreprise.fr"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Entreprise</label>
+        <div className="relative">
+          <Building2 size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            value={entreprise} onChange={e => setEntreprise(e.target.value)}
+            placeholder="Nom de votre organisation"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      {err && <p className="sm:col-span-2 text-sm text-destructive">{err}</p>}
+      <div className="sm:col-span-2">
+        <button
+          type="submit"
+          disabled={!email.trim() || !prenom.trim() || !nom.trim() || sending}
+          className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-lecko-blue text-white font-semibold text-sm hover:bg-lecko-blue/90 transition-colors disabled:opacity-50"
+        >
+          <Send size={15} />
+          {sending ? "Envoi en cours…" : "Envoyer"}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+// ── Main Page ──────────────────────────────────────────────────────────────────
+
 export default function Index() {
   const [metier, setMetier] = useState("");
   const [pendingJob, setPendingJob] = useState<string | null>(null);
@@ -146,22 +235,12 @@ export default function Index() {
   const [showNoMatchModal, setShowNoMatchModal] = useState(false);
   const [noMatchMetier, setNoMatchMetier] = useState("");
   const [similarJobs, setSimilarJobs] = useState<string[]>([]);
-  const [testimonialIdx, setTestimonialIdx] = useState(0);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (searchParams.get("requireKey") === "1") setShowApiModal(true);
   }, [searchParams]);
-
-  // Auto-rotate testimonials
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setTestimonialIdx((i) => (i + 1) % TESTIMONIALS.length);
-    }, 6000);
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, []);
 
   const handleAnalyze = (value?: string) => {
     const job = (value ?? metier).trim();
@@ -187,7 +266,7 @@ export default function Index() {
     if (job) navigate(`/resultats?metier=${encodeURIComponent(job)}`);
   };
 
-  const testimonial = TESTIMONIALS[testimonialIdx];
+  
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -445,73 +524,20 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── TESTIMONIAL ──────────────────────────────────────────────────────── */}
+      {/* ── CONTACT ──────────────────────────────────────────────────────────── */}
       <section className="px-4 py-20 section-alt">
         <div className="max-w-3xl mx-auto">
-          <div className="relative">
-            {/* Big decorative quote */}
-            <span
-              className="absolute -top-4 -left-2 text-6xl font-bold leading-none select-none pointer-events-none"
-              style={{ color: "hsl(var(--lecko-orange))", opacity: 0.4 }}
-              aria-hidden
-            >«</span>
-
-            <motion.div
-              key={testimonialIdx}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="pl-8"
-              style={{ borderLeft: "3px solid hsl(var(--lecko-blue))" }}
-            >
-              <p className="text-xl italic text-foreground-secondary leading-relaxed mb-6">
-                {testimonial.quote}
-              </p>
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
-                  style={{ backgroundColor: "hsl(var(--lecko-blue))" }}
-                >
-                  {testimonial.initials}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">{testimonial.name}</p>
-                  <p className="text-xs text-foreground-muted">{testimonial.title}</p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Navigation */}
-            <div className="flex items-center gap-2 mt-8 pl-8">
-              <button
-                onClick={() => { setTestimonialIdx((i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length); }}
-                className="p-2 rounded-lg border border-border hover:border-lecko-blue hover:text-lecko-blue text-foreground-muted transition-colors"
-                aria-label="Témoignage précédent"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={() => { setTestimonialIdx((i) => (i + 1) % TESTIMONIALS.length); }}
-                className="p-2 rounded-lg border border-border hover:border-lecko-blue hover:text-lecko-blue text-foreground-muted transition-colors"
-                aria-label="Témoignage suivant"
-              >
-                <ChevronRight size={16} />
-              </button>
-              <div className="flex items-center gap-1.5 ml-2">
-                {TESTIMONIALS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setTestimonialIdx(i)}
-                    className="w-1.5 h-1.5 rounded-full transition-all"
-                    style={{
-                      backgroundColor: i === testimonialIdx ? "hsl(var(--lecko-blue))" : "hsl(var(--border))",
-                      width: i === testimonialIdx ? "16px" : "6px",
-                    }}
-                    aria-label={`Témoignage ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="mb-10">
+            <p className="label-uppercase mb-3 text-lecko-blue">Contact</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Parlons de votre <span className="underline-orange">projet</span>
+            </h2>
+            <p className="text-lg text-foreground-secondary" style={{ maxWidth: "540px" }}>
+              Renseignez vos coordonnées et notre équipe vous recontactera pour discuter de vos besoins en automatisation.
+            </p>
+          </div>
+          <div className="lecko-card p-8">
+            <ContactSection />
           </div>
         </div>
       </section>
