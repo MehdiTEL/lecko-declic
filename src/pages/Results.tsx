@@ -47,6 +47,8 @@ export default function Results() {
   const [showFilters, setShowFilters] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const resultsRef = useRef<HTMLDivElement>(null);
+  const [ctaVisible, setCtaVisible] = useState(false);
+  const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
 
   const minLoadMs = 3000;
 
