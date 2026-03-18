@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, Target, Bot, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import ApiKeyModal from "@/components/ApiKeyModal";
+import { getApiKey } from "@/lib/apiKey";
 
 const SUGGESTIONS = [
   "Consultant",
@@ -40,12 +42,26 @@ const HOW_IT_WORKS = [
 
 export default function Index() {
   const [metier, setMetier] = useState("");
+  const [pendingJob, setPendingJob] = useState<string | null>(null);
+  const [showApiModal, setShowApiModal] = useState(false);
   const navigate = useNavigate();
 
   const handleAnalyze = (value?: string) => {
     const job = (value ?? metier).trim();
     if (!job) return;
+    if (!getApiKey()) {
+      setPendingJob(job);
+      setShowApiModal(true);
+      return;
+    }
     navigate(`/resultats?metier=${encodeURIComponent(job)}`);
+  };
+
+  const handleApiKeySaved = () => {
+    if (pendingJob) {
+      navigate(`/resultats?metier=${encodeURIComponent(pendingJob)}`);
+      setPendingJob(null);
+    }
   };
 
   return (
@@ -206,6 +222,12 @@ export default function Index() {
           lecko.fr
         </a>
       </footer>
+
+      <ApiKeyModal
+        open={showApiModal}
+        onClose={() => { setShowApiModal(false); setPendingJob(null); }}
+        onSaved={handleApiKeySaved}
+      />
     </div>
   );
 }
