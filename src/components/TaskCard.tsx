@@ -116,6 +116,18 @@ export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardPr
                   </span>
                 </div>
               </div>
+
+              {/* Coach CTA */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openChat({ task, metier: metier ?? "" });
+                }}
+                className="w-full flex items-center justify-center gap-2 text-xs font-semibold text-primary border border-primary/30 hover:bg-primary hover:text-primary-foreground rounded-lg py-2 transition-colors mt-1"
+              >
+                <Bot size={13} />
+                Me guider pour automatiser ça
+              </button>
             </div>
           </motion.div>
         )}
