@@ -10,6 +10,8 @@ import Settings from "./pages/Settings";
 import Equipe from "./pages/Equipe";
 import EquipeResultats from "./pages/EquipeResultats";
 import NotFound from "./pages/NotFound";
+import { ChatProvider } from "./context/ChatContext";
+import { ChatPanel } from "./components/chat/ChatPanel";
 
 const queryClient = new QueryClient();
 
@@ -19,16 +21,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/resultats" element={<Results />} />
-          <Route path="/historique" element={<History />} />
-          <Route path="/parametres" element={<Settings />} />
-          <Route path="/equipe" element={<Equipe />} />
-          <Route path="/equipe/resultats" element={<EquipeResultats />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <ChatProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/resultats" element={<Results />} />
+            <Route path="/historique" element={<History />} />
+            <Route path="/parametres" element={<Settings />} />
+            <Route path="/equipe" element={<Equipe />} />
+            <Route path="/equipe/resultats" element={<EquipeResultats />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <ChatPanel />
+        </ChatProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
