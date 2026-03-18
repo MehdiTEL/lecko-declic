@@ -50,6 +50,13 @@ export default function Results() {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
   const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
+  // ROI state
+  const [roiHourlyRate, setRoiHourlyRate] = useState(45);
+  const [roiNbPeople, setRoiNbPeople] = useState(1);
+  const handleRoiParams = useCallback((r: number, p: number) => {
+    setRoiHourlyRate(r);
+    setRoiNbPeople(p);
+  }, []);
 
   const minLoadMs = 3000;
 
