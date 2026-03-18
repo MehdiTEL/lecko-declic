@@ -45,6 +45,14 @@ export default function Index() {
   const [pendingJob, setPendingJob] = useState<string | null>(null);
   const [showApiModal, setShowApiModal] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Auto-open modal if redirected from results with requireKey
+  useEffect(() => {
+    if (searchParams.get("requireKey") === "1") {
+      setShowApiModal(true);
+    }
+  }, [searchParams]);
 
   const handleAnalyze = (value?: string) => {
     const job = (value ?? metier).trim();
