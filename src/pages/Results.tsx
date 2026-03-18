@@ -470,6 +470,16 @@ export default function Results() {
             Analyser un autre métier
           </Link>
         </div>
+        {/* Team upsell */}
+        <div className="max-w-5xl mx-auto mt-3">
+          <Link
+            to="/equipe"
+            className="inline-flex items-center gap-2 text-xs text-foreground-muted hover:text-lecko-blue transition-colors"
+          >
+            <Users size={12} />
+            Vous gérez une équipe ? Essayez le mode équipe →
+          </Link>
+        </div>
       </div>
 
       {/* Footer */}
