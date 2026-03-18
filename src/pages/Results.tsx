@@ -346,6 +346,20 @@ export default function Results() {
             onParamsChange={handleRoiParams}
           />
 
+          {/* DÉCLIC progress bar */}
+          <DeclicProgress
+            currentPhase={3}
+            completedPhases={[0, 1, 2]}
+          />
+
+          {/* "Par où commencer?" */}
+          <WhereToStart
+            tasks={result.taches}
+            metier={result.metier}
+            onFilterEasyWins={() => { setCatFilter("easy_wins"); setToolFilter("all"); }}
+            onFilterAI={() => { setCatFilter("ai_needed"); setToolFilter("all"); }}
+          />
+
           {/* Free mode upsell banner */}
           {analysisSource === "local" && (
             <motion.div
