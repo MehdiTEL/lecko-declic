@@ -10,6 +10,7 @@ import TaskCard from "@/components/TaskCard";
 import LeckoCTA from "@/components/LeckoCTA";
 import MicroCTA from "@/components/MicroCTA";
 import Footer from "@/components/Footer";
+import RoiCalculator from "@/components/RoiCalculator";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
 import { saveToHistory } from "@/lib/history";
