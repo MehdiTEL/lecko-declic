@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Users, Plus, X, Sparkles, Rocket } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { FREE_JOB_LABELS, findInLocalDatabase } from "@/data/jobDatabase";
 import { getApiKey, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { AnalysisResult, AnalysisSource } from "@/types/analysis";
