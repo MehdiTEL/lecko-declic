@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ChevronDown, Clock } from "lucide-react";
+import { ChevronDown, Clock, Bot } from "lucide-react";
 import { AnalysisTask, TaskCategory, ToolType } from "@/types/analysis";
+import { useChatContext } from "@/context/ChatContext";
 
 const categoryConfig: Record<TaskCategory, { label: string; dot: string; bgClass: string; textClass: string }> = {
   automatisable: {
@@ -36,10 +37,12 @@ interface TaskCardProps {
   task: AnalysisTask;
   index: number;
   roiPerWeek?: number; // €/week for this task
+  metier?: string;
 }
 
-export default function TaskCard({ task, index, roiPerWeek }: TaskCardProps) {
+export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const { openChat } = useChatContext();
   const cat = categoryConfig[task.categorie];
   const tool = toolConfig[task.type_outil];
 
@@ -113,6 +116,18 @@ export default function TaskCard({ task, index, roiPerWeek }: TaskCardProps) {
                   </span>
                 </div>
               </div>
+
+              {/* Coach CTA */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openChat({ task, metier: metier ?? "" });
+                }}
+                className="w-full flex items-center justify-center gap-2 text-xs font-semibold text-primary border border-primary/30 hover:bg-primary hover:text-primary-foreground rounded-lg py-2 transition-colors mt-1"
+              >
+                <Bot size={13} />
+                Me guider pour automatiser ça
+              </button>
             </div>
           </motion.div>
         )}

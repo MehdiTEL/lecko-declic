@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Settings, Users } from "lucide-react";
+import { Sun, Moon, Menu, X, History, Settings, Users, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { getApiKey, getProvider, AIProvider } from "@/lib/aiProvider";
+import { useChatContext } from "@/context/ChatContext";
 
 const PROVIDER_BADGE: Record<AIProvider, string> = {
   openai: "GPT ✓",
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [hasKey, setHasKey] = useState<boolean>(!!getApiKey());
   const [provider, setProvider] = useState<AIProvider | null>(getProvider());
   const location = useLocation();
+  const { openChat, hasSeenNew } = useChatContext();
 
   useEffect(() => {
     setHasKey(!!getApiKey());
@@ -64,6 +66,21 @@ export default function Navbar() {
             </Link>
           ))}
 
+          {/* Coach AI button */}
+          <button
+            onClick={() => openChat()}
+            className="relative flex items-center gap-1.5 text-sm font-semibold text-foreground-secondary hover:text-lecko-blue transition-colors"
+            aria-label="Coach Automatisation"
+          >
+            <MessageCircle size={18} />
+            <span>Coach IA</span>
+            {!hasSeenNew && (
+              <span className="absolute -top-1 -right-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-lecko-green text-white leading-3">
+                Nouveau
+              </span>
+            )}
+          </button>
+
           {/* Settings with provider indicator */}
           <Link
             to="/parametres"
@@ -89,6 +106,17 @@ export default function Navbar() {
 
         {/* Mobile */}
         <div className="flex items-center gap-2 md:hidden">
+          {/* Coach button mobile */}
+          <button
+            onClick={() => openChat()}
+            className="relative p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"
+            aria-label="Coach Automatisation"
+          >
+            <MessageCircle size={18} />
+            {!hasSeenNew && (
+              <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-lecko-green" />
+            )}
+          </button>
           <Link
             to="/parametres"
             className="relative p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"

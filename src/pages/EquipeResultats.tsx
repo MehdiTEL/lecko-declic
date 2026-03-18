@@ -385,7 +385,7 @@ export default function EquipeResultats() {
                     </AccordionTrigger>
                     <AccordionContent className="px-4 pb-4 space-y-2 pt-1">
                       {r.result.taches.map((task, idx) => (
-                        <TaskCard key={idx} task={task} index={idx} />
+                        <TaskCard key={idx} task={task} index={idx} metier={r.result.metier} />
                       ))}
                     </AccordionContent>
                   </AccordionItem>
