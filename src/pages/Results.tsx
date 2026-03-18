@@ -458,6 +458,7 @@ export default function Results() {
                 key={task.nom + i}
                 task={task}
                 index={i}
+                metier={result?.metier}
                 roiPerWeek={task.temps_gagne_heures_semaine * roiHourlyRate * roiNbPeople}
               />
             ))}
