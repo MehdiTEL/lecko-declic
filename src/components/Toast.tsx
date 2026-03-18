@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CheckCircle, Copy, X } from "lucide-react";
+import { Check, AlertTriangle, X } from "lucide-react";
 
 interface ToastProps {
   message: string;
@@ -14,16 +14,19 @@ export function Toast({ message, type = "success", onClose }: ToastProps) {
   }, [onClose]);
 
   return (
-    <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 animate-slide-in-bottom">
-      <div className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3 shadow-card-hover">
+    <div className="fixed bottom-6 right-6 z-50 animate-slide-in-bottom">
+      <div className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3 shadow-elevated">
         {type === "success" ? (
-          <CheckCircle size={18} className="text-lecko-green shrink-0" />
+          <Check size={16} className="text-lecko-green shrink-0" />
         ) : (
-          <X size={18} className="text-destructive shrink-0" />
+          <AlertTriangle size={16} className="text-lecko-orange shrink-0" />
         )}
-        <span className="text-sm font-medium text-foreground">{message}</span>
-        <button onClick={onClose} className="text-foreground-muted hover:text-foreground ml-1">
-          <X size={14} />
+        <span className="text-sm text-foreground-secondary">{message}</span>
+        <button
+          onClick={onClose}
+          className="text-foreground-muted hover:text-foreground transition-colors ml-1"
+        >
+          <X size={13} />
         </button>
       </div>
     </div>
@@ -32,12 +35,7 @@ export function Toast({ message, type = "success", onClose }: ToastProps) {
 
 export function useToast() {
   const [toast, setToast] = useState<{ message: string; type?: "success" | "error" } | null>(null);
-
-  const showToast = (message: string, type: "success" | "error" = "success") => {
-    setToast({ message, type });
-  };
-
+  const showToast = (message: string, type: "success" | "error" = "success") => setToast({ message, type });
   const hideToast = () => setToast(null);
-
   return { toast, showToast, hideToast };
 }

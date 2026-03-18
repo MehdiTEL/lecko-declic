@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 /* =====================================================
-   LECKO DESIGN SYSTEM
-   All colors are HSL. Lecko Blue + Lecko Orange brand.
+   LECKO DESIGN SYSTEM — Editorial / Greet-inspired
+   White-dominant, professional, human
 ===================================================== */
 
 @layer base {
@@ -14,111 +14,112 @@
     /* Lecko Brand */
     --lecko-blue: 221 83% 53%;        /* #2563EB */
     --lecko-orange: 38 92% 50%;       /* #F59E0B */
-    --lecko-green: 160 84% 39%;       /* #10B981 */
+    --lecko-green: 160 72% 35%;       /* #059669 emerald-600 */
 
-    /* Surfaces */
-    --background: 230 100% 97%;       /* #EEF2FF */
+    /* Surfaces — white dominant */
+    --background: 0 0% 100%;          /* #FFFFFF */
+    --surface-alt: 210 40% 98%;       /* #F8FAFC slate-50 */
+    --surface-accent: 226 100% 97%;   /* #EEF2FF */
     --surface: 0 0% 100%;             /* #FFFFFF cards */
-    --foreground: 221 39% 11%;        /* #111827 */
-    --foreground-secondary: 220 13% 25%; /* #374151 */
-    --foreground-muted: 220 9% 46%;   /* #6B7280 */
+
+    /* Foreground — slate tones */
+    --foreground: 222 47% 11%;        /* #0F172A slate-900 */
+    --foreground-secondary: 215 25% 27%; /* #334155 slate-700 */
+    --foreground-muted: 215 16% 47%;  /* #64748B slate-500 */
 
     /* Shadcn tokens */
     --card: 0 0% 100%;
-    --card-foreground: 221 39% 11%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 221 39% 11%;
+    --popover-foreground: 222 47% 11%;
     --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 230 100% 97%;
+    --secondary: 210 40% 98%;
     --secondary-foreground: 221 83% 53%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
     --accent: 38 92% 50%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
+    --border: 214 32% 91%;            /* #E2E8F0 slate-200 */
+    --input: 214 32% 91%;
     --ring: 221 83% 53%;
     --radius: 0.75rem;
 
     /* Sidebar */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 25% 27%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 221 83% 53%;
 
-    /* Semantic badge backgrounds */
-    --badge-auto-bg: 152 76% 94%;     /* green light */
-    --badge-auto-text: 158 64% 20%;
-    --badge-partial-bg: 48 100% 95%;  /* yellow light */
-    --badge-partial-text: 30 62% 30%;
-    --badge-hard-bg: 0 100% 95%;      /* red light */
-    --badge-hard-text: 0 66% 38%;
-
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(230 100% 97%) 0%, hsl(221 83% 93%) 100%);
-    --gradient-blue: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 63%) 100%);
+    /* Semantic badge backgrounds — soft, professional */
+    --badge-auto-bg: 138 76% 97%;     /* emerald-50 */
+    --badge-auto-text: 160 72% 30%;   /* emerald-700 */
+    --badge-partial-bg: 48 100% 96%;  /* amber-50 */
+    --badge-partial-text: 32 95% 35%; /* amber-700 */
+    --badge-hard-bg: 210 40% 96%;     /* slate-100 */
+    --badge-hard-text: 215 16% 47%;   /* slate-500 */
 
     /* Shadows */
-    --shadow-card: 0 1px 3px 0 hsl(221 39% 11% / 0.08), 0 1px 2px -1px hsl(221 39% 11% / 0.05);
-    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 53% / 0.15);
+    --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.06), 0 1px 2px -1px hsl(222 47% 11% / 0.04);
+    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 53% / 0.12);
   }
 
   .dark {
-    /* Lecko brand stays same */
-    --lecko-blue: 221 83% 53%;
-    --lecko-orange: 38 92% 50%;
-    --lecko-green: 160 84% 39%;
+    --lecko-blue: 221 83% 60%;
+    --lecko-orange: 38 92% 55%;
+    --lecko-green: 160 72% 45%;
 
     --background: 222 47% 11%;        /* #0F172A slate-900 */
+    --surface-alt: 215 28% 17%;       /* #1E293B slate-800 */
+    --surface-accent: 215 28% 17%;
     --surface: 215 28% 17%;           /* #1E293B slate-800 */
+
     --foreground: 210 40% 96%;        /* #F1F5F9 slate-100 */
-    --foreground-secondary: 215 16% 47%; /* #94A3B8 slate-400 */
-    --foreground-muted: 215 16% 47%;
+    --foreground-secondary: 213 27% 84%; /* #CBD5E1 slate-300 */
+    --foreground-muted: 215 16% 57%;  /* #94A3B8 slate-400 */
 
     --card: 215 28% 17%;
     --card-foreground: 210 40% 96%;
     --popover: 215 28% 17%;
     --popover-foreground: 210 40% 96%;
-    --primary: 221 83% 53%;
+    --primary: 221 83% 60%;
     --primary-foreground: 0 0% 100%;
     --secondary: 215 25% 27%;
     --secondary-foreground: 210 40% 96%;
-    --muted: 215 25% 27%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 38 92% 50%;
+    --muted: 215 25% 22%;
+    --muted-foreground: 215 16% 57%;
+    --accent: 38 92% 55%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 50%;
     --destructive-foreground: 210 40% 98%;
     --border: 215 25% 27%;            /* #334155 slate-700 */
     --input: 215 25% 27%;
-    --ring: 221 83% 53%;
+    --ring: 221 83% 60%;
 
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary: 221 83% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 215 28% 17%;
     --sidebar-accent-foreground: 210 40% 96%;
     --sidebar-border: 215 25% 27%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-ring: 221 83% 60%;
 
     --badge-auto-bg: 158 64% 15%;
     --badge-auto-text: 152 76% 74%;
     --badge-partial-bg: 30 62% 18%;
     --badge-partial-text: 48 100% 75%;
-    --badge-hard-bg: 0 66% 18%;
-    --badge-hard-text: 0 100% 75%;
+    --badge-hard-bg: 215 25% 22%;
+    --badge-hard-text: 215 16% 57%;
 
-    --gradient-hero: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(215 28% 17%) 100%);
-    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
-    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 53% / 0.25);
+    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.25);
+    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 60% / 0.2);
   }
 }
 
@@ -134,12 +135,14 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Source Sans 3', Calibri, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Dark mode transitions */
+  /* Smooth color transitions */
   *, *::before, *::after {
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.15s ease;
   }
@@ -148,10 +151,16 @@
   svg *, canvas {
     transition: none;
   }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: hsl(var(--foreground));
+  }
 }
 
 @layer components {
-  /* Lecko card */
+  /* Editorial card */
   .lecko-card {
     @apply bg-card rounded-xl border border-border;
     box-shadow: var(--shadow-card);
@@ -161,11 +170,24 @@
     box-shadow: var(--shadow-card-hover);
   }
 
-  /* Orange square decoration */
+  /* Orange square decoration — fixed corner */
   .lecko-deco-square {
-    @apply fixed bottom-6 left-6 w-10 h-10 rounded-lg z-10 pointer-events-none;
+    @apply fixed bottom-6 left-6 w-8 h-8 rounded-lg z-10 pointer-events-none hidden md:block;
     background-color: hsl(var(--lecko-orange));
-    opacity: 0.85;
+    opacity: 0.6;
+  }
+
+  /* Uppercase label */
+  .label-uppercase {
+    @apply text-xs font-semibold uppercase tracking-widest text-foreground-muted;
+  }
+
+  /* Underline accent decoration */
+  .underline-orange {
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--lecko-orange));
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
   }
 
   /* Scrollable tags row */
@@ -177,12 +199,43 @@
   .tags-scroll::-webkit-scrollbar {
     display: none;
   }
+
+  /* Section alternating background */
+  .section-alt {
+    background-color: hsl(var(--surface-alt));
+  }
+
+  /* Insight/advice callout — orange border */
+  .callout-orange {
+    @apply rounded-lg px-4 py-3 text-sm;
+    border-left: 3px solid hsl(var(--lecko-orange));
+    background-color: hsl(38 100% 97%);
+    color: hsl(32 95% 28%);
+  }
+
+  .dark .callout-orange {
+    background-color: hsl(30 62% 12%);
+    color: hsl(38 92% 70%);
+  }
+
+  /* Insight/advice callout — blue border */
+  .callout-blue {
+    @apply rounded-lg px-4 py-3 text-sm;
+    border-left: 3px solid hsl(var(--lecko-blue));
+    background-color: hsl(214 100% 97%);
+    color: hsl(221 55% 28%);
+  }
+
+  .dark .callout-blue {
+    background-color: hsl(221 45% 14%);
+    color: hsl(221 83% 75%);
+  }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -192,5 +245,5 @@
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
+  background: hsl(var(--foreground-muted));
 }
