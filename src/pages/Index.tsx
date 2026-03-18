@@ -259,7 +259,44 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
+      {/* ── TEAM CTA ── */}
+      <section className="px-4 pb-10 flex justify-center">
+        <div className="max-w-3xl w-full">
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 border-t border-dashed border-border" />
+            <span className="text-xs text-foreground-muted font-semibold shrink-0">— ou —</span>
+            <div className="flex-1 border-t border-dashed border-border" />
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.5 }}
+          >
+            <Link
+              to="/equipe"
+              className="block rounded-2xl p-6 border-2 border-dashed border-lecko-blue/40 bg-lecko-blue/5 dark:bg-lecko-blue/10 hover:border-lecko-blue hover:bg-lecko-blue/10 dark:hover:bg-lecko-blue/15 transition-all duration-300 group"
+            >
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-lecko-blue/10 border border-lecko-blue/20 flex items-center justify-center shrink-0 group-hover:bg-lecko-blue/20 transition-colors">
+                  <Users size={24} className="text-lecko-blue" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-foreground text-base mb-0.5">
+                    Mode Équipe — Analysez toute votre organisation
+                  </h3>
+                  <p className="text-sm text-foreground-secondary">
+                    Ajoutez plusieurs métiers pour obtenir un diagnostic global et un rapport consolidé.
+                  </p>
+                </div>
+                <span className="shrink-0 px-4 py-2 rounded-xl font-bold text-sm bg-lecko-blue text-primary-foreground group-hover:bg-lecko-orange transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
+                  Lancer une analyse d'équipe
+                  <ArrowRight size={15} />
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
       <section className="bg-card border-t border-border px-4 py-16">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-foreground text-center mb-10">
