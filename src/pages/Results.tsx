@@ -10,7 +10,7 @@ import TaskCard from "@/components/TaskCard";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, TaskCategory, ToolType } from "@/types/analysis";
 import { saveToHistory } from "@/lib/history";
-import { getApiKey } from "@/lib/apiKey";
+import { getApiKey, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { supabase } from "@/integrations/supabase/client";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -24,54 +24,6 @@ const CAT_LABELS: Record<TaskCategory, string> = {
   partiellement_automatisable: "Partiellement",
   difficilement_automatisable: "Difficile",
 };
-
-const SYSTEM_PROMPT = `Tu es un expert en transformation digitale et automatisation des processus métier, spécialisé dans le conseil aux organisations.
-
-L'utilisateur va te donner un intitulé de métier.
-
-Tu dois :
-1. Lister 8 à 12 tâches quotidiennes typiques et réalistes de ce métier
-2. Pour chaque tâche, évaluer honnêtement son potentiel d'automatisation
-3. Recommander une solution concrète et actionnable d'automatisation
-4. Estimer le temps gagné par semaine pour chaque tâche
-
-Sois précis dans les noms d'outils : cite des outils réels (N8N, Make/Zapier, Claude, ChatGPT, Notion AI, Power Automate, etc.).
-
-Réponds UNIQUEMENT en JSON valide, sans texte avant ou après, sans backticks markdown, avec cette structure exacte :
-{
-  "metier": "string",
-  "score_global": number,
-  "heures_economisees_semaine": number,
-  "taches": [
-    {
-      "nom": "string",
-      "description": "string",
-      "categorie": "automatisable" | "partiellement_automatisable" | "difficilement_automatisable",
-      "solution": "string",
-      "type_outil": "Agent IA" | "Workflow N8N" | "Automatisation No-Code" | "Copilot / Assistant IA" | "Script personnalisé",
-      "temps_gagne_heures_semaine": number
-    }
-  ]
-}`;
-
-function getApiErrorMessage(status: number): { message: string; showSettings: boolean } {
-  if (status === 401) return {
-    message: "Clé API invalide. Vérifiez votre clé dans les paramètres.",
-    showSettings: true,
-  };
-  if (status === 429) return {
-    message: "Quota OpenAI dépassé. Vérifiez votre compte sur platform.openai.com.",
-    showSettings: false,
-  };
-  if (status === 403) return {
-    message: "Clé API non fonctionnelle. Veuillez en générer une nouvelle sur platform.openai.com/api-keys",
-    showSettings: true,
-  };
-  return {
-    message: `Erreur API OpenAI (${status}). Veuillez réessayer.`,
-    showSettings: false,
-  };
-}
 
 export default function Results() {
   const [searchParams] = useSearchParams();
@@ -147,30 +99,7 @@ export default function Results() {
     setErrorShowSettings(false);
 
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "gpt-4o",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: `Métier : ${job}` },
-          ],
-          temperature: 0.7,
-          max_tokens: 3000,
-        }),
-      });
-
-      if (!response.ok) {
-        const errInfo = getApiErrorMessage(response.status);
-        throw Object.assign(new Error(errInfo.message), { showSettings: errInfo.showSettings });
-      }
-
-      const aiData = await response.json();
-      const content: string = aiData.choices?.[0]?.message?.content ?? "";
+      const content: string = await callAnalyzeJob(job);
 
       let parsed: AnalysisResult;
       try {
@@ -295,6 +224,10 @@ export default function Results() {
               >
                 Réessayer
               </button>
+              <p className="text-xs text-foreground-muted">
+                💡 Vous pouvez aussi essayer avec un autre fournisseur dans les{" "}
+                <Link to="/parametres" className="text-lecko-blue hover:underline">paramètres</Link>.
+              </p>
             </div>
           </div>
         </div>

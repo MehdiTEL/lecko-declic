@@ -4,7 +4,7 @@ import { ArrowRight, Target, Bot, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ApiKeyModal from "@/components/ApiKeyModal";
-import { getApiKey } from "@/lib/apiKey";
+import { getApiKey } from "@/lib/aiProvider";
 
 const SUGGESTIONS = [
   "Consultant",
@@ -66,9 +66,11 @@ export default function Index() {
   };
 
   const handleApiKeySaved = () => {
-    if (pendingJob) {
-      navigate(`/resultats?metier=${encodeURIComponent(pendingJob)}`);
-      setPendingJob(null);
+    const job = pendingJob;
+    setPendingJob(null);
+    setShowApiModal(false);
+    if (job) {
+      navigate(`/resultats?metier=${encodeURIComponent(job)}`);
     }
   };
 
@@ -235,6 +237,7 @@ export default function Index() {
         open={showApiModal}
         onClose={() => { setShowApiModal(false); setPendingJob(null); }}
         onSaved={handleApiKeySaved}
+        initialProvider={null}
       />
     </div>
   );
