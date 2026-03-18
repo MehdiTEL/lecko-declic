@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Settings } from "lucide-react";
+import { Sun, Moon, Menu, X, History, Settings, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { getApiKey, getProvider, AIProvider } from "@/lib/aiProvider";
@@ -23,6 +23,7 @@ export default function Navbar() {
 
   const navLinks = [
     { to: "/", label: "Accueil" },
+    { to: "/equipe", label: "Équipe" },
     { to: "/historique", label: "Historique" },
   ];
 
@@ -58,6 +59,7 @@ export default function Navbar() {
               }`}
             >
               {link.label === "Historique" && <History size={14} />}
+              {link.label === "Équipe" && <Users size={14} />}
               {link.label}
             </Link>
           ))}
@@ -125,6 +127,7 @@ export default function Navbar() {
               }`}
             >
               {link.label === "Historique" && <History size={14} />}
+              {link.label === "Équipe" && <Users size={14} />}
               {link.label}
             </Link>
           ))}

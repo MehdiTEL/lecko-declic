@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings, Sparkles, Bot } from "lucide-react";
+import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings, Sparkles, Bot, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -468,6 +468,16 @@ export default function Results() {
           >
             <RotateCcw size={15} />
             Analyser un autre métier
+          </Link>
+        </div>
+        {/* Team upsell */}
+        <div className="max-w-5xl mx-auto mt-3">
+          <Link
+            to="/equipe"
+            className="inline-flex items-center gap-2 text-xs text-foreground-muted hover:text-lecko-blue transition-colors"
+          >
+            <Users size={12} />
+            Vous gérez une équipe ? Essayez le mode équipe →
           </Link>
         </div>
       </div>
