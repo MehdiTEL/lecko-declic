@@ -2,17 +2,23 @@ import { Link, useLocation } from "react-router-dom";
 import { Sun, Moon, Menu, X, History, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "@/hooks/useTheme";
-import { getApiKey } from "@/lib/apiKey";
+import { getApiKey, getProvider, AIProvider } from "@/lib/aiProvider";
+
+const PROVIDER_BADGE: Record<AIProvider, string> = {
+  openai: "GPT ✓",
+  anthropic: "Claude ✓",
+};
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [hasKey, setHasKey] = useState<boolean>(!!getApiKey());
+  const [provider, setProvider] = useState<AIProvider | null>(getProvider());
   const location = useLocation();
 
-  // Re-check key status when location changes (e.g. after saving in settings)
   useEffect(() => {
     setHasKey(!!getApiKey());
+    setProvider(getProvider());
   }, [location.pathname]);
 
   const navLinks = [
@@ -20,14 +26,25 @@ export default function Navbar() {
     { to: "/historique", label: "Historique" },
   ];
 
+  const ProviderDot = () => (
+    <span
+      className={`absolute -top-0.5 -right-0.5 text-[9px] font-bold px-1 rounded-full leading-4 ${
+        hasKey
+          ? "bg-lecko-green text-primary-foreground"
+          : "bg-destructive text-primary-foreground"
+      }`}
+      style={{ minWidth: "auto" }}
+    >
+      {hasKey && provider ? PROVIDER_BADGE[provider] : "API ✗"}
+    </span>
+  );
+
   return (
     <header className="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <span className="text-2xl font-bold text-lecko-blue tracking-tight">
-            lecko.
-          </span>
+          <span className="text-2xl font-bold text-lecko-blue tracking-tight">lecko.</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -37,9 +54,7 @@ export default function Navbar() {
               key={link.to}
               to={link.to}
               className={`flex items-center gap-1.5 text-sm font-semibold transition-colors hover:text-lecko-blue ${
-                location.pathname === link.to
-                  ? "text-lecko-blue"
-                  : "text-foreground-secondary"
+                location.pathname === link.to ? "text-lecko-blue" : "text-foreground-secondary"
               }`}
             >
               {link.label === "Historique" && <History size={14} />}
@@ -47,20 +62,18 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* Settings with API key indicator */}
+          {/* Settings with provider indicator */}
           <Link
             to="/parametres"
             className={`relative p-2 rounded-lg hover:bg-muted transition-colors ${
-              location.pathname === "/parametres" ? "text-lecko-blue" : "text-foreground-secondary hover:text-lecko-blue"
+              location.pathname === "/parametres"
+                ? "text-lecko-blue"
+                : "text-foreground-secondary hover:text-lecko-blue"
             }`}
             aria-label="Paramètres"
           >
             <Settings size={18} />
-            <span
-              className={`absolute top-1 right-1 w-2 h-2 rounded-full border border-card ${
-                hasKey ? "bg-lecko-green" : "bg-destructive"
-              }`}
-            />
+            <ProviderDot />
           </Link>
 
           <button
@@ -80,11 +93,7 @@ export default function Navbar() {
             aria-label="Paramètres"
           >
             <Settings size={18} />
-            <span
-              className={`absolute top-1 right-1 w-2 h-2 rounded-full border border-card ${
-                hasKey ? "bg-lecko-green" : "bg-destructive"
-              }`}
-            />
+            <ProviderDot />
           </Link>
           <button
             onClick={toggleTheme}
@@ -112,9 +121,7 @@ export default function Navbar() {
               to={link.to}
               onClick={() => setMenuOpen(false)}
               className={`flex items-center gap-2 text-sm font-semibold py-2 transition-colors ${
-                location.pathname === link.to
-                  ? "text-lecko-blue"
-                  : "text-foreground-secondary"
+                location.pathname === link.to ? "text-lecko-blue" : "text-foreground-secondary"
               }`}
             >
               {link.label === "Historique" && <History size={14} />}

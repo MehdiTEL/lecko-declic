@@ -1,9 +1,17 @@
 import { useState } from "react";
-import { Trash2, Key, Eye, EyeOff, RotateCcw, History } from "lucide-react";
+import { Trash2, Key, Eye, EyeOff, RotateCcw, History, RefreshCw } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { getApiKey, saveApiKey, deleteApiKey, maskApiKey } from "@/lib/apiKey";
+import {
+  getApiKey,
+  getProvider,
+  saveProviderAndKey,
+  deleteProviderAndKey,
+  maskApiKey,
+  AIProvider,
+} from "@/lib/aiProvider";
 import { clearHistory } from "@/lib/history";
 import { useTheme } from "@/hooks/useTheme";
+import ApiKeyModal from "@/components/ApiKeyModal";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,9 +23,16 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const PROVIDER_LABELS: Record<AIProvider, string> = {
+  openai: "OpenAI GPT-4o",
+  anthropic: "Anthropic Claude",
+};
+
 export default function Settings() {
   const [apiKey, setApiKeyState] = useState<string | null>(getApiKey());
-  const [editMode, setEditMode] = useState(false);
+  const [provider, setProviderState] = useState<AIProvider | null>(getProvider());
+  const [editKeyMode, setEditKeyMode] = useState(false);
+  const [showChangeProviderModal, setShowChangeProviderModal] = useState(false);
   const [newKey, setNewKey] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [editError, setEditError] = useState("");
@@ -29,13 +44,14 @@ export default function Settings() {
 
   const handleSaveKey = () => {
     const trimmed = newKey.trim();
-    if (!trimmed.startsWith("sk-") || trimmed.length < 20) {
-      setEditError("La clé doit commencer par « sk- » et contenir au moins 20 caractères.");
+    if (!provider) return;
+    if (trimmed.length < 20) {
+      setEditError("La clé doit contenir au moins 20 caractères.");
       return;
     }
-    saveApiKey(trimmed);
+    saveProviderAndKey(provider, trimmed);
     setApiKeyState(trimmed);
-    setEditMode(false);
+    setEditKeyMode(false);
     setNewKey("");
     setEditError("");
     setSavedFeedback(true);
@@ -43,8 +59,9 @@ export default function Settings() {
   };
 
   const handleDeleteKey = () => {
-    deleteApiKey();
+    deleteProviderAndKey();
     setApiKeyState(null);
+    setProviderState(null);
     setConfirmDelete(false);
   };
 
@@ -54,11 +71,18 @@ export default function Settings() {
   };
 
   const handleReset = () => {
-    deleteApiKey();
+    deleteProviderAndKey();
     clearHistory();
     resetTheme();
     setApiKeyState(null);
+    setProviderState(null);
     setConfirmReset(false);
+  };
+
+  const handleProviderModalSaved = (newProvider: AIProvider, newKey: string) => {
+    setApiKeyState(newKey);
+    setProviderState(newProvider);
+    setShowChangeProviderModal(false);
   };
 
   return (
@@ -67,16 +91,14 @@ export default function Settings() {
       <div className="lecko-deco-square" aria-hidden />
 
       <main className="max-w-2xl mx-auto w-full px-4 py-10 space-y-6 flex-1">
-        <h1 className="text-2xl font-bold text-foreground">
-          Paramètres
-        </h1>
+        <h1 className="text-2xl font-bold text-foreground">Paramètres</h1>
 
-        {/* API Key section */}
+        {/* AI Provider & API Key section */}
         <section className="lecko-card p-6 space-y-4">
           <div className="flex items-center gap-2 mb-1">
             <Key size={18} className="text-lecko-blue" />
-            <h2 className="font-bold text-foreground">Clé API OpenAI</h2>
-            {apiKey ? (
+            <h2 className="font-bold text-foreground">Fournisseur IA &amp; Clé API</h2>
+            {apiKey && provider ? (
               <span className="ml-auto text-xs font-semibold text-lecko-green flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-lecko-green inline-block" />
                 Configurée
@@ -89,14 +111,35 @@ export default function Settings() {
             )}
           </div>
 
-          {apiKey && !editMode && (
+          {/* Current provider badge */}
+          {provider && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-foreground-muted">Fournisseur actuel :</span>
+              <span
+                className={`text-xs font-bold px-2 py-0.5 rounded-full text-primary-foreground ${
+                  provider === "openai" ? "bg-foreground" : "bg-lecko-orange"
+                }`}
+              >
+                {PROVIDER_LABELS[provider]}
+              </span>
+            </div>
+          )}
+
+          {apiKey && provider && !editKeyMode && (
             <div className="flex items-center gap-3 bg-muted/50 rounded-xl px-4 py-3">
               <code className="text-sm font-mono text-foreground flex-1">{maskApiKey(apiKey)}</code>
               <button
-                onClick={() => { setEditMode(true); setNewKey(""); }}
+                onClick={() => setShowChangeProviderModal(true)}
+                className="text-xs font-bold text-foreground-secondary hover:text-lecko-blue transition-colors flex items-center gap-1"
+              >
+                <RefreshCw size={11} />
+                Changer
+              </button>
+              <button
+                onClick={() => { setEditKeyMode(true); setNewKey(""); }}
                 className="text-xs font-bold text-lecko-blue hover:text-lecko-orange transition-colors"
               >
-                Modifier
+                Modifier la clé
               </button>
               <button
                 onClick={() => setConfirmDelete(true)}
@@ -107,15 +150,19 @@ export default function Settings() {
             </div>
           )}
 
-          {(!apiKey || editMode) && (
+          {/* Edit key only (no provider change) */}
+          {editKeyMode && provider && (
             <div className="space-y-3">
+              <p className="text-xs text-foreground-muted">
+                Fournisseur actuel : <strong>{PROVIDER_LABELS[provider]}</strong>
+              </p>
               <div className="relative">
                 <input
                   type={showKey ? "text" : "password"}
                   value={newKey}
                   onChange={(e) => { setNewKey(e.target.value); setEditError(""); }}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveKey()}
-                  placeholder="sk-..."
+                  placeholder={provider === "anthropic" ? "sk-ant-api03-..." : "sk-proj-..."}
                   className="w-full h-11 px-4 pr-11 text-sm bg-background border-2 border-border rounded-xl outline-none focus:border-lecko-blue transition-colors text-foreground placeholder:text-foreground-muted font-mono"
                 />
                 <button
@@ -135,28 +182,28 @@ export default function Settings() {
                 >
                   {savedFeedback ? "✓ Enregistrée !" : "Enregistrer la clé"}
                 </button>
-                {editMode && (
-                  <button
-                    onClick={() => { setEditMode(false); setNewKey(""); setEditError(""); }}
-                    className="px-4 h-10 rounded-xl font-bold text-sm border-2 border-border text-foreground-secondary hover:border-lecko-blue hover:text-lecko-blue transition-colors"
-                  >
-                    Annuler
-                  </button>
-                )}
+                <button
+                  onClick={() => { setEditKeyMode(false); setNewKey(""); setEditError(""); }}
+                  className="px-4 h-10 rounded-xl font-bold text-sm border-2 border-border text-foreground-secondary hover:border-lecko-blue hover:text-lecko-blue transition-colors"
+                >
+                  Annuler
+                </button>
               </div>
             </div>
           )}
 
-          <p className="text-xs text-foreground-muted leading-relaxed">
-            💡 Votre clé est stockée localement dans votre navigateur. Elle n'est jamais transmise à Lecko.{" "}
-            <a
-              href="https://platform.openai.com/api-keys"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-lecko-blue hover:text-lecko-orange transition-colors underline underline-offset-2"
+          {/* No key configured */}
+          {!apiKey && !editKeyMode && (
+            <button
+              onClick={() => setShowChangeProviderModal(true)}
+              className="w-full h-10 rounded-xl font-bold text-sm bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-300"
             >
-              Obtenir une clé
-            </a>
+              Configurer un fournisseur IA
+            </button>
+          )}
+
+          <p className="text-xs text-foreground-muted leading-relaxed">
+            💡 Votre clé est stockée localement dans votre navigateur. Elle n'est jamais transmise à Lecko.
           </p>
         </section>
 
@@ -185,18 +232,27 @@ export default function Settings() {
           </div>
 
           <p className="text-xs text-foreground-muted">
-            "Réinitialiser tout" supprime la clé API, l'historique des analyses et la préférence de thème.
+            "Réinitialiser tout" supprime le fournisseur IA, la clé API, l'historique des analyses et la préférence de thème.
           </p>
         </section>
       </main>
+
+      {/* Change provider modal */}
+      <ApiKeyModal
+        open={showChangeProviderModal}
+        onClose={() => setShowChangeProviderModal(false)}
+        onSaved={handleProviderModalSaved}
+        initialProvider={provider}
+        initialValue=""
+      />
 
       {/* Confirm delete key */}
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer la clé API ?</AlertDialogTitle>
+            <AlertDialogTitle>Supprimer la configuration IA ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Êtes-vous sûr ? Vous devrez re-saisir votre clé pour utiliser l'application.
+              Êtes-vous sûr ? Vous devrez reconfigurer votre fournisseur et clé pour utiliser l'application.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -232,7 +288,7 @@ export default function Settings() {
           <AlertDialogHeader>
             <AlertDialogTitle>Réinitialiser tous les paramètres ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action supprime définitivement votre clé API, votre historique d'analyses et réinitialise le thème. Elle est irréversible.
+              Cette action supprime définitivement votre fournisseur IA, votre clé API, votre historique d'analyses et réinitialise le thème. Elle est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
