@@ -37,10 +37,12 @@ interface TaskCardProps {
   task: AnalysisTask;
   index: number;
   roiPerWeek?: number; // €/week for this task
+  metier?: string;
 }
 
-export default function TaskCard({ task, index, roiPerWeek }: TaskCardProps) {
+export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const { openChat } = useChatContext();
   const cat = categoryConfig[task.categorie];
   const tool = toolConfig[task.type_outil];
 
