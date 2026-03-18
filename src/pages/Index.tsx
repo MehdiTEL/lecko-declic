@@ -4,7 +4,7 @@ import { ArrowRight, Target, Bot, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ApiKeyModal from "@/components/ApiKeyModal";
-import { getApiKey } from "@/lib/apiKey";
+import { getApiKey } from "@/lib/aiProvider";
 
 const SUGGESTIONS = [
   "Consultant",
