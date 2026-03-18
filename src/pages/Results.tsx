@@ -447,6 +447,14 @@ export default function Results() {
               </div>
             )}
           </div>
+
+          {/* Lecko CTA */}
+          <LeckoCTA
+            score={result.score_global}
+            metier={result.metier}
+            typeAnalyse="individuel"
+            onVisible={handleCtaVisible}
+          />
         </main>
       </div>
 
@@ -487,19 +495,9 @@ export default function Results() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border px-4 py-4 text-center">
-        <p className="text-xs text-foreground-muted">
-          Analyse propulsée par l'IA — Les résultats sont indicatifs et basés sur des tendances générales.
-        </p>
-        <p className="text-xs text-foreground-muted mt-0.5">
-          <span className="font-bold">lecko.</span>{" "}
-          <a href="https://lecko.fr" target="_blank" rel="noopener noreferrer" className="hover:text-lecko-blue transition-colors">
-            lecko.fr
-          </a>
-        </p>
-      </footer>
+      <Footer />
 
+      <MicroCTA ctaVisible={ctaVisible} metier={result.metier} score={result.score_global} />
       {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
     </div>
   );
