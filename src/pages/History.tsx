@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Trash2, Eye, Clock, BarChart } from "lucide-react";
+import { Trash2, Eye, Clock, BarChart, Sparkles, Bot } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import { getHistory, removeFromHistory, clearHistory } from "@/lib/history";
@@ -81,6 +81,18 @@ export default function History() {
                           <BarChart size={11} />
                           {entry.result.score_global}%
                         </div>
+                        {/* Source badge */}
+                        {entry.source === "api" ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-lecko-blue/10 text-lecko-blue border border-lecko-blue/20">
+                            <Bot size={10} />
+                            API
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-muted text-foreground-muted border border-border">
+                            <Sparkles size={10} />
+                            Gratuit
+                          </span>
+                        )}
                       </div>
                       <div className="flex items-center gap-3 text-xs text-foreground-muted">
                         <span className="flex items-center gap-1">
@@ -101,7 +113,7 @@ export default function History() {
                     {/* Actions */}
                     <div className="flex items-center gap-2 shrink-0">
                       <Link
-                        to={`/resultats?metier=${encodeURIComponent(entry.metier)}&cached=${encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(entry.result))))}`}
+                        to={`/resultats?metier=${encodeURIComponent(entry.metier)}&cached=${encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(entry.result))))}&source=${entry.source ?? "local"}`}
                         className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-lecko-blue/10 text-lecko-blue hover:bg-lecko-blue hover:text-primary-foreground transition-colors"
                       >
                         <Eye size={13} />
