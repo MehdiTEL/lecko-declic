@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings, Sparkles, Bot, Users } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,6 +7,9 @@ import LoadingScreen from "@/components/LoadingScreen";
 import ScoreCircle from "@/components/ScoreCircle";
 import KPICard from "@/components/KPICard";
 import TaskCard from "@/components/TaskCard";
+import LeckoCTA from "@/components/LeckoCTA";
+import MicroCTA from "@/components/MicroCTA";
+import Footer from "@/components/Footer";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
 import { saveToHistory } from "@/lib/history";
