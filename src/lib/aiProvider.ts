@@ -85,18 +85,26 @@ Réponds UNIQUEMENT en JSON valide, sans texte avant ou après, sans backticks m
 
 export function getApiErrorMessage(
   status: number,
-  provider: AIProvider | null
+  provider: AIProvider | null,
+  apiMessage?: string
 ): { message: string; showSettings: boolean } {
   if (provider === "anthropic") {
     if (status === 401) return { message: "Clé API Anthropic invalide. Vérifiez votre clé dans les paramètres.", showSettings: true };
     if (status === 429) return { message: "Quota Anthropic dépassé. Vérifiez votre compte sur console.anthropic.com.", showSettings: false };
     if (status === 529) return { message: "L'API Anthropic est surchargée. Réessayez dans quelques instants.", showSettings: false };
+    if (status === 400 && apiMessage) {
+      // Surface Anthropic's own error message (e.g. credit balance too low)
+      if (apiMessage.toLowerCase().includes("credit balance") || apiMessage.toLowerCase().includes("billing"))
+        return { message: `Solde Anthropic insuffisant. Rechargez votre compte sur console.anthropic.com/settings/billing.`, showSettings: false };
+      return { message: `Erreur API Anthropic : ${apiMessage}`, showSettings: false };
+    }
     return { message: `Erreur API Anthropic (${status}). Veuillez réessayer.`, showSettings: false };
   }
   // OpenAI (default)
   if (status === 401) return { message: "Clé API OpenAI invalide. Vérifiez votre clé dans les paramètres.", showSettings: true };
   if (status === 429) return { message: "Quota OpenAI dépassé. Vérifiez votre compte sur platform.openai.com.", showSettings: false };
   if (status === 403) return { message: "Clé API non fonctionnelle. Veuillez en générer une nouvelle sur platform.openai.com/api-keys.", showSettings: true };
+  if (status === 400 && apiMessage) return { message: `Erreur API OpenAI : ${apiMessage}`, showSettings: false };
   if (status === 500 || status === 503) return { message: "OpenAI est temporairement indisponible. Réessayez dans quelques instants.", showSettings: false };
   return { message: `Erreur API OpenAI (${status}). Veuillez réessayer.`, showSettings: false };
 }
