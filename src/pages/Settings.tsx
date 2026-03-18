@@ -25,7 +25,7 @@ export default function Settings() {
   const [confirmClearHistory, setConfirmClearHistory] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   const [savedFeedback, setSavedFeedback] = useState(false);
-  const { setTheme } = useTheme();
+  const { resetTheme } = useTheme();
 
   const handleSaveKey = () => {
     const trimmed = newKey.trim();
