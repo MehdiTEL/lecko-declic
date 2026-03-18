@@ -524,73 +524,20 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── TESTIMONIAL ──────────────────────────────────────────────────────── */}
+      {/* ── CONTACT ──────────────────────────────────────────────────────────── */}
       <section className="px-4 py-20 section-alt">
         <div className="max-w-3xl mx-auto">
-          <div className="relative">
-            {/* Big decorative quote */}
-            <span
-              className="absolute -top-4 -left-2 text-6xl font-bold leading-none select-none pointer-events-none"
-              style={{ color: "hsl(var(--lecko-orange))", opacity: 0.4 }}
-              aria-hidden
-            >«</span>
-
-            <motion.div
-              key={testimonialIdx}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="pl-8"
-              style={{ borderLeft: "3px solid hsl(var(--lecko-blue))" }}
-            >
-              <p className="text-xl italic text-foreground-secondary leading-relaxed mb-6">
-                {testimonial.quote}
-              </p>
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
-                  style={{ backgroundColor: "hsl(var(--lecko-blue))" }}
-                >
-                  {testimonial.initials}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">{testimonial.name}</p>
-                  <p className="text-xs text-foreground-muted">{testimonial.title}</p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Navigation */}
-            <div className="flex items-center gap-2 mt-8 pl-8">
-              <button
-                onClick={() => { setTestimonialIdx((i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length); }}
-                className="p-2 rounded-lg border border-border hover:border-lecko-blue hover:text-lecko-blue text-foreground-muted transition-colors"
-                aria-label="Témoignage précédent"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={() => { setTestimonialIdx((i) => (i + 1) % TESTIMONIALS.length); }}
-                className="p-2 rounded-lg border border-border hover:border-lecko-blue hover:text-lecko-blue text-foreground-muted transition-colors"
-                aria-label="Témoignage suivant"
-              >
-                <ChevronRight size={16} />
-              </button>
-              <div className="flex items-center gap-1.5 ml-2">
-                {TESTIMONIALS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setTestimonialIdx(i)}
-                    className="w-1.5 h-1.5 rounded-full transition-all"
-                    style={{
-                      backgroundColor: i === testimonialIdx ? "hsl(var(--lecko-blue))" : "hsl(var(--border))",
-                      width: i === testimonialIdx ? "16px" : "6px",
-                    }}
-                    aria-label={`Témoignage ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="mb-10">
+            <p className="label-uppercase mb-3 text-lecko-blue">Contact</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Parlons de votre <span className="underline-orange">projet</span>
+            </h2>
+            <p className="text-lg text-foreground-secondary" style={{ maxWidth: "540px" }}>
+              Renseignez vos coordonnées et notre équipe vous recontactera pour discuter de vos besoins en automatisation.
+            </p>
+          </div>
+          <div className="lecko-card p-8">
+            <ContactSection />
           </div>
         </div>
       </section>
