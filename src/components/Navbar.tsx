@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Settings } from "lucide-react";
+import { Sun, Moon, Menu, X, History, Settings, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { getApiKey, getProvider, AIProvider } from "@/lib/aiProvider";
