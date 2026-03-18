@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings, Sparkles, Bot, Users } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,6 +7,9 @@ import LoadingScreen from "@/components/LoadingScreen";
 import ScoreCircle from "@/components/ScoreCircle";
 import KPICard from "@/components/KPICard";
 import TaskCard from "@/components/TaskCard";
+import LeckoCTA from "@/components/LeckoCTA";
+import MicroCTA from "@/components/MicroCTA";
+import Footer from "@/components/Footer";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
 import { saveToHistory } from "@/lib/history";
@@ -44,6 +47,8 @@ export default function Results() {
   const [showFilters, setShowFilters] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const resultsRef = useRef<HTMLDivElement>(null);
+  const [ctaVisible, setCtaVisible] = useState(false);
+  const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
 
   const minLoadMs = 3000;
 
@@ -442,6 +447,14 @@ export default function Results() {
               </div>
             )}
           </div>
+
+          {/* Lecko CTA */}
+          <LeckoCTA
+            score={result.score_global}
+            metier={result.metier}
+            typeAnalyse="individuel"
+            onVisible={handleCtaVisible}
+          />
         </main>
       </div>
 
@@ -482,19 +495,9 @@ export default function Results() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border px-4 py-4 text-center">
-        <p className="text-xs text-foreground-muted">
-          Analyse propulsée par l'IA — Les résultats sont indicatifs et basés sur des tendances générales.
-        </p>
-        <p className="text-xs text-foreground-muted mt-0.5">
-          <span className="font-bold">lecko.</span>{" "}
-          <a href="https://lecko.fr" target="_blank" rel="noopener noreferrer" className="hover:text-lecko-blue transition-colors">
-            lecko.fr
-          </a>
-        </p>
-      </footer>
+      <Footer />
 
+      <MicroCTA ctaVisible={ctaVisible} metier={result.metier} score={result.score_global} />
       {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
     </div>
   );

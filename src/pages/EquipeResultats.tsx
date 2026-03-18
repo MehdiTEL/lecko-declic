@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Download, Share2, Edit3, Users, Zap, Clock, Target } from "lucide-react";
 import { motion } from "framer-motion";
@@ -13,6 +13,9 @@ import {
   Legend,
 } from "recharts";
 import Navbar from "@/components/Navbar";
+import LeckoCTA from "@/components/LeckoCTA";
+import MicroCTA from "@/components/MicroCTA";
+import Footer from "@/components/Footer";
 import { Toast, useToast } from "@/components/Toast";
 import { TeamAnalysisResult, QuickWin } from "@/types/team";
 import { TeamJobResult } from "@/types/team";
@@ -82,6 +85,8 @@ export default function EquipeResultats() {
   const [team, setTeam] = useState<TeamAnalysisResult | null>(null);
   const { toast, showToast, hideToast } = useToast();
   const reportRef = useRef<HTMLDivElement>(null);
+  const [ctaVisible, setCtaVisible] = useState(false);
+  const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("lecko-team-result");
@@ -384,6 +389,14 @@ export default function EquipeResultats() {
               })}
             </Accordion>
           </motion.div>
+
+          {/* ── Lecko CTA ── */}
+          <LeckoCTA
+            score={Math.round(team.results.reduce((s, r) => s + r.result.score_global, 0) / team.results.length)}
+            metier={`${team.results.length} métiers (${team.members.reduce((s, m) => s + m.count, 0)} personnes)`}
+            typeAnalyse="equipe"
+            onVisible={handleCtaVisible}
+          />
         </main>
       </div>
 
@@ -417,6 +430,13 @@ export default function EquipeResultats() {
         </div>
       </div>
 
+      <Footer />
+
+      <MicroCTA
+        ctaVisible={ctaVisible}
+        metier={`${team.results.length} métiers`}
+        score={Math.round(team.results.reduce((s, r) => s + r.result.score_global, 0) / team.results.length)}
+      />
       {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
     </div>
   );

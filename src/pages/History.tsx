@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Trash2, Eye, Clock, BarChart, Sparkles, Bot } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { getHistory, removeFromHistory, clearHistory } from "@/lib/history";
 import { HistoryEntry } from "@/types/analysis";
 
@@ -181,14 +182,7 @@ export default function History() {
         )}
       </main>
 
-      <footer className="bg-card border-t border-border px-4 py-4 text-center">
-        <p className="text-xs text-foreground-muted">
-          <span className="font-bold">lecko.</span>{" "}
-          <a href="https://lecko.fr" target="_blank" rel="noopener noreferrer" className="hover:text-lecko-blue transition-colors">
-            lecko.fr
-          </a>
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
