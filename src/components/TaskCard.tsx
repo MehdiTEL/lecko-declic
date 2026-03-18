@@ -35,6 +35,7 @@ const toolConfig: Record<ToolType, { icon: string; badgeClass: string }> = {
 interface TaskCardProps {
   task: AnalysisTask;
   index: number;
+  roiPerWeek?: number; // €/week for this task
 }
 
 export default function TaskCard({ task, index }: TaskCardProps) {
