@@ -137,7 +137,12 @@ export async function analyzeJob(metier: string): Promise<string> {
     });
 
     if (!response.ok) {
-      const errInfo = getApiErrorMessage(response.status, "anthropic");
+      let apiMessage: string | undefined;
+      try {
+        const errBody = await response.json();
+        apiMessage = errBody?.error?.message ?? undefined;
+      } catch { /* ignore */ }
+      const errInfo = getApiErrorMessage(response.status, "anthropic", apiMessage);
       throw Object.assign(new Error(errInfo.message), { showSettings: errInfo.showSettings });
     }
 
@@ -164,7 +169,12 @@ export async function analyzeJob(metier: string): Promise<string> {
   });
 
   if (!response.ok) {
-    const errInfo = getApiErrorMessage(response.status, "openai");
+    let apiMessage: string | undefined;
+    try {
+      const errBody = await response.json();
+      apiMessage = errBody?.error?.message ?? undefined;
+    } catch { /* ignore */ }
+    const errInfo = getApiErrorMessage(response.status, "openai", apiMessage);
     throw Object.assign(new Error(errInfo.message), { showSettings: errInfo.showSettings });
   }
 
