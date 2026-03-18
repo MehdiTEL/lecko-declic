@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ChevronDown, Clock } from "lucide-react";
+import { ChevronDown, Clock, Bot } from "lucide-react";
 import { AnalysisTask, TaskCategory, ToolType } from "@/types/analysis";
+import { useChatContext } from "@/context/ChatContext";
 
 const categoryConfig: Record<TaskCategory, { label: string; dot: string; bgClass: string; textClass: string }> = {
   automatisable: {
