@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import Results from "./pages/Results";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
+import Equipe from "./pages/Equipe";
+import EquipeResultats from "./pages/EquipeResultats";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
