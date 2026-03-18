@@ -1,12 +1,19 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, History } from "lucide-react";
-import { useState } from "react";
+import { Sun, Moon, Menu, X, History, Settings } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useTheme } from "@/hooks/useTheme";
+import { getApiKey } from "@/lib/apiKey";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hasKey, setHasKey] = useState<boolean>(!!getApiKey());
   const location = useLocation();
+
+  // Re-check key status when location changes (e.g. after saving in settings)
+  useEffect(() => {
+    setHasKey(!!getApiKey());
+  }, [location.pathname]);
 
   const navLinks = [
     { to: "/", label: "Accueil" },
@@ -39,6 +46,23 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+
+          {/* Settings with API key indicator */}
+          <Link
+            to="/parametres"
+            className={`relative p-2 rounded-lg hover:bg-muted transition-colors ${
+              location.pathname === "/parametres" ? "text-lecko-blue" : "text-foreground-secondary hover:text-lecko-blue"
+            }`}
+            aria-label="Paramètres"
+          >
+            <Settings size={18} />
+            <span
+              className={`absolute top-1 right-1 w-2 h-2 rounded-full border border-card ${
+                hasKey ? "bg-lecko-green" : "bg-destructive"
+              }`}
+            />
+          </Link>
+
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary hover:text-lecko-blue"
@@ -50,6 +74,18 @@ export default function Navbar() {
 
         {/* Mobile */}
         <div className="flex items-center gap-2 md:hidden">
+          <Link
+            to="/parametres"
+            className="relative p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"
+            aria-label="Paramètres"
+          >
+            <Settings size={18} />
+            <span
+              className={`absolute top-1 right-1 w-2 h-2 rounded-full border border-card ${
+                hasKey ? "bg-lecko-green" : "bg-destructive"
+              }`}
+            />
+          </Link>
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"
