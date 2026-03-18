@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Download, Share2, Edit3, Users, Zap, Clock, Target } from "lucide-react";
 import { motion } from "framer-motion";
@@ -13,6 +13,9 @@ import {
   Legend,
 } from "recharts";
 import Navbar from "@/components/Navbar";
+import LeckoCTA from "@/components/LeckoCTA";
+import MicroCTA from "@/components/MicroCTA";
+import Footer from "@/components/Footer";
 import { Toast, useToast } from "@/components/Toast";
 import { TeamAnalysisResult, QuickWin } from "@/types/team";
 import { TeamJobResult } from "@/types/team";
