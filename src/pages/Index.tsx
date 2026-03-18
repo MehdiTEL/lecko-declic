@@ -266,7 +266,7 @@ export default function Index() {
     if (job) navigate(`/resultats?metier=${encodeURIComponent(job)}`);
   };
 
-  const testimonial = TESTIMONIALS[testimonialIdx];
+  
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
