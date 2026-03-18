@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Trash2, Key, Eye, EyeOff, RotateCcw, History, RefreshCw, Sparkles, Bot } from "lucide-react";
 import { FREE_JOB_LABELS } from "@/data/jobDatabase";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import {
   getApiKey,
   getProvider,
