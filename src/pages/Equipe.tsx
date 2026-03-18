@@ -320,14 +320,7 @@ export default function Equipe() {
         </motion.div>
       </main>
 
-      <footer className="bg-card border-t border-border px-4 py-4 text-center">
-        <p className="text-xs text-foreground-muted">
-          <span className="font-bold">lecko.</span>{" "}
-          <a href="https://lecko.fr" target="_blank" rel="noopener noreferrer" className="hover:text-lecko-blue transition-colors">
-            lecko.fr
-          </a>
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
