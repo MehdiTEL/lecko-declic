@@ -59,6 +59,7 @@ export default function Navbar() {
               }`}
             >
               {link.label === "Historique" && <History size={14} />}
+              {link.label === "Équipe" && <Users size={14} />}
               {link.label}
             </Link>
           ))}
