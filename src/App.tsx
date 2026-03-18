@@ -9,6 +9,7 @@ import History from "./pages/History";
 import Settings from "./pages/Settings";
 import Equipe from "./pages/Equipe";
 import EquipeResultats from "./pages/EquipeResultats";
+import Methode from "./pages/Methode";
 import NotFound from "./pages/NotFound";
 import { ChatProvider } from "./context/ChatContext";
 import { ChatPanel } from "./components/chat/ChatPanel";
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/parametres" element={<Settings />} />
             <Route path="/equipe" element={<Equipe />} />
             <Route path="/equipe/resultats" element={<EquipeResultats />} />
+            <Route path="/methode" element={<Methode />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
