@@ -300,28 +300,39 @@ export default function Index() {
       </section>
       <section className="bg-card border-t border-border px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-foreground text-center mb-10">
-            Comment <span className="text-lecko-orange">ça marche</span> ?
+          <h2 className="text-2xl font-bold text-foreground text-center mb-3">
+            Notre <span className="text-lecko-orange">approche</span> — La méthode DÉCLIC
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {HOW_IT_WORKS.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="lecko-card p-6 flex flex-col items-center text-center gap-3"
-              >
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className="text-2xl font-bold text-lecko-blue">{step.num}</span>
-                  {step.icon}
-                </div>
-                <h3 className="font-bold text-foreground">{step.title}</h3>
-                <p className="text-sm text-foreground-secondary">{step.desc}</p>
-              </motion.div>
+          <p className="text-sm text-foreground-secondary text-center mb-10 max-w-2xl mx-auto">
+            Notre app vous accompagne automatiquement dans les phases 1 à 3. Pour les phases 4 et 5, le Coach IA vous guide pas à pas — ou un consultant Lecko peut prendre le relais.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-0 md:flex-nowrap relative">
+            {[
+              { icon: "🛡️", label: "Prérequis", color: "#6B7280", question: "C'est clair ?", desc: "Clarifier avant d'automatiser" },
+              { icon: "🔍", label: "Détecter", color: "#F59E0B", question: "Quelles tâches ?", desc: "Identifier ce qui freine" },
+              { icon: "⚖️", label: "Évaluer", color: "#2563EB", question: "Ça vaut le coup ?", desc: "Scorer sur 5 critères" },
+              { icon: "🔧", label: "Concevoir", color: "#7C3AED", question: "Le plan concret", desc: "Dessiner avant de coder" },
+              { icon: "🚀", label: "Lancer", color: "#10B981", question: "On teste et ajuste", desc: "Crash-test + déploiement" },
+              { icon: "🏆", label: "Consolider", color: "#D97706", question: "Les gains s'ancrent", desc: "Mesurer + itérer" },
+            ].map((phase, i) => (
+              <div key={phase.label} className="flex items-center">
+                <Link
+                  to="/methode"
+                  className="flex flex-col items-center gap-2 px-4 py-3 rounded-2xl hover:bg-muted transition-colors group w-28 text-center"
+                >
+                  <span className="text-2xl group-hover:scale-110 transition-transform">{phase.icon}</span>
+                  <span className="text-xs font-bold" style={{ color: phase.color }}>{phase.label}</span>
+                  <span className="text-[10px] text-foreground-muted">{phase.question}</span>
+                </Link>
+                {i < 5 && <div className="hidden md:block w-4 h-px bg-border" />}
+              </div>
             ))}
           </div>
+          <p className="text-center mt-6">
+            <Link to="/methode" className="text-sm text-lecko-blue hover:underline font-semibold">
+              Découvrir la méthode complète →
+            </Link>
+          </p>
         </div>
       </section>
 

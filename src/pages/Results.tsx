@@ -11,8 +11,11 @@ import LeckoCTA from "@/components/LeckoCTA";
 import MicroCTA from "@/components/MicroCTA";
 import Footer from "@/components/Footer";
 import RoiCalculator from "@/components/RoiCalculator";
+import DeclicProgress from "@/components/DeclicProgress";
+import WhereToStart from "@/components/WhereToStart";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
+import { DeclicPhase } from "@/types/declic";
 import { saveToHistory } from "@/lib/history";
 import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { findInLocalDatabase } from "@/data/jobDatabase";
@@ -20,7 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-type CategoryFilter = "all" | TaskCategory;
+type CategoryFilter = "all" | TaskCategory | "easy_wins" | "ai_needed";
 type ToolFilter = "all" | ToolType;
 
 const TOOL_TYPES: ToolType[] = ["Agent IA", "Workflow N8N", "Automatisation No-Code", "Copilot / Assistant IA", "Script personnalisé"];
@@ -187,6 +190,8 @@ export default function Results() {
   }
 
   const filteredTasks: AnalysisTask[] = (result?.taches ?? []).filter((t) => {
+    if (catFilter === "easy_wins") return (t.score_criteres ?? 0) >= 3 && t.peut_fonctionner_sans_ia === true;
+    if (catFilter === "ai_needed") return t.peut_fonctionner_sans_ia === false;
     if (catFilter !== "all" && t.categorie !== catFilter) return false;
     if (toolFilter !== "all" && t.type_outil !== toolFilter) return false;
     return true;
@@ -339,6 +344,20 @@ export default function Results() {
             hoursPerWeek={result.heures_economisees_semaine}
             metier={result.metier}
             onParamsChange={handleRoiParams}
+          />
+
+          {/* DÉCLIC progress bar */}
+          <DeclicProgress
+            currentPhase={3}
+            completedPhases={[0, 1, 2]}
+          />
+
+          {/* "Par où commencer?" */}
+          <WhereToStart
+            tasks={result.taches}
+            metier={result.metier}
+            onFilterEasyWins={() => { setCatFilter("easy_wins"); setToolFilter("all"); }}
+            onFilterAI={() => { setCatFilter("ai_needed"); setToolFilter("all"); }}
           />
 
           {/* Free mode upsell banner */}
