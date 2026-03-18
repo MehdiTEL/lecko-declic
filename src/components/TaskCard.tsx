@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ChevronDown, Clock, Bot } from "lucide-react";
-import { AnalysisTask, TaskCategory, ToolType } from "@/types/analysis";
+import { ChevronDown, Clock, Bot, Info } from "lucide-react";
+import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass } from "@/types/analysis";
 import { useChatContext } from "@/context/ChatContext";
 
 const categoryConfig: Record<TaskCategory, { label: string; dot: string; bgClass: string; textClass: string }> = {
@@ -33,18 +33,37 @@ const toolConfig: Record<ToolType, { icon: string; badgeClass: string }> = {
   "Script personnalisé": { icon: "📝", badgeClass: "bg-muted text-foreground-secondary" },
 };
 
+const CRITERE_ICONS: Record<string, string> = {
+  recurrence: "🔁",
+  energie: "⚡",
+  scalabilite: "📈",
+  fiabilite: "⚠️",
+  penibilite: "😤",
+};
+const CRITERE_LABELS: Record<string, string> = {
+  recurrence: "Récurrence",
+  energie: "Énergie",
+  scalabilite: "Scalabilité",
+  fiabilite: "Fiabilité",
+  penibilite: "Pénibilité",
+};
+
 interface TaskCardProps {
   task: AnalysisTask;
   index: number;
-  roiPerWeek?: number; // €/week for this task
+  roiPerWeek?: number;
   metier?: string;
 }
 
 export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [showRaisonIa, setShowRaisonIa] = useState(false);
   const { openChat } = useChatContext();
   const cat = categoryConfig[task.categorie];
   const tool = toolConfig[task.type_outil];
+  const score = task.score_criteres ?? computeScoreCriteres(task.criteres);
+  const scoreBadge = getScoreBadgeClass(score);
+  const hasCriteres = !!task.criteres;
 
   return (
     <motion.div
@@ -61,21 +80,23 @@ export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardPr
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="text-sm font-bold text-foreground">{task.nom}</span>
+            {/* Score badge */}
+            {hasCriteres && (
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${scoreBadge}`}>
+                {score}/5
+              </span>
+            )}
           </div>
           <p className="text-xs text-foreground-muted line-clamp-1">{task.description}</p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span
-            className={`text-xs font-semibold px-2 py-1 rounded-full ${cat.bgClass} ${cat.textClass}`}
-          >
+          <span className={`text-xs font-semibold px-2 py-1 rounded-full ${cat.bgClass} ${cat.textClass}`}>
             {cat.dot} {cat.label}
           </span>
           <ChevronDown
             size={16}
-            className={`text-foreground-muted transition-transform duration-200 ${
-              expanded ? "rotate-180" : ""
-            }`}
+            className={`text-foreground-muted transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
           />
         </div>
       </button>
@@ -93,6 +114,48 @@ export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardPr
           >
             <div className="px-4 pb-4 border-t border-border pt-3 space-y-3">
               <p className="text-sm text-foreground-secondary">{task.description}</p>
+
+              {/* Criteria dots (DÉCLIC) */}
+              {hasCriteres && task.criteres && (
+                <div className="flex flex-wrap items-center gap-2">
+                  {Object.entries(task.criteres).map(([key, val]) => (
+                    <div key={key} title={CRITERE_LABELS[key]}
+                      className={`flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full ${
+                        val
+                          ? "bg-lecko-blue/10 text-lecko-blue"
+                          : "bg-muted text-foreground-muted"
+                      }`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${val ? "bg-lecko-blue" : "bg-foreground-muted"}`} />
+                      {CRITERE_ICONS[key]} {CRITERE_LABELS[key]}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* AI badge */}
+              <div className="flex flex-wrap gap-2 items-center">
+                {task.peut_fonctionner_sans_ia === true && (
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                    ⚡ Faisable sans IA
+                  </span>
+                )}
+                {task.peut_fonctionner_sans_ia === false && (
+                  <div className="relative">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setShowRaisonIa(!showRaisonIa); }}
+                      className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400 hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
+                    >
+                      🤖 IA nécessaire
+                      <Info size={11} />
+                    </button>
+                    {showRaisonIa && task.raison_ia && (
+                      <div className="absolute top-full left-0 mt-1 z-10 w-64 bg-card border border-border rounded-xl shadow-xl p-3 text-xs text-foreground-secondary animate-fade-in">
+                        {task.raison_ia}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               {/* Solution */}
               <div className="flex gap-2 bg-lecko-blue/5 border border-lecko-blue/20 rounded-lg p-3">
