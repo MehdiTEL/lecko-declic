@@ -389,6 +389,14 @@ export default function EquipeResultats() {
               })}
             </Accordion>
           </motion.div>
+
+          {/* ── Lecko CTA ── */}
+          <LeckoCTA
+            score={Math.round(team.results.reduce((s, r) => s + r.result.score_global, 0) / team.results.length)}
+            metier={`${team.results.length} métiers (${team.members.reduce((s, m) => s + m.count, 0)} personnes)`}
+            typeAnalyse="equipe"
+            onVisible={handleCtaVisible}
+          />
         </main>
       </div>
 
@@ -422,6 +430,13 @@ export default function EquipeResultats() {
         </div>
       </div>
 
+      <Footer />
+
+      <MicroCTA
+        ctaVisible={ctaVisible}
+        metier={`${team.results.length} métiers`}
+        score={Math.round(team.results.reduce((s, r) => s + r.result.score_global, 0) / team.results.length)}
+      />
       {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
     </div>
   );
