@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { ArrowRight, Search, BarChart3, Wrench, Play, Award, ChevronLeft, ChevronRight, Users } from "lucide-react";
+import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ApiKeyModal from "@/components/ApiKeyModal";
 import Footer from "@/components/Footer";
 import { getApiKey } from "@/lib/aiProvider";
 import { findInLocalDatabase, FREE_JOB_LABELS, getSimilarJobs } from "@/data/jobDatabase";
+import { supabase } from "@/integrations/supabase/client";
 
 const DECLIC_PHASES = [
   {
