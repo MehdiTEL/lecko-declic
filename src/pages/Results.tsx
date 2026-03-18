@@ -108,9 +108,8 @@ export default function Results() {
 
       // Save to Supabase for sharing
       try {
-        await supabase
-          .from("analyses")
-          .insert({ metier: job, resultats: parsed as unknown as Record<string, unknown> });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase.from("analyses") as any).insert({ metier: job, resultats: parsed });
       } catch {
         // silent fail
       }
