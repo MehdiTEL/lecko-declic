@@ -21,5 +21,11 @@ export function useTheme() {
 
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
 
-  return { theme, toggleTheme };
+  const resetTheme = () => {
+    localStorage.removeItem("lecko-theme");
+    const sys = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    setTheme(sys);
+  };
+
+  return { theme, toggleTheme, setTheme, resetTheme };
 }
