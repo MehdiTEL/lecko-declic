@@ -99,30 +99,7 @@ export default function Results() {
     setErrorShowSettings(false);
 
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "gpt-4o",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: `Métier : ${job}` },
-          ],
-          temperature: 0.7,
-          max_tokens: 3000,
-        }),
-      });
-
-      if (!response.ok) {
-        const errInfo = getApiErrorMessage(response.status);
-        throw Object.assign(new Error(errInfo.message), { showSettings: errInfo.showSettings });
-      }
-
-      const aiData = await response.json();
-      const content: string = aiData.choices?.[0]?.message?.content ?? "";
+      const content: string = await callAnalyzeJob(job);
 
       let parsed: AnalysisResult;
       try {
