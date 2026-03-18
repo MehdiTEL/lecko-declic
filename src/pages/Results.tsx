@@ -53,6 +53,7 @@ export default function Results() {
   }, []);
 
   async function loadShared(id: string) {
+
     setLoading(true);
     try {
       const { data, error } = await supabase
