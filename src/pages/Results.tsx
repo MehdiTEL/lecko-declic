@@ -461,7 +461,6 @@ export default function Results() {
                 roiPerWeek={task.temps_gagne_heures_semaine * roiHourlyRate * roiNbPeople}
               />
             ))}
-            ))}
             {filteredTasks.length === 0 && (
               <div className="lecko-card p-8 text-center text-foreground-muted">
                 Aucune tâche ne correspond aux filtres sélectionnés.
