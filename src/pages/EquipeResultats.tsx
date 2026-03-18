@@ -85,6 +85,8 @@ export default function EquipeResultats() {
   const [team, setTeam] = useState<TeamAnalysisResult | null>(null);
   const { toast, showToast, hideToast } = useToast();
   const reportRef = useRef<HTMLDivElement>(null);
+  const [ctaVisible, setCtaVisible] = useState(false);
+  const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("lecko-team-result");
