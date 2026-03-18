@@ -47,26 +47,6 @@ const DECLIC_PHASES = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote: "La méthode DÉCLIC nous a permis d'identifier 12 automatisations prioritaires en une journée. En 3 mois, nous avons récupéré l'équivalent d'un mi-temps.",
-    name: "Marie Dupont",
-    title: "Directrice des opérations, Groupe bancaire",
-    initials: "MD",
-  },
-  {
-    quote: "Ce qui m'a frappé, c'est la rigueur de l'approche : on n'automatise pas pour automatiser. On commence par comprendre. Résultat : zéro projet abandonné.",
-    name: "Thomas Laurent",
-    title: "DSI, Collectivité territoriale",
-    initials: "TL",
-  },
-  {
-    quote: "L'outil de diagnostic m'a ouvert les yeux sur des tâches que je faisais depuis des années sans questionner. En 2 semaines, j'avais mon premier workflow en production.",
-    name: "Sophie Martin",
-    title: "Chef de projet, Équipementier automobile",
-    initials: "SM",
-  },
-];
 
 // ── No-match modal ─────────────────────────────────────────────────────────────
 
