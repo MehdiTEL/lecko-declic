@@ -11,8 +11,11 @@ import LeckoCTA from "@/components/LeckoCTA";
 import MicroCTA from "@/components/MicroCTA";
 import Footer from "@/components/Footer";
 import RoiCalculator from "@/components/RoiCalculator";
+import DeclicProgress from "@/components/DeclicProgress";
+import WhereToStart from "@/components/WhereToStart";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
+import { DeclicPhase } from "@/types/declic";
 import { saveToHistory } from "@/lib/history";
 import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { findInLocalDatabase } from "@/data/jobDatabase";
@@ -20,7 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-type CategoryFilter = "all" | TaskCategory;
+type CategoryFilter = "all" | TaskCategory | "easy_wins" | "ai_needed";
 type ToolFilter = "all" | ToolType;
 
 const TOOL_TYPES: ToolType[] = ["Agent IA", "Workflow N8N", "Automatisation No-Code", "Copilot / Assistant IA", "Script personnalisé"];
