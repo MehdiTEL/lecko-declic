@@ -356,6 +356,7 @@ export default function Settings() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <Footer />
     </div>
   );
 }
