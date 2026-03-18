@@ -454,7 +454,13 @@ export default function Results() {
           {/* Task cards */}
           <div className="space-y-3">
             {filteredTasks.map((task, i) => (
-              <TaskCard key={task.nom + i} task={task} index={i} />
+              <TaskCard
+                key={task.nom + i}
+                task={task}
+                index={i}
+                roiPerWeek={task.temps_gagne_heures_semaine * roiHourlyRate * roiNbPeople}
+              />
+            ))}
             ))}
             {filteredTasks.length === 0 && (
               <div className="lecko-card p-8 text-center text-foreground-muted">
