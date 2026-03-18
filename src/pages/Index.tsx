@@ -66,9 +66,11 @@ export default function Index() {
   };
 
   const handleApiKeySaved = () => {
-    if (pendingJob) {
-      navigate(`/resultats?metier=${encodeURIComponent(pendingJob)}`);
-      setPendingJob(null);
+    const job = pendingJob;
+    setPendingJob(null);
+    setShowApiModal(false);
+    if (job) {
+      navigate(`/resultats?metier=${encodeURIComponent(job)}`);
     }
   };
 
