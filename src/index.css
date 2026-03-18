@@ -1,96 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* =====================================================
+   LECKO DESIGN SYSTEM
+   All colors are HSL. Lecko Blue + Lecko Orange brand.
+===================================================== */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Lecko Brand */
+    --lecko-blue: 221 83% 53%;        /* #2563EB */
+    --lecko-orange: 38 92% 50%;       /* #F59E0B */
+    --lecko-green: 160 84% 39%;       /* #10B981 */
 
+    /* Surfaces */
+    --background: 230 100% 97%;       /* #EEF2FF */
+    --surface: 0 0% 100%;             /* #FFFFFF cards */
+    --foreground: 221 39% 11%;        /* #111827 */
+    --foreground-secondary: 220 13% 25%; /* #374151 */
+    --foreground-muted: 220 9% 46%;   /* #6B7280 */
+
+    /* Shadcn tokens */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 221 39% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 221 39% 11%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 230 100% 97%;
+    --secondary-foreground: 221 83% 53%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
+    --radius: 0.75rem;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Semantic badge backgrounds */
+    --badge-auto-bg: 152 76% 94%;     /* green light */
+    --badge-auto-text: 158 64% 20%;
+    --badge-partial-bg: 48 100% 95%;  /* yellow light */
+    --badge-partial-text: 30 62% 30%;
+    --badge-hard-bg: 0 100% 95%;      /* red light */
+    --badge-hard-text: 0 66% 38%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(230 100% 97%) 0%, hsl(221 83% 93%) 100%);
+    --gradient-blue: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 63%) 100%);
+
+    /* Shadows */
+    --shadow-card: 0 1px 3px 0 hsl(221 39% 11% / 0.08), 0 1px 2px -1px hsl(221 39% 11% / 0.05);
+    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 53% / 0.15);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Lecko brand stays same */
+    --lecko-blue: 221 83% 53%;
+    --lecko-orange: 38 92% 50%;
+    --lecko-green: 160 84% 39%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --background: 222 47% 11%;        /* #0F172A slate-900 */
+    --surface: 215 28% 17%;           /* #1E293B slate-800 */
+    --foreground: 210 40% 96%;        /* #F1F5F9 slate-100 */
+    --foreground-secondary: 215 16% 47%; /* #94A3B8 slate-400 */
+    --foreground-muted: 215 16% 47%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
+    --card: 215 28% 17%;
+    --card-foreground: 210 40% 96%;
+    --popover: 215 28% 17%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 27%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 215 25% 27%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+    --border: 215 25% 27%;            /* #334155 slate-700 */
+    --input: 215 25% 27%;
+    --ring: 221 83% 53%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 221 83% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 215 25% 27%;
+    --sidebar-ring: 221 83% 53%;
+
+    --badge-auto-bg: 158 64% 15%;
+    --badge-auto-text: 152 76% 74%;
+    --badge-partial-bg: 30 62% 18%;
+    --badge-partial-text: 48 100% 75%;
+    --badge-hard-bg: 0 66% 18%;
+    --badge-hard-text: 0 100% 75%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(215 28% 17%) 100%);
+    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
+    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 53% / 0.25);
   }
 }
 
@@ -99,7 +127,70 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'Source Sans 3', Calibri, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+
+  /* Dark mode transitions */
+  *, *::before, *::after {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.15s ease;
+  }
+
+  /* Disable transitions for SVG and canvas */
+  svg *, canvas {
+    transition: none;
+  }
+}
+
+@layer components {
+  /* Lecko card */
+  .lecko-card {
+    @apply bg-card rounded-xl border border-border;
+    box-shadow: var(--shadow-card);
+  }
+
+  .lecko-card:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Orange square decoration */
+  .lecko-deco-square {
+    @apply fixed bottom-6 left-6 w-10 h-10 rounded-lg z-10 pointer-events-none;
+    background-color: hsl(var(--lecko-orange));
+    opacity: 0.85;
+  }
+
+  /* Scrollable tags row */
+  .tags-scroll {
+    @apply flex gap-2 overflow-x-auto pb-2;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .tags-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
 }
