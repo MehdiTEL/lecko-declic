@@ -16,6 +16,7 @@ import Navbar from "@/components/Navbar";
 import LeckoCTA from "@/components/LeckoCTA";
 import MicroCTA from "@/components/MicroCTA";
 import Footer from "@/components/Footer";
+import RoiCalculatorEquipe from "@/components/RoiCalculatorEquipe";
 import { Toast, useToast } from "@/components/Toast";
 import { TeamAnalysisResult, QuickWin } from "@/types/team";
 import { TeamJobResult } from "@/types/team";
