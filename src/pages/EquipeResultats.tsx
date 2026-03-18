@@ -222,7 +222,10 @@ export default function EquipeResultats() {
             </div>
           </motion.div>
 
-          {/* ── Section 2 — Stacked Bar Chart ── */}
+          {/* ── Section 2 — ROI Calculator ── */}
+          <RoiCalculatorEquipe results={team.results} />
+
+          {/* ── Section 3 — Stacked Bar Chart ── */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
