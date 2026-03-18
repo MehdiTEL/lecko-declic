@@ -56,7 +56,7 @@ export default function Settings() {
   const handleReset = () => {
     deleteApiKey();
     clearHistory();
-    setTheme("system");
+    resetTheme();
     setApiKeyState(null);
     setConfirmReset(false);
   };
