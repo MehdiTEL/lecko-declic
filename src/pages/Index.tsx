@@ -237,6 +237,7 @@ export default function Index() {
         open={showApiModal}
         onClose={() => { setShowApiModal(false); setPendingJob(null); }}
         onSaved={handleApiKeySaved}
+        initialProvider={null}
       />
     </div>
   );
