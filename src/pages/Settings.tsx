@@ -236,6 +236,61 @@ export default function Settings() {
             "Réinitialiser tout" supprime le fournisseur IA, la clé API, l'historique des analyses et la préférence de thème.
           </p>
         </section>
+
+        {/* Analysis mode section */}
+        <section className="lecko-card p-6 space-y-4">
+          <div className="flex items-center gap-2 mb-1">
+            <Bot size={18} className="text-lecko-blue" />
+            <h2 className="font-bold text-foreground">Mode d'analyse</h2>
+          </div>
+
+          <div className="flex items-center gap-3 bg-muted/50 rounded-xl px-4 py-3">
+            {apiKey && provider ? (
+              <>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-lecko-blue/10 text-lecko-blue border border-lecko-blue/20">
+                  <Bot size={11} />
+                  API — {provider === "openai" ? "OpenAI GPT-4o" : "Anthropic Claude"}
+                </span>
+                <span className="text-xs text-foreground-muted flex-1">Analyses personnalisées activées</span>
+                <button
+                  onClick={() => setConfirmDelete(true)}
+                  className="text-xs font-semibold text-foreground-secondary hover:text-destructive transition-colors"
+                >
+                  Repasser en mode gratuit
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-muted text-foreground-muted border border-border">
+                  <Sparkles size={11} />
+                  Gratuit — Base locale
+                </span>
+                <span className="text-xs text-foreground-muted flex-1">15 métiers disponibles</span>
+                <button
+                  onClick={() => setShowChangeProviderModal(true)}
+                  className="text-xs font-semibold text-lecko-blue hover:text-lecko-orange transition-colors"
+                >
+                  Configurer une clé API
+                </button>
+              </>
+            )}
+          </div>
+
+          <div>
+            <p className="text-xs font-bold text-foreground-muted uppercase mb-2">Métiers disponibles gratuitement</p>
+            <div className="flex flex-wrap gap-1.5">
+              {FREE_JOB_LABELS.map((label) => (
+                <span
+                  key={label}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full border border-border bg-muted/50 text-foreground-secondary"
+                >
+                  <Sparkles size={9} className="text-lecko-blue" />
+                  {label}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Change provider modal */}
