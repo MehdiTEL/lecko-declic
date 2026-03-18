@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Trash2, Eye, Clock, BarChart, Sparkles, Bot } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { getHistory, removeFromHistory, clearHistory } from "@/lib/history";
 import { HistoryEntry } from "@/types/analysis";
 
