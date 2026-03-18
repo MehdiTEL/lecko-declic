@@ -1,165 +1,120 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Settings, Users, MessageCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Sun, Moon, Menu, X, History, Users, MessageCircle } from "lucide-react";
+import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
-import { getApiKey, getProvider, AIProvider } from "@/lib/aiProvider";
 import { useChatContext } from "@/context/ChatContext";
-
-const PROVIDER_BADGE: Record<AIProvider, string> = {
-  openai: "GPT ✓",
-  anthropic: "Claude ✓",
-};
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [hasKey, setHasKey] = useState<boolean>(!!getApiKey());
-  const [provider, setProvider] = useState<AIProvider | null>(getProvider());
   const location = useLocation();
   const { openChat, hasSeenNew } = useChatContext();
-
-  useEffect(() => {
-    setHasKey(!!getApiKey());
-    setProvider(getProvider());
-  }, [location.pathname]);
 
   const navLinks = [
     { to: "/", label: "Accueil" },
     { to: "/methode", label: "Méthode" },
-    { to: "/equipe", label: "Équipe" },
-    { to: "/historique", label: "Historique" },
+    { to: "/equipe", label: "Équipe", icon: <Users size={14} /> },
+    { to: "/historique", label: "Historique", icon: <History size={14} /> },
   ];
 
-  const ProviderDot = () => (
-    <span
-      className={`absolute -top-0.5 -right-0.5 text-[9px] font-bold px-1 rounded-full leading-4 ${
-        hasKey
-          ? "bg-lecko-green text-primary-foreground"
-          : "bg-destructive text-primary-foreground"
-      }`}
-      style={{ minWidth: "auto" }}
-    >
-      {hasKey && provider ? PROVIDER_BADGE[provider] : "API ✗"}
-    </span>
-  );
+  const linkClass = (to: string) =>
+    `flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 hover:text-lecko-blue ${
+      location.pathname === to ? "text-lecko-blue" : "text-foreground-secondary"
+    }`;
 
   return (
-    <header className="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <span className="text-2xl font-bold text-lecko-blue tracking-tight">lecko.</span>
+          <span className="text-xl font-bold text-lecko-blue tracking-tight">lecko.</span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-7">
           {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`flex items-center gap-1.5 text-sm font-semibold transition-colors hover:text-lecko-blue ${
-                location.pathname === link.to ? "text-lecko-blue" : "text-foreground-secondary"
-              }`}
-            >
-              {link.label === "Historique" && <History size={14} />}
-              {link.label === "Équipe" && <Users size={14} />}
+            <Link key={link.to} to={link.to} className={linkClass(link.to)}>
+              {link.icon}
               {link.label}
             </Link>
           ))}
 
-          {/* Coach AI button */}
+          {/* Coach IA */}
           <button
             onClick={() => openChat()}
-            className="relative flex items-center gap-1.5 text-sm font-semibold text-foreground-secondary hover:text-lecko-blue transition-colors"
+            className="relative flex items-center gap-1.5 text-sm font-medium text-foreground-secondary hover:text-lecko-blue transition-colors duration-200"
             aria-label="Coach Automatisation"
           >
-            <MessageCircle size={18} />
+            <MessageCircle size={16} />
             <span>Coach IA</span>
             {!hasSeenNew && (
-              <span className="absolute -top-1 -right-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-lecko-green text-white leading-3">
+              <span className="absolute -top-1.5 -right-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-lecko-green text-white leading-3">
                 Nouveau
               </span>
             )}
           </button>
 
-          {/* Settings with provider indicator */}
-          <Link
-            to="/parametres"
-            className={`relative p-2 rounded-lg hover:bg-muted transition-colors ${
-              location.pathname === "/parametres"
-                ? "text-lecko-blue"
-                : "text-foreground-secondary hover:text-lecko-blue"
-            }`}
-            aria-label="Paramètres"
-          >
-            <Settings size={18} />
-            <ProviderDot />
-          </Link>
-
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary hover:text-lecko-blue"
-            aria-label="Toggle theme"
+            className="p-1.5 rounded-lg hover:bg-muted transition-colors text-foreground-muted hover:text-foreground"
+            aria-label="Changer de thème"
           >
-            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+            {theme === "light" ? <Moon size={17} /> : <Sun size={17} />}
           </button>
         </nav>
 
         {/* Mobile */}
-        <div className="flex items-center gap-2 md:hidden">
-          {/* Coach button mobile */}
+        <div className="flex items-center gap-1 md:hidden">
           <button
             onClick={() => openChat()}
-            className="relative p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"
+            className="relative p-2 rounded-lg hover:bg-muted transition-colors text-foreground-muted"
             aria-label="Coach Automatisation"
           >
             <MessageCircle size={18} />
             {!hasSeenNew && (
-              <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-lecko-green" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-lecko-green" />
             )}
           </button>
-          <Link
-            to="/parametres"
-            className="relative p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"
-            aria-label="Paramètres"
-          >
-            <Settings size={18} />
-            <ProviderDot />
-          </Link>
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"
-            aria-label="Toggle theme"
+            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-muted"
+            aria-label="Changer de thème"
           >
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-secondary"
-            aria-label="Toggle menu"
+            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-muted"
+            aria-label="Menu"
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — slide down */}
       {menuOpen && (
-        <div className="md:hidden bg-card border-b border-border px-4 py-4 flex flex-col gap-3 animate-fade-in">
+        <div className="md:hidden bg-card border-b border-border px-5 py-4 flex flex-col gap-1 animate-fade-in">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               onClick={() => setMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-semibold py-2 transition-colors ${
+              className={`flex items-center gap-2 text-sm font-medium py-2.5 transition-colors ${
                 location.pathname === link.to ? "text-lecko-blue" : "text-foreground-secondary"
               }`}
             >
-              {link.label === "Historique" && <History size={14} />}
-              {link.label === "Équipe" && <Users size={14} />}
+              {link.icon}
               {link.label}
             </Link>
           ))}
+          <button
+            onClick={() => { setMenuOpen(false); openChat(); }}
+            className="flex items-center gap-2 text-sm font-medium py-2.5 text-foreground-secondary hover:text-lecko-blue transition-colors text-left"
+          >
+            <MessageCircle size={14} />
+            Coach IA
+          </button>
         </div>
       )}
     </header>

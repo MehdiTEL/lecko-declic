@@ -327,13 +327,12 @@ export default function Results() {
               <ScoreCircle score={result.score_global} />
             </div>
             <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <KPICard value={result.taches.length} label="Tâches analysées" color="blue" delay={0.1} />
-              <KPICard value={automatisables + partiels} label="Automatisables" color="green" delay={0.2} />
+              <KPICard value={result.taches.length} label="Tâches analysées" delay={0.1} />
+              <KPICard value={automatisables + partiels} label="Automatisables" delay={0.2} />
               <KPICard
                 value={result.heures_economisees_semaine}
                 suffix="h"
                 label="Heures / semaine gagnées"
-                color="orange"
                 delay={0.3}
               />
             </div>
