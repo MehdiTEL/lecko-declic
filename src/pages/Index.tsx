@@ -326,19 +326,7 @@ export default function Index() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-card border-t border-border px-4 py-6 text-center">
-        <p className="text-foreground-muted text-sm">
-          <span className="font-bold">lecko.</span> — Propulsé par l'expertise IA de Lecko — Conseil en transformation digitale
-        </p>
-        <a
-          href="https://lecko.fr"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-foreground-muted hover:text-lecko-blue transition-colors"
-        >
-          lecko.fr
-        </a>
-      </footer>
+      <Footer />
 
       {showNoMatchModal && (
         <NoMatchModal
