@@ -1,36 +1,24 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowRight, Target, Bot, BarChart3 } from "lucide-react";
+import { ArrowRight, Target, Bot, BarChart3, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ApiKeyModal from "@/components/ApiKeyModal";
 import { getApiKey } from "@/lib/aiProvider";
-
-const SUGGESTIONS = [
-  "Consultant",
-  "Comptable",
-  "Chef de projet",
-  "Community Manager",
-  "RH / Recruteur",
-  "Commercial",
-  "Développeur",
-  "Assistant(e) de direction",
-  "Juriste",
-  "Product Manager",
-];
+import { findInLocalDatabase, FREE_JOB_LABELS, getSimilarJobs } from "@/data/jobDatabase";
 
 const HOW_IT_WORKS = [
   {
     icon: <Target size={28} className="text-lecko-blue" />,
     num: "01",
     title: "Entrez votre métier",
-    desc: "Tapez votre intitulé de poste ou choisissez parmi nos suggestions",
+    desc: "Tapez votre intitulé de poste ou choisissez parmi nos suggestions disponibles gratuitement",
   },
   {
     icon: <Bot size={28} className="text-lecko-blue" />,
     num: "02",
-    title: "L'IA analyse",
-    desc: "Notre IA identifie vos tâches quotidiennes et évalue leur potentiel d'automatisation",
+    title: "Analyse instantanée",
+    desc: "Résultats immédiats depuis notre base de 15 métiers, ou analyse IA personnalisée avec votre clé API",
   },
   {
     icon: <BarChart3 size={28} className="text-lecko-blue" />,
@@ -40,14 +28,81 @@ const HOW_IT_WORKS = [
   },
 ];
 
+interface NoMatchModalProps {
+  metier: string;
+  onClose: () => void;
+  onUseApi: () => void;
+  similarJobs: string[];
+  onPickJob: (job: string) => void;
+}
+
+function NoMatchModal({ metier, onClose, onUseApi, similarJobs, onPickJob }: NoMatchModalProps) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        className="bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4"
+      >
+        <div className="text-3xl text-center">🔍</div>
+        <h2 className="text-lg font-bold text-foreground text-center">
+          Ce métier n'est pas dans notre base gratuite
+        </h2>
+        <p className="text-sm text-foreground-secondary text-center">
+          <span className="font-semibold text-lecko-orange">"{metier}"</span> n'est pas encore
+          disponible gratuitement. Pour obtenir une analyse personnalisée, vous pouvez utiliser
+          votre propre clé API.
+        </p>
+
+        <button
+          onClick={onUseApi}
+          className="w-full h-11 rounded-xl font-bold text-sm bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-300 flex items-center justify-center gap-2"
+        >
+          Utiliser ma clé API →
+        </button>
+
+        {similarJobs.length > 0 && (
+          <div>
+            <p className="text-xs text-foreground-muted mb-2 text-center">
+              Ou essayez un métier proche disponible gratuitement :
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {similarJobs.map((j) => (
+                <button
+                  key={j}
+                  onClick={() => onPickJob(j)}
+                  className="px-3 py-1.5 text-xs font-semibold rounded-full border border-lecko-blue/30 bg-lecko-blue/5 text-lecko-blue hover:bg-lecko-blue hover:text-primary-foreground transition-all duration-200 flex items-center gap-1"
+                >
+                  <Sparkles size={11} />
+                  {j}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <button
+          onClick={onClose}
+          className="w-full text-xs text-foreground-muted hover:text-foreground transition-colors py-1"
+        >
+          Annuler
+        </button>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function Index() {
   const [metier, setMetier] = useState("");
   const [pendingJob, setPendingJob] = useState<string | null>(null);
   const [showApiModal, setShowApiModal] = useState(false);
+  const [showNoMatchModal, setShowNoMatchModal] = useState(false);
+  const [noMatchMetier, setNoMatchMetier] = useState("");
+  const [similarJobs, setSimilarJobs] = useState<string[]>([]);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Auto-open modal if redirected from results with requireKey
   useEffect(() => {
     if (searchParams.get("requireKey") === "1") {
       setShowApiModal(true);
@@ -57,12 +112,24 @@ export default function Index() {
   const handleAnalyze = (value?: string) => {
     const job = (value ?? metier).trim();
     if (!job) return;
-    if (!getApiKey()) {
-      setPendingJob(job);
-      setShowApiModal(true);
+
+    // 1. Check local database first
+    const localResult = findInLocalDatabase(job);
+    if (localResult) {
+      navigate(`/resultats?metier=${encodeURIComponent(job)}&source=local`);
       return;
     }
-    navigate(`/resultats?metier=${encodeURIComponent(job)}`);
+
+    // 2. If not in local DB, check if user has API key
+    if (getApiKey()) {
+      navigate(`/resultats?metier=${encodeURIComponent(job)}`);
+      return;
+    }
+
+    // 3. Neither local nor API — show no-match modal
+    setNoMatchMetier(job);
+    setSimilarJobs(getSimilarJobs(job));
+    setShowNoMatchModal(true);
   };
 
   const handleApiKeySaved = () => {
@@ -74,29 +141,34 @@ export default function Index() {
     }
   };
 
+  const handleNoMatchUseApi = () => {
+    setShowNoMatchModal(false);
+    setPendingJob(noMatchMetier);
+    setShowApiModal(true);
+  };
+
+  const handlePickSimilarJob = (job: string) => {
+    setShowNoMatchModal(false);
+    navigate(`/resultats?metier=${encodeURIComponent(job)}&source=local`);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-
-      {/* Orange deco square fixed */}
       <div className="lecko-deco-square" aria-hidden />
 
       {/* ── HERO ── */}
       <section className="relative flex-1 flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
-        {/* Hero background gradient */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: "var(--gradient-hero)" }}
           aria-hidden
         />
-
-        {/* Orange deco top-right */}
         <div
           className="absolute top-6 right-6 w-10 h-10 rounded-lg opacity-70"
           style={{ backgroundColor: "hsl(var(--lecko-orange))" }}
           aria-hidden
         />
-        {/* Blue deco bottom-left hero */}
         <div
           className="absolute bottom-8 left-8 w-6 h-6 rounded-md opacity-30"
           style={{ backgroundColor: "hsl(var(--lecko-blue))" }}
@@ -104,7 +176,6 @@ export default function Index() {
         />
 
         <div className="relative z-10 max-w-3xl w-full text-center">
-          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -115,7 +186,6 @@ export default function Index() {
             Diagnostic IA × Métier
           </motion.div>
 
-          {/* Title */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -133,7 +203,9 @@ export default function Index() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg text-foreground-secondary mb-8 max-w-xl mx-auto"
           >
-            Entrez votre profession, notre IA analyse vos tâches quotidiennes et identifie les gains de temps possibles grâce à l'automatisation.
+            Entrez votre profession, obtenez instantanément un diagnostic d'automatisation.{" "}
+            <span className="text-lecko-blue font-semibold">Gratuit</span> pour 15 métiers, ou
+            utilisez votre clé API pour une analyse sur-mesure.
           </motion.p>
 
           {/* Input */}
@@ -154,34 +226,31 @@ export default function Index() {
             <button
               onClick={() => handleAnalyze()}
               disabled={!metier.trim()}
-              className="h-13 px-6 py-3.5 rounded-xl font-bold text-base flex items-center gap-2 shrink-0
-                bg-lecko-blue text-primary-foreground
-                hover:bg-lecko-orange transition-all duration-300
-                disabled:opacity-40 disabled:cursor-not-allowed
-                shadow-card hover:shadow-card-hover"
+              className="h-13 px-6 py-3.5 rounded-xl font-bold text-base flex items-center gap-2 shrink-0 bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-card hover:shadow-card-hover"
             >
               Analyser mon métier
               <ArrowRight size={18} />
             </button>
           </motion.div>
 
-          {/* Suggestions */}
+          {/* Suggestions with free badge */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <p className="text-xs text-foreground-muted mb-2">Suggestions rapides :</p>
+            <p className="text-xs text-foreground-muted mb-2 flex items-center justify-center gap-1">
+              <Sparkles size={11} className="text-lecko-blue" />
+              Disponibles gratuitement :
+            </p>
             <div className="tags-scroll justify-center flex-wrap">
-              {SUGGESTIONS.map((s) => (
+              {FREE_JOB_LABELS.map((s) => (
                 <button
                   key={s}
                   onClick={() => handleAnalyze(s)}
-                  className="shrink-0 px-3 py-1.5 text-sm font-semibold rounded-full border border-lecko-blue/30 bg-lecko-blue/5 text-lecko-blue
-                    hover:bg-lecko-blue hover:text-primary-foreground hover:scale-105
-                    dark:border-lecko-blue/30 dark:bg-lecko-blue/10
-                    transition-all duration-200"
+                  className="shrink-0 px-3 py-1.5 text-sm font-semibold rounded-full border border-lecko-blue/30 bg-lecko-blue/5 text-lecko-blue hover:bg-lecko-blue hover:text-primary-foreground hover:scale-105 dark:border-lecko-blue/30 dark:bg-lecko-blue/10 transition-all duration-200 flex items-center gap-1"
                 >
+                  <Sparkles size={10} />
                   {s}
                 </button>
               ))}
@@ -232,6 +301,16 @@ export default function Index() {
           lecko.fr
         </a>
       </footer>
+
+      {showNoMatchModal && (
+        <NoMatchModal
+          metier={noMatchMetier}
+          onClose={() => setShowNoMatchModal(false)}
+          onUseApi={handleNoMatchUseApi}
+          similarJobs={similarJobs}
+          onPickJob={handlePickSimilarJob}
+        />
+      )}
 
       <ApiKeyModal
         open={showApiModal}

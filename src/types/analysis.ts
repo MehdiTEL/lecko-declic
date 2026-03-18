@@ -10,6 +10,8 @@ export type ToolType =
   | "Copilot / Assistant IA"
   | "Script personnalisé";
 
+export type AnalysisSource = "local" | "api";
+
 export interface AnalysisTask {
   nom: string;
   description: string;
@@ -31,5 +33,6 @@ export interface HistoryEntry {
   metier: string;
   date: string;
   result: AnalysisResult;
+  source?: AnalysisSource;
   supabaseId?: string;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings } from "lucide-react";
+import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings, Sparkles, Bot } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -8,9 +8,10 @@ import ScoreCircle from "@/components/ScoreCircle";
 import KPICard from "@/components/KPICard";
 import TaskCard from "@/components/TaskCard";
 import { Toast, useToast } from "@/components/Toast";
-import { AnalysisResult, AnalysisTask, TaskCategory, ToolType } from "@/types/analysis";
+import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
 import { saveToHistory } from "@/lib/history";
-import { getApiKey, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
+import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
+import { findInLocalDatabase } from "@/data/jobDatabase";
 import { supabase } from "@/integrations/supabase/client";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -31,9 +32,11 @@ export default function Results() {
   const metier = searchParams.get("metier") ?? "";
   const sharedId = searchParams.get("id");
   const cachedParam = searchParams.get("cached");
+  const sourceParam = searchParams.get("source") as AnalysisSource | null;
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [analysisSource, setAnalysisSource] = useState<AnalysisSource>("local");
   const [error, setError] = useState<string | null>(null);
   const [errorShowSettings, setErrorShowSettings] = useState(false);
   const [catFilter, setCatFilter] = useState<CategoryFilter>("all");
@@ -49,19 +52,38 @@ export default function Results() {
       try {
         const parsed = JSON.parse(decodeURIComponent(atob(cachedParam))) as AnalysisResult;
         setResult(parsed);
+        setAnalysisSource(sourceParam ?? "local");
         setLoading(false);
       } catch {
-        analyzeJob(metier);
+        runAnalysis(metier);
       }
     } else if (sharedId) {
       loadShared(sharedId);
     } else if (metier) {
+      // Check if local source was requested
+      if (sourceParam === "local") {
+        const localResult = findInLocalDatabase(metier);
+        if (localResult) {
+          setResult(localResult);
+          setAnalysisSource("local");
+          saveToHistory({
+            id: crypto.randomUUID(),
+            metier,
+            date: new Date().toISOString(),
+            result: localResult,
+            source: "local",
+          });
+          // Small delay for visual polish
+          setTimeout(() => setLoading(false), 900);
+          return;
+        }
+      }
       const key = getApiKey();
       if (!key) {
         navigate("/?requireKey=1");
         return;
       }
-      analyzeJob(metier);
+      runAnalysis(metier);
     } else {
       navigate("/");
     }
@@ -78,6 +100,7 @@ export default function Results() {
         .single();
       if (error || !data) throw new Error("Analyse introuvable.");
       setResult(data.resultats as unknown as AnalysisResult);
+      setAnalysisSource("api");
     } catch {
       setError("Analyse introuvable ou lien expiré.");
       setErrorShowSettings(false);
@@ -86,7 +109,7 @@ export default function Results() {
     }
   }
 
-  async function analyzeJob(job: string, retry = false) {
+  async function runAnalysis(job: string, retry = false) {
     const apiKey = getApiKey();
     if (!apiKey) {
       navigate("/?requireKey=1");
@@ -115,16 +138,16 @@ export default function Results() {
       if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
 
       setResult(parsed);
+      setAnalysisSource("api");
 
-      // Save to history
       saveToHistory({
         id: crypto.randomUUID(),
         metier: job,
         date: new Date().toISOString(),
         result: parsed,
+        source: "api",
       });
 
-      // Save to Supabase for sharing (silent)
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (supabase.from("analyses") as any).insert({ metier: job, resultats: parsed });
@@ -138,7 +161,7 @@ export default function Results() {
       if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
 
       if (!retry && !(err instanceof Error && (err as { showSettings?: boolean }).showSettings)) {
-        await analyzeJob(job, true);
+        await runAnalysis(job, true);
         return;
       }
 
@@ -162,7 +185,7 @@ export default function Results() {
   const handleShare = async () => {
     if (!result) return;
     const encoded = btoa(encodeURIComponent(JSON.stringify(result)));
-    const url = `${window.location.origin}/resultats?metier=${encodeURIComponent(result.metier)}&cached=${encoded}`;
+    const url = `${window.location.origin}/resultats?metier=${encodeURIComponent(result.metier)}&cached=${encoded}&source=${analysisSource}`;
     try {
       await navigator.clipboard.writeText(url);
       showToast("Lien copié dans le presse-papier !");
@@ -219,7 +242,7 @@ export default function Results() {
                 </Link>
               )}
               <button
-                onClick={() => metier && analyzeJob(metier)}
+                onClick={() => metier && runAnalysis(metier)}
                 className="w-full py-3 bg-lecko-blue text-primary-foreground rounded-xl font-bold hover:bg-lecko-blue/90 transition-colors"
               >
                 Réessayer
@@ -239,6 +262,7 @@ export default function Results() {
 
   const automatisables = countByCat("automatisable");
   const partiels = countByCat("partiellement_automatisable");
+  const provider = getProvider();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -256,10 +280,24 @@ export default function Results() {
               <ArrowLeft size={16} />
               Nouvelle analyse
             </Link>
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-              Diagnostic IA pour :{" "}
-              <span className="text-lecko-orange">{result.metier}</span>
-            </h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                Diagnostic IA pour :{" "}
+                <span className="text-lecko-orange">{result.metier}</span>
+              </h1>
+              {/* Source badge */}
+              {analysisSource === "local" ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-muted text-foreground-muted border border-border">
+                  <Sparkles size={11} />
+                  Analyse générique
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-lecko-blue/10 text-lecko-blue border border-lecko-blue/20">
+                  <Bot size={11} />
+                  Analyse IA personnalisée{provider ? ` · via ${provider === "openai" ? "OpenAI" : "Claude"}` : ""}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -282,6 +320,31 @@ export default function Results() {
               />
             </div>
           </div>
+
+          {/* Free mode upsell banner */}
+          {analysisSource === "local" && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="lecko-card p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 border-lecko-orange/30 bg-lecko-orange/5"
+            >
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-foreground mb-0.5">
+                  📊 Cette analyse est basée sur des données génériques
+                </p>
+                <p className="text-xs text-foreground-secondary">
+                  Pour une analyse sur-mesure adaptée à votre contexte spécifique, utilisez le mode API avec votre clé OpenAI ou Anthropic.
+                </p>
+              </div>
+              <Link
+                to="/parametres"
+                className="shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 transition-colors whitespace-nowrap"
+              >
+                Passer au mode API →
+              </Link>
+            </motion.div>
+          )}
 
           {/* Filters */}
           <div>
