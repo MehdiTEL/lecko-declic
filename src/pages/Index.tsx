@@ -120,6 +120,114 @@ function NoMatchModal({ metier, onClose, onUseApi, similarJobs, onPickJob }: NoM
 
 // ── Main Page ──────────────────────────────────────────────────────────────────
 
+// ── Contact Form ───────────────────────────────────────────────────────────────
+
+function ContactSection() {
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
+  const [entreprise, setEntreprise] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !prenom.trim() || !nom.trim()) return;
+    setSending(true);
+    setErr(null);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from("leads") as any).insert({
+        nom: `${prenom.trim()} ${nom.trim()}`,
+        email: email.trim(),
+        message: entreprise.trim() ? `Entreprise : ${entreprise.trim()}` : null,
+        source: "contact_accueil",
+      });
+      if (error) throw error;
+      setSent(true);
+    } catch {
+      setErr("Une erreur est survenue. Réessayez ou écrivez-nous à contact@lecko.fr");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (sent) {
+    return (
+      <div className="text-center py-12">
+        <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle size={24} className="text-emerald-600" />
+        </div>
+        <h3 className="text-xl font-bold text-foreground mb-2">Message envoyé !</h3>
+        <p className="text-foreground-secondary">Notre équipe vous recontactera dans les 48h.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Prénom *</label>
+        <div className="relative">
+          <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            required value={prenom} onChange={e => setPrenom(e.target.value)}
+            placeholder="Jean"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Nom *</label>
+        <div className="relative">
+          <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            required value={nom} onChange={e => setNom(e.target.value)}
+            placeholder="Dupont"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Email *</label>
+        <div className="relative">
+          <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            type="email" required value={email} onChange={e => setEmail(e.target.value)}
+            placeholder="jean.dupont@entreprise.fr"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">Entreprise</label>
+        <div className="relative">
+          <Building2 size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+          <input
+            value={entreprise} onChange={e => setEntreprise(e.target.value)}
+            placeholder="Nom de votre organisation"
+            className="w-full h-11 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground"
+          />
+        </div>
+      </div>
+      {err && <p className="sm:col-span-2 text-sm text-destructive">{err}</p>}
+      <div className="sm:col-span-2">
+        <button
+          type="submit"
+          disabled={!email.trim() || !prenom.trim() || !nom.trim() || sending}
+          className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-lecko-blue text-white font-semibold text-sm hover:bg-lecko-blue/90 transition-colors disabled:opacity-50"
+        >
+          <Send size={15} />
+          {sending ? "Envoi en cours…" : "Envoyer"}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+// ── Main Page ──────────────────────────────────────────────────────────────────
+
 export default function Index() {
   const [metier, setMetier] = useState("");
   const [pendingJob, setPendingJob] = useState<string | null>(null);
@@ -127,22 +235,12 @@ export default function Index() {
   const [showNoMatchModal, setShowNoMatchModal] = useState(false);
   const [noMatchMetier, setNoMatchMetier] = useState("");
   const [similarJobs, setSimilarJobs] = useState<string[]>([]);
-  const [testimonialIdx, setTestimonialIdx] = useState(0);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (searchParams.get("requireKey") === "1") setShowApiModal(true);
   }, [searchParams]);
-
-  // Auto-rotate testimonials
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setTestimonialIdx((i) => (i + 1) % TESTIMONIALS.length);
-    }, 6000);
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, []);
 
   const handleAnalyze = (value?: string) => {
     const job = (value ?? metier).trim();
