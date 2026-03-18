@@ -29,6 +29,7 @@ export default function Results() {
   const navigate = useNavigate();
   const metier = searchParams.get("metier") ?? "";
   const sharedId = searchParams.get("id");
+  const cachedParam = searchParams.get("cached");
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -42,7 +43,15 @@ export default function Results() {
   const minLoadMs = 3000;
 
   useEffect(() => {
-    if (sharedId) {
+    if (cachedParam) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(atob(cachedParam))) as AnalysisResult;
+        setResult(parsed);
+        setLoading(false);
+      } catch {
+        analyzeJob(metier);
+      }
+    } else if (sharedId) {
       loadShared(sharedId);
     } else if (metier) {
       analyzeJob(metier);
@@ -53,7 +62,6 @@ export default function Results() {
   }, []);
 
   async function loadShared(id: string) {
-
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -62,7 +70,7 @@ export default function Results() {
         .eq("id", id)
         .single();
       if (error || !data) throw new Error("Analyse introuvable.");
-      setResult(data.resultats as AnalysisResult);
+      setResult(data.resultats as unknown as AnalysisResult);
     } catch {
       setError("Analyse introuvable ou lien expiré.");
     } finally {
@@ -81,7 +89,7 @@ export default function Results() {
       });
 
       if (error) throw new Error(error.message);
-      const parsed: AnalysisResult = typeof data === "string" ? JSON.parse(data) : data;
+      const parsed: AnalysisResult = typeof data === "string" ? JSON.parse(data) : (data as AnalysisResult);
 
       const elapsed = Date.now() - startTime;
       const remaining = minLoadMs - elapsed;
@@ -90,27 +98,21 @@ export default function Results() {
       setResult(parsed);
 
       // Save to history
-      const entry = {
+      const histEntry = {
         id: crypto.randomUUID(),
         metier: job,
         date: new Date().toISOString(),
         result: parsed,
       };
-      saveToHistory(entry);
+      saveToHistory(histEntry);
 
       // Save to Supabase for sharing
       try {
-        const { data: saved } = await supabase
+        await supabase
           .from("analyses")
-          .insert({ metier: job, resultats: parsed as unknown as Record<string, unknown> })
-          .select("id")
-          .single();
-        if (saved) {
-          entry.supabaseId = saved.id;
-          saveToHistory(entry);
-        }
+          .insert({ metier: job, resultats: parsed as unknown as Record<string, unknown> });
       } catch {
-        // silent fail - sharing will fall back to base64
+        // silent fail
       }
 
     } catch (err: unknown) {
@@ -139,12 +141,14 @@ export default function Results() {
 
   const handleShare = async () => {
     if (!result) return;
-    let url = "";
-    // Try to get supabase id from history
     const encoded = btoa(encodeURIComponent(JSON.stringify(result)));
-    url = `${window.location.origin}/resultats?metier=${encodeURIComponent(result.metier)}&shared=${encoded}`;
-    await navigator.clipboard.writeText(url).catch(() => {});
-    showToast("Lien copié dans le presse-papier !");
+    const url = `${window.location.origin}/resultats?metier=${encodeURIComponent(result.metier)}&cached=${encoded}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast("Lien copié dans le presse-papier !");
+    } catch {
+      showToast("Erreur lors de la copie du lien.", "error");
+    }
   };
 
   const handleExportPDF = async () => {
@@ -265,7 +269,6 @@ export default function Results() {
                 animate={{ opacity: 1, height: "auto" }}
                 className="lecko-card p-4 space-y-4 mb-4"
               >
-                {/* Category filter */}
                 <div>
                   <p className="text-xs font-bold text-foreground-muted uppercase mb-2">Catégorie</p>
                   <div className="flex flex-wrap gap-2">
@@ -294,7 +297,6 @@ export default function Results() {
                     ))}
                   </div>
                 </div>
-                {/* Tool filter */}
                 <div>
                   <p className="text-xs font-bold text-foreground-muted uppercase mb-2">Type d'outil</p>
                   <div className="flex flex-wrap gap-2">
@@ -326,7 +328,6 @@ export default function Results() {
               </motion.div>
             )}
 
-            {/* Results count */}
             <p className="text-sm text-foreground-muted">
               {filteredTasks.length} tâche{filteredTasks.length !== 1 ? "s" : ""} affichée{filteredTasks.length !== 1 ? "s" : ""}
             </p>
