@@ -190,6 +190,8 @@ export default function Results() {
   }
 
   const filteredTasks: AnalysisTask[] = (result?.taches ?? []).filter((t) => {
+    if (catFilter === "easy_wins") return (t.score_criteres ?? 0) >= 3 && t.peut_fonctionner_sans_ia === true;
+    if (catFilter === "ai_needed") return t.peut_fonctionner_sans_ia === false;
     if (catFilter !== "all" && t.categorie !== catFilter) return false;
     if (toolFilter !== "all" && t.type_outil !== toolFilter) return false;
     return true;
