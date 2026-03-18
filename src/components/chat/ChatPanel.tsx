@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { X, RotateCcw, ClipboardList, Settings } from "lucide-react";
+import { X, RotateCcw, ClipboardList } from "lucide-react";
 import { useChatContext } from "@/context/ChatContext";
 import { useChat } from "@/hooks/useChat";
 import { ChatMessage } from "./ChatMessage";
@@ -11,8 +11,8 @@ import { Link } from "react-router-dom";
 
 const INITIAL_SUGGESTIONS_TASK = [
   "Guide-moi pas à pas",
-  "Montre-moi le workflow N8N",
-  "Donne le JSON à importer",
+  "Montre le workflow complet",
+  "Donne le JSON importable",
   "Quels outils installer ?",
 ];
 
@@ -35,49 +35,31 @@ export function ChatPanel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const hasApiKey = !!getApiKey();
 
-  // Init chat when opened
   useEffect(() => {
-    if (isOpen) {
-      initChat();
-    }
+    if (isOpen) initChat();
   }, [isOpen]); // eslint-disable-line
 
-  // Auto-scroll
   useEffect(() => {
-    if (isAtBottom) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
+    if (isAtBottom) messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isAtBottom]);
 
-  // Update suggestions after last assistant message
   useEffect(() => {
     const lastAssistant = [...messages].reverse().find((m) => m.role === "assistant" && !m.isStreaming);
     if (lastAssistant && lastAssistant.content.length > 20) {
-      const newSuggestions = generateSuggestions(lastAssistant.content);
-      setSuggestions(newSuggestions);
+      setSuggestions(generateSuggestions(lastAssistant.content));
     }
   }, [messages]);
 
   const handleScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
-    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
-    setIsAtBottom(atBottom);
-  };
-
-  const handleSend = async (text: string) => {
-    await sendMessage(text);
-  };
-
-  const handleSelectSuggestion = (text: string) => {
-    sendMessage(text);
+    setIsAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 60);
   };
 
   const handleReset = () => {
     setShowResetConfirm(false);
     resetChat();
     setSuggestions(INITIAL_SUGGESTIONS_GENERAL);
-    // Re-init after reset
     setTimeout(() => initChat(), 0);
   };
 
@@ -87,23 +69,21 @@ export function ChatPanel() {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]"
+        className="fixed inset-0 z-40"
+        style={{ backgroundColor: "hsl(222 47% 11% / 0.35)" }}
         onClick={closeChat}
       />
 
       {/* Panel */}
       <div
-        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col bg-card border-l border-border shadow-2xl animate-slide-in-right"
-        style={{ width: "min(450px, 100vw)" }}
+        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col border-l border-border shadow-elevated animate-slide-in-right"
+        style={{ width: "min(450px, 100vw)", backgroundColor: "hsl(var(--background))" }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card/95 backdrop-blur-sm shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">🤖</span>
-            <div>
-              <p className="text-sm font-bold text-foreground">Coach Automatisation</p>
-              <p className="text-[10px] text-foreground-muted">Lecko · Expert en automatisation</p>
-            </div>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
+          <div>
+            <p className="text-sm font-semibold text-foreground">Coach Automatisation</p>
+            <p className="text-xs text-foreground-muted mt-0.5">Votre guide étape par étape</p>
           </div>
           <div className="flex items-center gap-1">
             <button
@@ -133,26 +113,21 @@ export function ChatPanel() {
 
         {/* Task context banner */}
         {taskContext && (
-          <div className="px-4 py-2 bg-primary/5 border-b border-primary/10 shrink-0">
-            <p className="text-xs text-primary font-medium truncate">
-              📌 Tâche : {taskContext.task.nom}
+          <div className="px-5 py-2.5 border-b border-border shrink-0"
+            style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
+            <p className="text-xs text-lecko-blue font-medium truncate">
+              Tâche : {taskContext.task.nom}
             </p>
           </div>
         )}
 
         {/* No API key banner */}
         {!hasApiKey && (
-          <div className="px-4 py-2.5 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 shrink-0">
-            <p className="text-xs text-amber-700 dark:text-amber-400">
-              Mode aperçu — guides génériques uniquement.{" "}
-              <Link
-                to="/parametres"
-                onClick={closeChat}
-                className="underline font-semibold"
-              >
-                Configurer ma clé API →
-              </Link>
-            </p>
+          <div className="px-5 py-2.5 border-b shrink-0 callout-orange">
+            Mode aperçu — guides génériques uniquement.{" "}
+            <Link to="/parametres" onClick={closeChat} className="underline font-semibold">
+              Configurer ma clé API
+            </Link>
           </div>
         )}
 
@@ -160,7 +135,7 @@ export function ChatPanel() {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto px-3 py-3 space-y-3"
+          className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
         >
           {messages.filter((m) => m.role !== "system").map((msg) => (
             <ChatMessage key={msg.id} message={msg} />
@@ -168,42 +143,33 @@ export function ChatPanel() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Scroll to bottom button */}
+        {/* Scroll to bottom */}
         {!isAtBottom && (
           <button
-            onClick={() => {
-              messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-              setIsAtBottom(true);
-            }}
-            className="absolute bottom-28 right-4 bg-primary text-primary-foreground text-xs px-3 py-1.5 rounded-full shadow-lg hover:bg-primary/90 transition-all animate-fade-in"
+            onClick={() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); setIsAtBottom(true); }}
+            className="absolute bottom-28 right-4 bg-primary text-primary-foreground text-xs px-3 py-1.5 rounded-full shadow-elevated hover:bg-primary/90 transition-all animate-fade-in"
           >
-            ↓ Nouveau message
+            Nouveau message
           </button>
         )}
 
-        {/* Suggestions */}
-        <ChatSuggestions
-          suggestions={suggestions}
-          onSelect={handleSelectSuggestion}
-          disabled={isStreaming}
-        />
-
-        {/* Input */}
-        <ChatInput onSend={handleSend} disabled={isStreaming} />
+        <ChatSuggestions suggestions={suggestions} onSelect={(t) => sendMessage(t)} disabled={isStreaming} />
+        <ChatInput onSend={(t) => sendMessage(t)} disabled={isStreaming} />
       </div>
 
-      {/* Reset confirm modal */}
+      {/* Reset confirm */}
       {showResetConfirm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl p-5 shadow-xl max-w-sm w-full animate-scale-in">
-            <h3 className="font-bold text-foreground mb-2">🔄 Nouveau sujet ?</h3>
-            <p className="text-sm text-foreground-secondary mb-4">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+          style={{ backgroundColor: "hsl(222 47% 11% / 0.5)" }}>
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-elevated max-w-sm w-full animate-fade-in">
+            <h3 className="font-semibold text-foreground mb-2">Nouveau sujet ?</h3>
+            <p className="text-sm text-foreground-secondary mb-5">
               L'historique de cette conversation sera perdu. Voulez-vous continuer ?
             </p>
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setShowResetConfirm(false)}
-                className="px-4 py-2 text-sm rounded-lg border border-border hover:bg-muted transition-colors"
+                className="px-4 py-2 text-sm rounded-lg border border-border hover:bg-muted transition-colors text-foreground-secondary"
               >
                 Annuler
               </button>
