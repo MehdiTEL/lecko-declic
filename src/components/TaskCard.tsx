@@ -38,7 +38,7 @@ interface TaskCardProps {
   roiPerWeek?: number; // €/week for this task
 }
 
-export default function TaskCard({ task, index }: TaskCardProps) {
+export default function TaskCard({ task, index, roiPerWeek }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
   const cat = categoryConfig[task.categorie];
   const tool = toolConfig[task.type_outil];
