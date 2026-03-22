@@ -54,7 +54,7 @@ function getComparison(annualEur: number, weekEur: number): string {
       : annualEur < 60000
       ? "l'équivalent d'un salaire junior à temps plein"
       : `l'équivalent de ${(annualEur / 35000).toFixed(1)} collaborateurs à temps plein`;
-  return `Soit ${base}. Un accompagnement Lecko se rentabilise en moyenne en ${payback} semaine${payback > 1 ? "s" : ""}.`;
+  return `Soit ${base}. Un accompagnement DÉCLIC se rentabilise en moyenne en ${payback} semaine${payback > 1 ? "s" : ""}.`;
 }
 
 // ─── Animated counter ─────────────────────────────────────────────────────────
@@ -106,7 +106,7 @@ function RoiKpi({ label, sublabel, value, accent, large, delay = 0 }: RoiKpiProp
       <p className="label-uppercase text-[10px] mb-1">{label}</p>
       <span
         className={`font-bold ${large ? "text-2xl" : "text-xl"}`}
-        style={{ color: accent ? "hsl(var(--lecko-orange))" : "hsl(var(--lecko-blue))" }}
+        style={{ color: accent ? "hsl(var(--lecko-orange))" : "hsl(var(--primary))" }}
       >
         <AnimatedValue value={value} delay={delay} />
       </span>
@@ -159,7 +159,7 @@ export default function RoiCalculator({
     >
       {/* Title */}
       <p className="label-uppercase mb-1 text-[11px]">Calculateur</p>
-      <h2 className="text-lg font-bold text-foreground mb-5">
+      <h2 className="text-lg font-bold font-heading text-foreground mb-5">
         Estimez vos <span className="underline-orange">économies</span>
       </h2>
 
@@ -170,7 +170,7 @@ export default function RoiCalculator({
           <input
             type="number" min={10} max={500} value={hourlyRate}
             onChange={(e) => handleRateChange(Math.max(10, parseInt(e.target.value) || 10))}
-            className="w-full h-10 px-3 text-sm font-semibold bg-background border border-border rounded-xl outline-none focus:border-lecko-blue transition-colors text-foreground"
+            className="w-full h-10 px-3 text-sm font-semibold bg-background border border-border rounded-xl outline-none focus:border-primary transition-colors text-foreground"
           />
           <p className="text-xs text-foreground-muted mt-1">Salaire brut chargé ÷ 151,67h/mois</p>
         </div>
@@ -180,7 +180,7 @@ export default function RoiCalculator({
             <input
               type="number" min={1} max={200} value={nbPeople}
               onChange={(e) => handlePeopleChange(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full h-10 px-3 text-sm font-semibold bg-background border border-border rounded-xl outline-none focus:border-lecko-blue transition-colors text-foreground"
+              className="w-full h-10 px-3 text-sm font-semibold bg-background border border-border rounded-xl outline-none focus:border-primary transition-colors text-foreground"
             />
           </div>
         )}
@@ -197,7 +197,7 @@ export default function RoiCalculator({
           className="lecko-card p-4 flex flex-col gap-1"
         >
           <p className="label-uppercase text-[10px] mb-1">Équivalent ETP</p>
-          <span className="font-bold text-xl text-lecko-green">{etp.toFixed(1)}</span>
+          <span className="font-bold text-xl text-gr33t-500">{etp.toFixed(1)}</span>
           <span className="text-xs text-foreground-muted">temps plein</span>
         </motion.div>
       </div>

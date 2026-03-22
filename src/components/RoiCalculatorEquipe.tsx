@@ -69,7 +69,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
       className="rounded-2xl p-6 md:p-8 border border-border"
       style={{ background: "hsl(var(--background))" }}
     >
-      <h2 className="text-xl font-bold text-foreground mb-5 flex items-center gap-2">
+      <h2 className="text-xl font-bold font-heading text-foreground mb-5 flex items-center gap-2">
         💰 ROI agrégé de l'<span className="text-lecko-orange">équipe</span>
       </h2>
 
@@ -90,7 +90,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
               <tr key={row.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                 <td className="py-2.5 pr-4 font-semibold text-foreground">{row.metier}</td>
                 <td className="py-2.5 px-2 text-center text-foreground-secondary">{row.count}</td>
-                <td className="py-2.5 px-2 text-center text-lecko-blue font-semibold">{row.weekHours}h</td>
+                <td className="py-2.5 px-2 text-center text-primary font-semibold">{row.weekHours}h</td>
                 <td className="py-2.5 px-2 text-center">
                   <input
                     type="number"
@@ -98,11 +98,11 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
                     max={500}
                     value={row.rate}
                     onChange={(e) => updateRate(row.id, Math.max(10, parseInt(e.target.value) || 10))}
-                    className="w-16 h-7 text-center text-xs font-bold bg-card border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors"
+                    className="w-16 h-7 text-center text-xs font-bold bg-card border border-border rounded-lg outline-none focus:border-primary transition-colors"
                   />
                   <span className="text-xs text-foreground-muted ml-0.5">€</span>
                 </td>
-                <td className="py-2.5 pl-2 text-right font-bold text-lecko-green">{formatEur(row.monthEur)}</td>
+                <td className="py-2.5 pl-2 text-right font-bold text-gr33t-500">{formatEur(row.monthEur)}</td>
               </tr>
             ))}
           </tbody>
@@ -110,9 +110,9 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
             <tr className="border-t-2 border-border bg-muted/30">
               <td className="py-3 pr-4 font-bold text-foreground">TOTAL</td>
               <td className="py-3 px-2 text-center font-bold text-foreground">{totalPeople}</td>
-              <td className="py-3 px-2 text-center font-bold text-lecko-blue">{Math.round(totalWeekHours)}h</td>
+              <td className="py-3 px-2 text-center font-bold text-primary">{Math.round(totalWeekHours)}h</td>
               <td className="py-3 px-2 text-center text-foreground-muted">—</td>
-              <td className="py-3 pl-2 text-right font-bold text-lecko-green text-base">{formatEur(totalMonthEur)}</td>
+              <td className="py-3 pl-2 text-right font-bold text-gr33t-500 text-base">{formatEur(totalMonthEur)}</td>
             </tr>
           </tfoot>
         </table>
@@ -122,8 +122,8 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         {[
           { icon: "💶", label: "/ semaine", value: totalWeekEur, color: "text-lecko-orange" },
-          { icon: "📅", label: "/ mois", value: totalMonthEur, color: "text-lecko-blue" },
-          { icon: "📆", label: "/ an", value: totalYearEur, color: "text-lecko-blue" },
+          { icon: "📅", label: "/ mois", value: totalMonthEur, color: "text-primary" },
+          { icon: "📆", label: "/ an", value: totalYearEur, color: "text-primary" },
         ].map((k, i) => (
           <motion.div
             key={i}
@@ -144,7 +144,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
           className="lecko-card p-4 flex flex-col items-center text-center gap-1"
         >
           <span className="text-xl mb-0.5">👤</span>
-          <span className="font-bold text-2xl text-lecko-green">{totalEtp.toFixed(1)}</span>
+          <span className="font-bold text-2xl text-gr33t-500">{totalEtp.toFixed(1)}</span>
           <span className="text-xs text-foreground-muted">équivalent temps plein</span>
         </motion.div>
       </div>
@@ -161,7 +161,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
                 {comparison}.
               </p>
               <p className="text-sm text-foreground-secondary">
-                Un accompagnement Lecko se rentabilise en moyenne en{" "}
+                Un accompagnement DÉCLIC se rentabilise en moyenne en{" "}
                 <strong>{payback} semaine{payback > 1 ? "s" : ""}</strong>.
               </p>
             </div>

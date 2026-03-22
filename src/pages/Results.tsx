@@ -13,18 +13,20 @@ import Footer from "@/components/Footer";
 import RoiCalculator from "@/components/RoiCalculator";
 import DeclicProgress from "@/components/DeclicProgress";
 import WhereToStart from "@/components/WhereToStart";
+import BenchmarkBanner from "@/components/BenchmarkBanner";
+import AccompagnementSplit from "@/components/AccompagnementSplit";
 import { Toast, useToast } from "@/components/Toast";
-import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType } from "@/types/analysis";
+import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
 import { DeclicPhase } from "@/types/declic";
 import { saveToHistory } from "@/lib/history";
 import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { findInLocalDatabase } from "@/data/jobDatabase";
 import { supabase } from "@/integrations/supabase/client";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { generatePremiumPdf } from "@/lib/pdfReport";
 
 type CategoryFilter = "all" | TaskCategory | "easy_wins" | "ai_needed";
 type ToolFilter = "all" | ToolType;
+type AccompagnementFilter = "all" | AccompagnementLevel;
 
 const TOOL_TYPES: ToolType[] = ["Agent IA", "Workflow N8N", "Automatisation No-Code", "Copilot / Assistant IA", "Script personnalisé"];
 const CAT_LABELS: Record<TaskCategory, string> = {
@@ -48,6 +50,7 @@ export default function Results() {
   const [errorShowSettings, setErrorShowSettings] = useState(false);
   const [catFilter, setCatFilter] = useState<CategoryFilter>("all");
   const [toolFilter, setToolFilter] = useState<ToolFilter>("all");
+  const [accompFilter, setAccompFilter] = useState<AccompagnementFilter>("all");
   const [showFilters, setShowFilters] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -194,11 +197,14 @@ export default function Results() {
     if (catFilter === "ai_needed") return t.peut_fonctionner_sans_ia === false;
     if (catFilter !== "all" && t.categorie !== catFilter) return false;
     if (toolFilter !== "all" && t.type_outil !== toolFilter) return false;
+    if (accompFilter !== "all" && t.niveau_accompagnement !== accompFilter) return false;
     return true;
   });
 
   const countByCat = (cat: TaskCategory) => result?.taches.filter((t) => t.categorie === cat).length ?? 0;
   const countByTool = (tool: ToolType) => result?.taches.filter((t) => t.type_outil === tool).length ?? 0;
+  const countByAccomp = (level: AccompagnementLevel) => result?.taches.filter((t) => t.niveau_accompagnement === level).length ?? 0;
+  const hasAccompagnement = result?.taches.some((t) => t.niveau_accompagnement) ?? false;
 
   const handleShare = async () => {
     if (!result) return;
@@ -212,26 +218,16 @@ export default function Results() {
     }
   };
 
-  const handleExportPDF = async () => {
-    if (!resultsRef.current || !result) return;
+  const handleExportPDF = () => {
+    if (!result) return;
     showToast("Génération du PDF en cours...");
     try {
-      const canvas = await html2canvas(resultsRef.current, { scale: 2, useCORS: true });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-      const ratio = canvas.height / canvas.width;
-      const imgH = pageW * ratio;
-      let yOffset = 0;
-      let remaining = imgH;
-      while (remaining > 0) {
-        pdf.addImage(imgData, "PNG", 0, -yOffset, pageW, imgH);
-        remaining -= pageH;
-        yOffset += pageH;
-        if (remaining > 0) pdf.addPage();
-      }
-      pdf.save(`lecko-diagnostic-${result.metier.replace(/\s+/g, "-").toLowerCase()}.pdf`);
+      generatePremiumPdf({
+        result,
+        source: analysisSource,
+        hourlyRate: roiHourlyRate,
+        nbPeople: roiNbPeople,
+      });
       showToast("PDF exporté avec succès !");
     } catch {
       showToast("Erreur lors de la génération du PDF.", "error");
@@ -253,7 +249,7 @@ export default function Results() {
               {errorShowSettings && (
                 <Link
                   to="/parametres"
-                  className="w-full py-3 flex items-center justify-center gap-2 bg-lecko-orange text-primary-foreground rounded-xl font-bold hover:bg-lecko-orange/90 transition-colors"
+                  className="w-full py-3 flex items-center justify-center gap-2 bg-lecko-orange text-primary-foreground rounded-2xl font-bold hover:bg-lecko-orange/90 transition-colors"
                 >
                   <Settings size={15} />
                   Modifier ma clé API
@@ -261,13 +257,13 @@ export default function Results() {
               )}
               <button
                 onClick={() => metier && runAnalysis(metier)}
-                className="w-full py-3 bg-lecko-blue text-primary-foreground rounded-xl font-bold hover:bg-lecko-blue/90 transition-colors"
+                className="w-full py-3 bg-primary text-primary-foreground rounded-2xl font-bold hover:bg-primary/90 transition-colors"
               >
                 Réessayer
               </button>
               <p className="text-xs text-foreground-muted">
                 💡 Vous pouvez aussi essayer avec un autre fournisseur dans les{" "}
-                <Link to="/parametres" className="text-lecko-blue hover:underline">paramètres</Link>.
+                <Link to="/parametres" className="text-primary hover:underline">paramètres</Link>.
               </p>
             </div>
           </div>
@@ -293,13 +289,13 @@ export default function Results() {
           <div className="max-w-5xl mx-auto">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-secondary hover:text-lecko-blue transition-colors mb-4"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-secondary hover:text-primary transition-colors mb-4"
             >
               <ArrowLeft size={16} />
               Nouvelle analyse
             </Link>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+              <h1 className="text-2xl md:text-3xl font-bold font-heading text-foreground">
                 Diagnostic IA pour :{" "}
                 <span className="text-lecko-orange">{result.metier}</span>
               </h1>
@@ -310,7 +306,7 @@ export default function Results() {
                   Analyse générique
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-lecko-blue/10 text-lecko-blue border border-lecko-blue/20">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
                   <Bot size={11} />
                   Analyse IA personnalisée{provider ? ` · via ${provider === "openai" ? "OpenAI" : "Claude"}` : ""}
                 </span>
@@ -338,6 +334,9 @@ export default function Results() {
             </div>
           </div>
 
+          {/* Benchmark */}
+          <BenchmarkBanner score={result.score_global} metier={result.metier} hoursPerWeek={result.heures_economisees_semaine} />
+
           {/* ROI Calculator */}
           <RoiCalculator
             hoursPerWeek={result.heures_economisees_semaine}
@@ -351,12 +350,16 @@ export default function Results() {
             completedPhases={[0, 1, 2]}
           />
 
+          {/* Accompagnement split */}
+          <AccompagnementSplit tasks={result.taches} metier={result.metier} />
+
           {/* "Par où commencer?" */}
           <WhereToStart
             tasks={result.taches}
             metier={result.metier}
-            onFilterEasyWins={() => { setCatFilter("easy_wins"); setToolFilter("all"); }}
-            onFilterAI={() => { setCatFilter("ai_needed"); setToolFilter("all"); }}
+            onFilterEasyWins={() => { setCatFilter("easy_wins"); setToolFilter("all"); setAccompFilter("all"); }}
+            onFilterAI={() => { setCatFilter("ai_needed"); setToolFilter("all"); setAccompFilter("all"); }}
+            onFilterAccompagnement={(level) => { setAccompFilter(level); setCatFilter("all"); setToolFilter("all"); }}
           />
 
           {/* Free mode upsell banner */}
@@ -377,7 +380,7 @@ export default function Results() {
               </div>
               <Link
                 to="/parametres"
-                className="shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 transition-colors whitespace-nowrap"
+                className="shrink-0 px-4 py-2 rounded-full text-xs font-bold bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 transition-colors whitespace-nowrap"
               >
                 Passer au mode API →
               </Link>
@@ -388,12 +391,12 @@ export default function Results() {
           <div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-sm font-semibold text-foreground-secondary hover:text-lecko-blue transition-colors mb-3"
+              className="flex items-center gap-2 text-sm font-semibold text-foreground-secondary hover:text-primary transition-colors mb-3"
             >
               <Filter size={15} />
               Filtres
               {(catFilter !== "all" || toolFilter !== "all") && (
-                <span className="w-5 h-5 rounded-full bg-lecko-blue text-primary-foreground text-xs flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
                   {[catFilter !== "all" ? 1 : 0, toolFilter !== "all" ? 1 : 0].reduce((a, b) => a + b, 0)}
                 </span>
               )}
@@ -412,8 +415,8 @@ export default function Results() {
                       onClick={() => setCatFilter("all")}
                       className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${
                         catFilter === "all"
-                          ? "bg-lecko-blue text-primary-foreground border-lecko-blue"
-                          : "border-border text-foreground-secondary hover:border-lecko-blue hover:text-lecko-blue"
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "border-border text-foreground-secondary hover:border-primary hover:text-primary"
                       }`}
                     >
                       Toutes ({result.taches.length})
@@ -424,8 +427,8 @@ export default function Results() {
                         onClick={() => setCatFilter(cat)}
                         className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${
                           catFilter === cat
-                            ? "bg-lecko-blue text-primary-foreground border-lecko-blue"
-                            : "border-border text-foreground-secondary hover:border-lecko-blue hover:text-lecko-blue"
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "border-border text-foreground-secondary hover:border-primary hover:text-primary"
                         }`}
                       >
                         {CAT_LABELS[cat]} ({countByCat(cat)})
@@ -440,8 +443,8 @@ export default function Results() {
                       onClick={() => setToolFilter("all")}
                       className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${
                         toolFilter === "all"
-                          ? "bg-lecko-blue text-primary-foreground border-lecko-blue"
-                          : "border-border text-foreground-secondary hover:border-lecko-blue hover:text-lecko-blue"
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "border-border text-foreground-secondary hover:border-primary hover:text-primary"
                       }`}
                     >
                       Tous
@@ -452,8 +455,8 @@ export default function Results() {
                         onClick={() => setToolFilter(t)}
                         className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${
                           toolFilter === t
-                            ? "bg-lecko-blue text-primary-foreground border-lecko-blue"
-                            : "border-border text-foreground-secondary hover:border-lecko-blue hover:text-lecko-blue"
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "border-border text-foreground-secondary hover:border-primary hover:text-primary"
                         }`}
                       >
                         {t} ({countByTool(t)})
@@ -461,6 +464,32 @@ export default function Results() {
                     ))}
                   </div>
                 </div>
+                {hasAccompagnement && (
+                  <div>
+                    <p className="text-xs font-bold text-foreground-muted uppercase mb-2">Accompagnement</p>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => setAccompFilter("all")}
+                        className={`px-3 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
+                          accompFilter === "all" ? "border-primary bg-primary/10 text-primary" : "border-border text-foreground-secondary hover:border-primary hover:text-primary"
+                        }`}
+                      >
+                        Tous
+                      </button>
+                      {(["express", "guide", "consultant"] as AccompagnementLevel[]).map((level) => (
+                        <button
+                          key={level}
+                          onClick={() => setAccompFilter(level)}
+                          className={`px-3 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
+                            accompFilter === level ? "border-primary bg-primary/10 text-primary" : "border-border text-foreground-secondary hover:border-primary hover:text-primary"
+                          }`}
+                        >
+                          {level === "express" ? "⚡ Express" : level === "guide" ? "✨ Guidé" : "👥 Consultant"} ({countByAccomp(level)})
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </motion.div>
             )}
 
@@ -502,21 +531,21 @@ export default function Results() {
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row flex-wrap gap-3">
           <button
             onClick={handleExportPDF}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-lecko-blue text-primary-foreground hover:bg-lecko-blue/90 transition-colors"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md transition-colors"
           >
             <Download size={15} />
             Exporter en PDF
           </button>
           <button
             onClick={handleShare}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 transition-colors"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 hover:shadow-md transition-colors"
           >
             <Share2 size={15} />
             Partager les résultats
           </button>
           <Link
             to="/"
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm border-2 border-lecko-blue text-lecko-blue hover:bg-lecko-blue hover:text-primary-foreground transition-colors"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground hover:shadow-md transition-colors"
           >
             <RotateCcw size={15} />
             Analyser un autre métier
@@ -526,7 +555,7 @@ export default function Results() {
         <div className="max-w-5xl mx-auto mt-3">
           <Link
             to="/equipe"
-            className="inline-flex items-center gap-2 text-xs text-foreground-muted hover:text-lecko-blue transition-colors"
+            className="inline-flex items-center gap-2 text-xs text-foreground-muted hover:text-primary transition-colors"
           >
             <Users size={12} />
             Vous gérez une équipe ? Essayez le mode équipe →
