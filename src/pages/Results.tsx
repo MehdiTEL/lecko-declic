@@ -25,6 +25,7 @@ import { findInLocalDatabase } from "@/data/jobDatabase";
 import { supabase } from "@/integrations/supabase/client";
 import { generatePremiumPdf } from "@/lib/pdfReport";
 import { usePageContext } from "@/context/PageContext";
+import { useProgress } from "@/context/ProgressContext";
 
 type CategoryFilter = "all" | TaskCategory | "easy_wins" | "ai_needed";
 type ToolFilter = "all" | ToolType;
@@ -65,6 +66,7 @@ export default function Results() {
   const [roiHourlyRate, setRoiHourlyRate] = useState(demoRoiRate ? parseInt(demoRoiRate, 10) : 45);
   const [roiNbPeople, setRoiNbPeople] = useState(demoRoiPeople ? parseInt(demoRoiPeople, 10) : 1);
   const { setPage, setAnalysis, setRoi } = usePageContext();
+  const { initAnalysisTracking, setTaskStatus, getTasksForAnalysis } = useProgress();
 
   const handleRoiParams = useCallback((r: number, p: number) => {
     setRoiHourlyRate(r);
@@ -77,6 +79,15 @@ export default function Results() {
   useEffect(() => {
     if (result) setAnalysis(result, result.metier);
   }, [result, setAnalysis]);
+
+  // Init progression tracking
+  const analysisId = result ? `analysis-${result.metier.toLowerCase().replace(/\s+/g, "-")}` : "";
+  useEffect(() => {
+    if (result && !isDemo) {
+      initAnalysisTracking(analysisId, result.metier, result.taches.map((t) => t.nom));
+    }
+  }, [result, analysisId, isDemo, initAnalysisTracking]);
+  const trackedTasks = getTasksForAnalysis(analysisId);
 
   const minLoadMs = 3000;
 
@@ -543,6 +554,9 @@ export default function Results() {
                 index={i}
                 metier={result?.metier}
                 roiPerWeek={task.temps_gagne_heures_semaine * roiHourlyRate * roiNbPeople}
+                analysisId={analysisId}
+                trackedStatus={trackedTasks.find((t) => t.taskName === task.nom)?.status ?? "todo"}
+                onStatusChange={(taskName, status) => setTaskStatus(analysisId, taskName, status)}
               />
             ))}
             {filteredTasks.length === 0 && (

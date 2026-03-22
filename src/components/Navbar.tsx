@@ -1,20 +1,24 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Users, Sparkles } from "lucide-react";
+import { Sun, Moon, Menu, X, History, Users, Sparkles, Trophy } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { useChatContext } from "@/context/ChatContext";
+import { useProgress } from "@/context/ProgressContext";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const { openChat, hasSeenNew } = useChatContext();
+  const { globalProgress, currentMaturity, state: progressState } = useProgress();
+  const hasProgress = globalProgress.total > 0;
 
   const navLinks = [
     { to: "/", label: "Accueil" },
     { to: "/methode", label: "Méthode" },
     { to: "/equipe", label: "Équipe", icon: <Users size={15} strokeWidth={1.5} /> },
     { to: "/historique", label: "Historique", icon: <History size={15} strokeWidth={1.5} /> },
+    ...(hasProgress ? [{ to: "/mon-parcours", label: "Mon parcours", icon: <Trophy size={15} strokeWidth={1.5} /> }] : []),
   ];
 
   const linkClass = (to: string) =>
@@ -120,6 +124,31 @@ export default function Navbar() {
             <Sparkles size={15} strokeWidth={1.5} />
             DÉCLIC Copilot
           </button>
+        </div>
+      )}
+      {/* Progress bar — only if user has tracked tasks */}
+      {hasProgress && (
+        <div className="relative h-1 bg-muted">
+          <div
+            className="absolute inset-y-0 left-0 transition-all duration-500 ease-out rounded-r-full"
+            style={{
+              width: `${globalProgress.percent}%`,
+              backgroundColor: currentMaturity.color,
+            }}
+          />
+          <Link
+            to="/mon-parcours"
+            className="absolute right-2 -top-3.5 flex items-center gap-1.5 text-xs font-bold px-2 py-0.5 rounded-full bg-white dark:bg-card border border-border/60 shadow-sm hover:shadow-md transition-shadow"
+            style={{ color: currentMaturity.color }}
+          >
+            {currentMaturity.emoji} {currentMaturity.label} · {globalProgress.percent}%
+            {progressState.streak.currentStreak >= 2 && (
+              <span className="text-amber-500">🔥{progressState.streak.currentStreak}</span>
+            )}
+            {progressState.streak.currentStreak === 0 && hasProgress && (
+              <span className="opacity-30">🔥0</span>
+            )}
+          </Link>
         </div>
       )}
     </header>

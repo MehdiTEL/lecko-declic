@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info, Sparkles, Users, Wrench } from "lucide-react";
 import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass, ACCOMPAGNEMENT_CONFIG, COMPLEXITE_CONFIG, ECOSYSTEM_LABELS } from "@/types/analysis";
 import type { AccompagnementLevel, ComplexiteMiseEnPlace, ToolEcosystem } from "@/types/analysis";
+import type { TaskStatus } from "@/types/gamification";
 import { useChatContext } from "@/context/ChatContext";
 
 const categoryConfig: Record<TaskCategory, { label: string; bgClass: string; textClass: string }> = {
@@ -91,14 +92,50 @@ function MiniSparkline({
   );
 }
 
+/** Status circle — cycles through todo → in_progress → done */
+function StatusCircle({ status, onChange }: { status: TaskStatus; onChange: (s: TaskStatus) => void }) {
+  const nextStatus: Record<TaskStatus, TaskStatus> = {
+    todo: "in_progress",
+    in_progress: "done",
+    done: "todo",
+  };
+
+  return (
+    <motion.button
+      onClick={(e) => { e.stopPropagation(); onChange(nextStatus[status]); }}
+      whileTap={{ scale: 0.9 }}
+      animate={status === "done" ? { scale: [0.9, 1.1, 1] } : {}}
+      transition={{ duration: 0.3 }}
+      className="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors"
+      style={{
+        borderColor: status === "done" ? "#10B981" : status === "in_progress" ? "#2563EB" : "hsl(var(--border))",
+        backgroundColor: status === "done" ? "#10B981" : status === "in_progress" ? "rgba(37,99,235,0.12)" : "transparent",
+      }}
+      title={status === "todo" ? "Marquer en cours" : status === "in_progress" ? "Marquer comme fait" : "Remettre à faire"}
+    >
+      {status === "done" && (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      )}
+      {status === "in_progress" && (
+        <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+      )}
+    </motion.button>
+  );
+}
+
 interface TaskCardProps {
   task: AnalysisTask;
   index: number;
   roiPerWeek?: number;
   metier?: string;
+  analysisId?: string;
+  trackedStatus?: TaskStatus;
+  onStatusChange?: (taskName: string, status: TaskStatus) => void;
 }
 
-export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardProps) {
+export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, trackedStatus, onStatusChange }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [showRaisonIa, setShowRaisonIa] = useState(false);
 
@@ -140,9 +177,17 @@ export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardPr
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-start justify-between gap-3 p-5 hover:bg-muted/30 transition-colors text-left"
       >
+        {/* Status checkbox */}
+        {analysisId && onStatusChange && trackedStatus && (
+          <StatusCircle
+            status={trackedStatus}
+            onChange={(s) => onStatusChange(task.nom, s)}
+          />
+        )}
+
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1.5">
-            <span className="text-base font-semibold text-foreground leading-tight">{task.nom}</span>
+            <span className={`text-base font-semibold leading-tight ${trackedStatus === "done" ? "line-through opacity-60 text-foreground-muted" : "text-foreground"}`}>{task.nom}</span>
             {hasCriteres && (
               <span
                 className="text-xs font-semibold px-2 py-0.5 rounded-full"

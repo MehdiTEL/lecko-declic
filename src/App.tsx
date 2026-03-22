@@ -10,12 +10,21 @@ import Settings from "./pages/Settings";
 import Equipe from "./pages/Equipe";
 import EquipeResultats from "./pages/EquipeResultats";
 import Methode from "./pages/Methode";
+import MonParcours from "./pages/MonParcours";
 import NotFound from "./pages/NotFound";
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
+import { ProgressProvider } from "./context/ProgressContext";
+import { useProgress } from "./context/ProgressContext";
 import { ChatPanel } from "./components/chat/ChatPanel";
+import CelebrationOverlay from "./components/CelebrationOverlay";
 
 const queryClient = new QueryClient();
+
+function AppCelebration() {
+  const { celebration, dismissCelebration } = useProgress();
+  return <CelebrationOverlay celebration={celebration} onDismiss={dismissCelebration} />;
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -23,6 +32,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ProgressProvider>
         <PageProvider>
         <ChatProvider>
           <Routes>
@@ -33,12 +43,14 @@ const App = () => (
             <Route path="/equipe" element={<Equipe />} />
             <Route path="/equipe/resultats" element={<EquipeResultats />} />
             <Route path="/methode" element={<Methode />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/mon-parcours" element={<MonParcours />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatPanel />
+          <AppCelebration />
         </ChatProvider>
         </PageProvider>
+        </ProgressProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
