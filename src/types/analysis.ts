@@ -125,12 +125,12 @@ export const ACCOMPAGNEMENT_CONFIG: Record<AccompagnementLevel, {
     description: "Le DÉCLIC Copilot vous guide pas à pas. Quelques jours de mise en place.",
   },
   consultant: {
-    label: "Accompagnement Lecko",
+    label: "Accompagnement expert",
     icon: "Users",
     color: "#F59E0B",
     bgLight: "hsl(48 100% 96%)",
     textColor: "hsl(32 95% 35%)",
-    description: "Nécessite l'expertise d'un consultant Lecko. Intégration complexe ou conduite du changement.",
+    description: "Nécessite un accompagnement expert. Intégration complexe ou conduite du changement.",
   },
 };
 

@@ -13,7 +13,7 @@ import {
   Legend,
 } from "recharts";
 import Navbar from "@/components/Navbar";
-import LeckoCTA from "@/components/LeckoCTA";
+import DeclicCTA from "@/components/DeclicCTA";
 import MicroCTA from "@/components/MicroCTA";
 import Footer from "@/components/Footer";
 import RoiCalculatorEquipe from "@/components/RoiCalculatorEquipe";
@@ -403,8 +403,8 @@ export default function EquipeResultats() {
             </Accordion>
           </motion.div>
 
-          {/* ── Lecko CTA ── */}
-          <LeckoCTA
+          {/* ── DÉCLIC CTA ── */}
+          <DeclicCTA
             score={Math.round(team.results.reduce((s, r) => s + r.result.score_global, 0) / team.results.length)}
             metier={`${team.results.length} métiers (${team.members.reduce((s, m) => s + m.count, 0)} personnes)`}
             typeAnalyse="equipe"

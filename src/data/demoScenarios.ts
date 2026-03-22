@@ -554,7 +554,7 @@ const consultantTasks: AnalysisTask[] = [
       "Rediger les propositions commerciales (contexte client, approche, planning, budget) a partir des notes de cadrage et du referentiel de missions similaires.",
     categorie: "partiellement_automatisable",
     solution:
-      "Claude API genere un brouillon de proposition a partir d'un prompt structure (contexte client, enjeux, methodologie Lecko). Le consultant ajuste, personnalise avec les references client pertinentes et finalise dans Google Docs.",
+      "Claude API genere un brouillon de proposition a partir d'un prompt structure (contexte client, enjeux, methodologie DÉCLIC). Le consultant ajuste, personnalise avec les references client pertinentes et finalise dans Google Docs.",
     type_outil: "Copilot / Assistant IA",
     temps_gagne_heures_semaine: 2.0,
     criteres: { recurrence: true, energie: true, scalabilite: false, fiabilite: false, penibilite: true },

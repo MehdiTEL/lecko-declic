@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { TeamJobResult } from "@/types/team";
 import { getDefaultRate, formatEur, DEFAULT_RATE } from "./RoiCalculator";
 
-const LECKO_MISSION_COST = 15000;
 
 interface RoiCalculatorEquipeProps {
   results: TeamJobResult[];
@@ -49,7 +48,6 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
   const totalWeekEur = rows.reduce((s, r) => s + r.weekEur, 0);
   const totalYearEur = totalWeekEur * 47;
   const totalEtp = totalWeekHours / 35;
-  const payback = Math.ceil(LECKO_MISSION_COST / Math.max(totalWeekEur, 1));
 
   const comparison =
     totalYearEur < 10000
@@ -159,10 +157,6 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
                 Économie annuelle de{" "}
                 <span className="text-lecko-orange">{formatEur(totalYearEur)}</span> ={" "}
                 {comparison}.
-              </p>
-              <p className="text-sm text-foreground-secondary">
-                Un accompagnement DÉCLIC se rentabilise en moyenne en{" "}
-                <strong>{payback} semaine{payback > 1 ? "s" : ""}</strong>.
               </p>
             </div>
           </div>

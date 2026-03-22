@@ -124,7 +124,7 @@ export default function AccompagnementSplit({ tasks }: AccompagnementSplitProps)
             <span className="font-semibold" style={{ color: ACCOMPAGNEMENT_CONFIG.consultant.textColor }}>
               {counts.consultant.length} tâche{counts.consultant.length > 1 ? "s" : ""}
             </span>
-            , un accompagnement Lecko accélérera significativement la mise en place et sécurisera le
+            , un accompagnement dédié accélérera significativement la mise en place et sécurisera le
             déploiement.
           </p>
           <a

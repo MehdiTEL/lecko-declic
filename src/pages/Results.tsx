@@ -7,7 +7,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import ScoreCircle from "@/components/ScoreCircle";
 import KPICard from "@/components/KPICard";
 import TaskCard from "@/components/TaskCard";
-import LeckoCTA from "@/components/LeckoCTA";
+import DeclicCTA from "@/components/DeclicCTA";
 import MicroCTA from "@/components/MicroCTA";
 import Footer from "@/components/Footer";
 import RoiCalculator from "@/components/RoiCalculator";
@@ -566,8 +566,8 @@ export default function Results() {
             )}
           </div>
 
-          {/* Lecko CTA */}
-          <LeckoCTA
+          {/* DÉCLIC CTA */}
+          <DeclicCTA
             score={result.score_global}
             metier={result.metier}
             typeAnalyse="individuel"

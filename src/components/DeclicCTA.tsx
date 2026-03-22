@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { CheckCircle2, ExternalLink, X, Send } from "lucide-react";
+import { CheckCircle2, X, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
-interface LeckoCTAProps {
+interface DeclicCTAProps {
   score: number;
   metier: string;
   typeAnalyse?: "individuel" | "equipe";
@@ -55,7 +55,7 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const defaultMessage = `Je souhaite un accompagnement suite à mon diagnostic IA (${metier}, score ${score}%).`;
+  const defaultMessage = `Demande d'accompagnement suite au diagnostic DÉCLIC (${metier}, score ${score}%).`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +72,7 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
         metier_analyse: metier,
         score_global: score,
         type_analyse: typeAnalyse,
-        source: "cta_diagnostic",
+        source: "declic_cta",
       });
       if (error) throw error;
       setSent(true);
@@ -88,7 +88,7 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
       <div className="text-center py-6">
         <CheckCircle2 size={32} className="text-gr33t-500 mx-auto mb-3" />
         <p className="font-semibold text-foreground mb-1">Demande envoyée !</p>
-        <p className="text-sm text-foreground-secondary mb-4">Notre équipe vous recontactera dans les 24h.</p>
+        <p className="text-sm text-foreground-secondary mb-4">Nous revenons vers vous sous 24h.</p>
         <button onClick={onClose} className="text-xs text-foreground-muted hover:text-foreground transition-colors">
           Fermer
         </button>
@@ -105,15 +105,15 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
         </button>
       </div>
       <input value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Votre nom"
-        className="w-full h-9 px-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors" />
+        className="w-full h-9 px-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-primary transition-colors" />
       <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Votre email *"
-        className="w-full h-9 px-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors" />
+        className="w-full h-9 px-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-primary transition-colors" />
       <input value={tel} onChange={(e) => setTel(e.target.value)} placeholder="Téléphone (optionnel)"
-        className="w-full h-9 px-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors" />
+        className="w-full h-9 px-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-primary transition-colors" />
       <p className="text-xs text-foreground-muted bg-muted/50 rounded-lg px-3 py-2">{defaultMessage}</p>
       {err && <p className="text-xs text-destructive">{err}</p>}
       <button type="submit" disabled={!email.trim() || sending}
-        className="w-full h-9 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 bg-lecko-blue text-white hover:bg-lecko-blue/90 transition-colors disabled:opacity-50">
+        className="w-full h-9 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 bg-primary text-white hover:bg-primary/90 transition-colors disabled:opacity-50">
         <Send size={13} />
         {sending ? "Envoi…" : "Envoyer"}
       </button>
@@ -121,7 +121,7 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
   );
 }
 
-export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", onVisible }: LeckoCTAProps) {
+export default function DeclicCTA({ score, metier, typeAnalyse = "individuel", onVisible }: DeclicCTAProps) {
   const [showFallback, setShowFallback] = useState(false);
   const blockRef = useRef<HTMLDivElement>(null);
 
@@ -154,21 +154,21 @@ export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", on
   const bullets =
     score > 70
       ? [
-          "Identifier les quick wins à activer en moins de 2 semaines",
-          "Construire une roadmap d'automatisation sur mesure",
-          "Déployer les bons outils (M365, agents IA, N8N, Power Automate)",
-          "Former vos équipes pour une adoption durable",
+          "Activer les quick wins identifiés en moins de 2 semaines",
+          "Suivre une roadmap d'automatisation structurée",
+          "Déployer les outils adaptés à votre environnement",
+          "Monter en compétence avec le Copilot intégré",
         ]
       : score >= 40
       ? [
-          "Valider les automatisations les plus rentables pour votre contexte",
-          "Recommander les outils adaptés à votre environnement",
-          "Estimer le ROI concret de chaque action",
+          "Prioriser les automatisations à plus fort ROI",
+          "Choisir les outils adaptés à votre stack",
+          "Mesurer le retour sur investissement de chaque action",
         ]
       : [
-          "Déployer Microsoft 365 et les usages collaboratifs",
-          "Intégrer l'IA assistive (Copilot, Claude) dans le quotidien",
-          "Conduite du changement et adoption des outils",
+          "Comprendre le potentiel d'automatisation de votre métier",
+          "Identifier les premiers gains accessibles",
+          "Se familiariser avec les outils d'automatisation",
         ];
 
   return (
@@ -182,13 +182,13 @@ export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", on
       style={{ backgroundColor: "hsl(var(--surface-accent))" }}
     >
       <div className="max-w-2xl">
-        <span className="section-label mb-4 inline-block text-[11px]">Aller plus loin</span>
+        <span className="section-label mb-4 inline-block text-[11px]">Passer à l'action</span>
         <h3 className="font-heading text-2xl md:text-heading-lg font-bold text-foreground mb-3">
-          Vous avez identifié le potentiel.
-          <br />Structurons ensemble le passage à l'action.
+          Vous avez le diagnostic.
+          <br />Passez à la mise en œuvre.
         </h3>
         <p className="text-base text-foreground-secondary mb-6 leading-relaxed">
-          Nos consultants vous accompagnent de la conception des workflows à la formation de vos équipes.
+          DÉCLIC vous accompagne de l'identification des quick wins à la mise en place concrète de chaque automatisation.
         </p>
 
         <ul className="space-y-2 mb-7">
@@ -205,22 +205,12 @@ export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", on
             <FallbackForm metier={metier} score={score} typeAnalyse={typeAnalyse} onClose={() => setShowFallback(false)} />
           </div>
         ) : (
-          <div className="flex flex-wrap items-center gap-4">
-            <button
-              onClick={handleCTA}
-              className="px-8 py-3 rounded-full font-semibold text-sm text-white bg-primary hover:bg-primary/90 hover:shadow-md transition-all active:scale-[0.98]"
-            >
-              Réserver un échange
-            </button>
-            <a
-              href="https://lecko.fr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline transition-colors"
-            >
-              En savoir plus <ExternalLink size={13} />
-            </a>
-          </div>
+          <button
+            onClick={handleCTA}
+            className="px-8 py-3 rounded-full font-semibold text-sm text-white bg-primary hover:bg-primary/90 hover:shadow-md transition-all active:scale-[0.98]"
+          >
+            Démarrer l'accompagnement
+          </button>
         )}
       </div>
     </motion.div>

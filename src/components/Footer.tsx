@@ -1,4 +1,5 @@
-import { Linkedin, CalendarDays } from "lucide-react";
+import { CalendarDays } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CALENDLY_URL = "https://calendly.com/lecko/decouverte";
 
@@ -29,18 +30,8 @@ export default function Footer() {
               DÉCLIC
             </p>
             <p className="text-sm leading-relaxed text-slate-400">
-              Lecko accélère la transformation interne des organisations en apportant conseils
-              et services aux acteurs du changement.
+              Plateforme d'automatisation IA par métier. Analysez, priorisez, et passez à l'action.
             </p>
-            <a
-              href="https://www.linkedin.com/company/lecko"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-4 text-sm text-slate-400 transition-colors hover:text-white"
-            >
-              <Linkedin size={16} strokeWidth={1.5} />
-              LinkedIn
-            </a>
           </div>
 
           {/* Links grid */}
@@ -50,24 +41,31 @@ export default function Footer() {
                 Produit
               </p>
               <div className="space-y-2.5">
-                {["Diagnostic métier", "Méthode DÉCLIC", "Résultats"].map((l) => (
-                  <a key={l} href="https://lecko.fr" target="_blank" rel="noopener noreferrer"
+                {[
+                  { label: "Diagnostic métier", href: "/" },
+                  { label: "Méthode DÉCLIC", href: "/methode" },
+                  { label: "Mode équipe", href: "/equipe" },
+                ].map((l) => (
+                  <Link key={l.label} to={l.href}
                     className="block text-sm text-slate-300 transition-colors hover:text-white">
-                    {l}
-                  </a>
+                    {l.label}
+                  </Link>
                 ))}
               </div>
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
-                Méthode
+                Ressources
               </p>
               <div className="space-y-2.5">
-                {["Les 5 phases", "Équipe", "Historique"].map((l) => (
-                  <a key={l} href="https://lecko.fr" target="_blank" rel="noopener noreferrer"
+                {[
+                  { label: "Comment ça marche", href: "/methode" },
+                  { label: "Paramètres", href: "/parametres" },
+                ].map((l) => (
+                  <Link key={l.label} to={l.href}
                     className="block text-sm text-slate-300 transition-colors hover:text-white">
-                    {l}
-                  </a>
+                    {l.label}
+                  </Link>
                 ))}
               </div>
             </div>
@@ -75,12 +73,9 @@ export default function Footer() {
               <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
                 Contact
               </p>
-              <p className="text-sm text-slate-300 mb-1">
-                64 rue des Archives, 75003 Paris
-              </p>
-              <p className="text-sm text-slate-300 mb-4">
-                01 83 79 01 74
-              </p>
+              <a href="mailto:contact@lecko.fr" className="block text-sm text-slate-300 transition-colors hover:text-white mb-4">
+                contact@lecko.fr
+              </a>
               <button
                 onClick={openCalendly}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full border border-blue-500/40 text-blue-400 transition-all hover:border-blue-400 hover:text-blue-300"
@@ -95,7 +90,7 @@ export default function Footer() {
         {/* Divider + copyright */}
         <div className="border-t border-slate-700/60 pt-6">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} DÉCLIC par Lecko — Tous droits réservés
+            © {new Date().getFullYear()} DÉCLIC by Lecko
           </p>
         </div>
       </div>

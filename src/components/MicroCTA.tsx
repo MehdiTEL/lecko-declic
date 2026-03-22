@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { X, CalendarDays } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const DISMISSED_KEY = "lecko-micro-cta-dismissed";
+const DISMISSED_KEY = "declic-micro-cta-dismissed";
 const CALENDLY_URL = "https://calendly.com/lecko/decouverte";
 
 declare global {
@@ -13,7 +13,7 @@ declare global {
 }
 
 interface MicroCTAProps {
-  /** True when the main LeckoCTA block is visible in viewport */
+  /** True when the main DeclicCTA block is visible in viewport */
   ctaVisible: boolean;
   metier?: string;
   score?: number;
@@ -62,7 +62,7 @@ export default function MicroCTA({ ctaVisible, metier = "", score = 0 }: MicroCT
             className="pointer-events-auto flex items-center gap-3 bg-white dark:bg-card border border-border/50 rounded-2xl shadow-float px-5 py-3 max-w-lg w-full"
           >
             <span className="text-sm font-semibold text-foreground flex-1 min-w-0 truncate">
-              Besoin d'aide pour passer à l'action ?
+              Besoin d'aide pour démarrer ?
             </span>
             <button
               onClick={handleRDV}

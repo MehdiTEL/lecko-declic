@@ -47,7 +47,6 @@ const PAGE_W = 210;
 const PAGE_H = 297;
 const MARGIN = 15;
 const CONTENT_W = PAGE_W - 2 * MARGIN;
-const LECKO_MISSION_COST = 15000;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // DRAWING HELPERS
@@ -257,7 +256,7 @@ function drawPageFooter(pdf: jsPDF, pageNum: number, totalPages: number) {
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(8);
   setTextColor(pdf, C.grey);
-  pdf.text("Lecko — Diagnostic DÉCLIC", MARGIN + 16, PAGE_H - 14);
+  pdf.text("DÉCLIC — Diagnostic IA", MARGIN + 16, PAGE_H - 14);
   pdf.text(`Page ${pageNum} / ${totalPages}`, PAGE_W - MARGIN, PAGE_H - 14, { align: "right" });
 }
 
@@ -281,9 +280,8 @@ function formatEur(n: number): string {
   return Math.round(n).toLocaleString("fr-FR") + " €";
 }
 
-function getComparison(annualEur: number, weekEur: number): string {
+function getComparison(annualEur: number): string {
   if (annualEur <= 0) return "";
-  const payback = Math.ceil(LECKO_MISSION_COST / Math.max(weekEur, 1));
   const base =
     annualEur < 10000
       ? `l'équivalent de ${Math.round(annualEur / 750)} jours de prestation conseil`
@@ -292,7 +290,7 @@ function getComparison(annualEur: number, weekEur: number): string {
       : annualEur < 60000
       ? "l'équivalent d'un salaire junior à temps plein"
       : `l'équivalent de ${(annualEur / 35000).toFixed(1)} collaborateurs à temps plein`;
-  return `Soit ${base}. Un accompagnement Lecko se rentabilise en moyenne en ${payback} semaine${payback > 1 ? "s" : ""}.`;
+  return `Soit ${base}.`;
 }
 
 function getSynthesisText(metier: string, score: number, autoCount: number, total: number, hours: number): string {
@@ -359,7 +357,7 @@ function drawCoverPage(pdf: jsPDF, metier: string, source: AnalysisSource) {
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(10);
   setTextColor(pdf, C.grey);
-  pdf.text("par Lecko", MARGIN, 37);
+  pdf.text("par DÉCLIC", MARGIN, 37);
 
   // Center content
   const centerY = 120;
@@ -501,7 +499,7 @@ function drawRoiPage(pdf: jsPDF, result: AnalysisResult, hourlyRate: number, nbP
 
   // "À retenir" callout
   let bY = tableEndY + 8;
-  const comparison = getComparison(yearEur, weekEur);
+  const comparison = getComparison(yearEur);
   const calloutText = `Votre économie annuelle de ${formatEur(yearEur)} représente ${comparison}`;
   const calloutLines = pdf.splitTextToSize(calloutText, CONTENT_W - 16);
   const calloutH = Math.max(18, 10 + calloutLines.length * 4.5);
@@ -873,7 +871,7 @@ function drawCtaPage(pdf: jsPDF, score: number) {
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(13);
   setTextColor(pdf, C.black);
-  pdf.text("Ce que Lecko vous apporte", rightX, y);
+  pdf.text("Ce que DÉCLIC vous apporte", rightX, y);
   y += 12;
 
   const bullets = getBullets(score);
@@ -903,7 +901,7 @@ function drawCtaPage(pdf: jsPDF, score: number) {
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(12);
   setTextColor(pdf, C.black);
-  pdf.text("Réservez un échange avec nos consultants", rightX, y);
+  pdf.text("Réservez un échange", rightX, y);
   y += 10;
 
   pdf.setFont("helvetica", "normal");

@@ -143,7 +143,7 @@ function ContactSection() {
         nom: `${prenom.trim()} ${nom.trim()}`,
         email: email.trim(),
         message: entreprise.trim() ? `Entreprise : ${entreprise.trim()}` : null,
-        source: "contact_accueil",
+        source: "declic_contact",
       });
       if (error) throw error;
       setSent(true);
@@ -325,7 +325,7 @@ export default function Index() {
                 transition={{ duration: 0.4 }}
                 className="mb-5"
               >
-                <span className="section-label">Diagnostic IA × Métier</span>
+                <span className="section-label">Diagnostic IA par métier</span>
               </motion.div>
 
               <motion.h1
@@ -344,8 +344,8 @@ export default function Index() {
                 transition={{ duration: 0.4, delay: 0.12 }}
                 className="text-body-lg text-foreground-secondary mb-10 max-w-xl"
               >
-                Analysez votre métier. Identifiez ce qui peut être automatisé.
-                Passez à l'action étape par étape.
+                Entrez votre métier. Découvrez ce que l'IA peut automatiser.
+                Suivez le plan d'action.
               </motion.p>
 
               {/* Search box — Gr33t style: large, rounded, shadow */}
@@ -538,17 +538,12 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── SOCIAL PROOF ─────────────────────────────────────────────────────── */}
-      <section className="px-4 py-16">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-center section-label mb-10">Des organisations qui passent à l'action</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 hover:opacity-60 transition-opacity">
-            {["Collectivité ÎdF", "Région Sud", "Groupe bancaire", "Maison de luxe", "Équipementier auto"].map((name) => (
-              <div key={name} className="font-heading text-sm font-semibold text-foreground-muted tracking-wide">
-                {name}
-              </div>
-            ))}
-          </div>
+      {/* ── PRODUCT FACTS ──────────────────────────────────────────────────── */}
+      <section className="px-4 py-10 border-b border-border">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-sm text-foreground-muted">
+            15 métiers analysables · 120+ tâches dans la base · Méthodologie DÉCLIC en 5 phases
+          </p>
         </div>
       </section>
 
@@ -558,10 +553,10 @@ export default function Index() {
           <div className="mb-10">
             <span className="section-label mb-4 inline-block">Contact</span>
             <h2 className="font-heading text-heading-lg md:text-heading-xl text-foreground mb-4">
-              Parlons de votre <span className="underline-orange">projet</span>
+              Une <span className="underline-orange">question</span> ?
             </h2>
             <p className="text-body-lg text-foreground-secondary max-w-xl">
-              Renseignez vos coordonnées et notre équipe vous recontactera pour discuter de vos besoins en automatisation.
+              Laissez-nous vos coordonnées, nous revenons vers vous sous 48h.
             </p>
           </div>
           <div className="lecko-card p-8">

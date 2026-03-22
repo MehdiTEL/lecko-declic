@@ -95,7 +95,7 @@ export function useChat(): UseChat {
         addMessage({
           role: "assistant",
           content:
-            `Bonjour ! 👋 Je suis votre **Coach Automatisation Lecko**.\n\nPour une expérience complète avec des réponses personnalisées, configurez votre clé API dans les **paramètres**.\n\nEn attendant, je peux vous montrer des guides génériques sur N8N, Make, Power Automate ou les Agents IA. Quel sujet vous intéresse ?`,
+            `Bonjour ! 👋 Je suis votre **Copilot DÉCLIC**.\n\nPour une expérience complète avec des réponses personnalisées, configurez votre clé API dans les **paramètres**.\n\nEn attendant, je peux vous montrer des guides génériques sur N8N, Make, Power Automate ou les Agents IA. Quel sujet vous intéresse ?`,
         });
       } else {
         const opening = getPageOpeningMessage(currentPage, hasAnalysis, pageMetier ?? undefined);

@@ -25,7 +25,6 @@ export const DEFAULT_HOURLY_RATES: Record<string, number> = {
   "daf": 70,
 };
 export const DEFAULT_RATE = 45;
-const LECKO_MISSION_COST = 15000;
 
 function normalize(s: string): string {
   return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s/]/g, "").trim();
@@ -43,9 +42,8 @@ export function formatEur(n: number): string {
   return Math.round(n).toLocaleString("fr-FR", { useGrouping: true }).replace(/\s/g, "\u00A0") + "\u00A0€";
 }
 
-function getComparison(annualEur: number, weekEur: number): string {
+function getComparison(annualEur: number): string {
   if (annualEur <= 0) return "";
-  const payback = Math.ceil(LECKO_MISSION_COST / Math.max(weekEur, 1));
   const base =
     annualEur < 10000
       ? `l'équivalent de ${Math.round(annualEur / 750)} jours de prestation conseil`
@@ -54,7 +52,7 @@ function getComparison(annualEur: number, weekEur: number): string {
       : annualEur < 60000
       ? "l'équivalent d'un salaire junior à temps plein"
       : `l'équivalent de ${(annualEur / 35000).toFixed(1)} collaborateurs à temps plein`;
-  return `Soit ${base}. Un accompagnement DÉCLIC se rentabilise en moyenne en ${payback} semaine${payback > 1 ? "s" : ""}.`;
+  return `Soit ${base}.`;
 }
 
 // ─── Animated counter ─────────────────────────────────────────────────────────
@@ -147,7 +145,7 @@ export default function RoiCalculator({
   const monthEur = weekEur * 4.33;
   const yearEur = weekEur * 47;
   const etp = (hoursPerWeek * nbPeople) / 35;
-  const comparison = getComparison(yearEur, weekEur);
+  const comparison = getComparison(yearEur);
 
   return (
     <motion.div

@@ -82,14 +82,14 @@ export default function WhereToStart({ tasks, metier, onFilterEasyWins, onFilter
             <div className="flex items-center gap-2 mb-2">
               <Users size={14} style={{ color: ACCOMPAGNEMENT_CONFIG.consultant.color }} />
               <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: ACCOMPAGNEMENT_CONFIG.consultant.textColor }}>
-                Avec Lecko
+                Accompagnement
               </p>
             </div>
             <p className="text-sm font-semibold text-foreground mb-1">
               {consultantTasks.length} tâche{consultantTasks.length !== 1 ? "s" : ""} nécessitant un expert
             </p>
             <p className="text-sm text-foreground-secondary mb-3 leading-relaxed">
-              Intégrations complexes, conduite du changement, architecture SI — nos consultants vous accélèrent.
+              Intégrations complexes, conduite du changement, architecture SI — un accompagnement expert vous accélère.
             </p>
             <button
               onClick={() => onFilterAccompagnement("consultant")}
