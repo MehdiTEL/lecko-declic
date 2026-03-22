@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info } from "lucide-react";
-import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass } from "@/types/analysis";
+import { useState, useMemo } from "react";
+import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info, Sparkles, Users, Wrench } from "lucide-react";
+import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass, ACCOMPAGNEMENT_CONFIG, COMPLEXITE_CONFIG, ECOSYSTEM_LABELS } from "@/types/analysis";
+import type { AccompagnementLevel, ComplexiteMiseEnPlace, ToolEcosystem } from "@/types/analysis";
 import { useChatContext } from "@/context/ChatContext";
 
 const categoryConfig: Record<TaskCategory, { label: string; bgClass: string; textClass: string }> = {
@@ -38,6 +39,58 @@ const CRITERE_LABELS: Record<string, string> = {
   penibilite: "Pénibilité",
 };
 
+/** Mini sparkline showing a projected ramp-up curve over 6 weeks */
+function MiniSparkline({
+  values,
+  color,
+  width = 80,
+  height = 24,
+}: {
+  values: number[];
+  color: string;
+  width?: number;
+  height?: number;
+}) {
+  const max = Math.max(...values, 1);
+  const points = values
+    .map((v, i) => {
+      const x = (i / (values.length - 1)) * width;
+      const y = height - (v / max) * (height - 2) - 1;
+      return `${x},${y}`;
+    })
+    .join(" ");
+
+  const lastX = width;
+  const lastY = height - (values[values.length - 1] / max) * (height - 2) - 1;
+
+  return (
+    <div className="inline-flex flex-col items-start ml-2">
+      <svg
+        width={width}
+        height={height}
+        className="inline-block align-middle"
+      >
+        <polyline
+          points={points}
+          fill="none"
+          stroke={color}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{
+            strokeDasharray: 200,
+            animation: "draw-line 0.8s ease-out forwards",
+          }}
+        />
+        <circle cx={lastX} cy={lastY} r="2" fill={color} />
+      </svg>
+      <span className="text-[10px] text-foreground-muted leading-none mt-0.5">
+        Projection 6 sem.
+      </span>
+    </div>
+  );
+}
+
 interface TaskCardProps {
   task: AnalysisTask;
   index: number;
@@ -48,6 +101,19 @@ interface TaskCardProps {
 export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [showRaisonIa, setShowRaisonIa] = useState(false);
+
+  // Generate sparkline projection data (ramp-up over 6 weeks)
+  const sparklineValues = useMemo(() => {
+    const t = task.temps_gagne_heures_semaine;
+    return [0, t * 0.3, t * 0.5, t * 0.7, t * 0.9, t];
+  }, [task.temps_gagne_heures_semaine]);
+
+  const sparklineColor =
+    task.categorie === "automatisable"
+      ? "hsl(221 83% 53%)"
+      : task.categorie === "partiellement_automatisable"
+      ? "hsl(38 92% 50%)"
+      : "hsl(215 16% 47%)";
   const { openChat } = useChatContext();
   const cat = categoryConfig[task.categorie];
   const tool = toolConfig[task.type_outil];
@@ -113,6 +179,19 @@ export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardPr
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
+          {/* Accompagnement badge */}
+          {task.niveau_accompagnement && (
+            <span
+              className="text-xs font-semibold px-2 py-0.5 rounded-full"
+              style={{
+                backgroundColor: ACCOMPAGNEMENT_CONFIG[task.niveau_accompagnement].bgLight,
+                color: ACCOMPAGNEMENT_CONFIG[task.niveau_accompagnement].textColor,
+              }}
+            >
+              {task.niveau_accompagnement === "express" ? "⚡" : task.niveau_accompagnement === "guide" ? "✨" : "👥"}{" "}
+              {ACCOMPAGNEMENT_CONFIG[task.niveau_accompagnement].label}
+            </span>
+          )}
           <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${cat.bgClass} ${cat.textClass}`}>
             {cat.label}
           </span>
@@ -177,13 +256,123 @@ export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardPr
                 <p className="text-sm text-foreground-secondary leading-relaxed">{task.solution}</p>
               </div>
 
-              {/* Metrics row */}
+              {/* Mise en place section (new fields) */}
+              {task.niveau_accompagnement && (
+                <div className="space-y-2.5">
+                  <p className="label-uppercase text-[11px]">Mise en place</p>
+
+                  {/* Pills row: time, complexity, ecosystem */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {task.temps_mise_en_place_jours != null && (
+                      <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-muted text-foreground-secondary">
+                        <Clock size={10} />
+                        ~{task.temps_mise_en_place_jours}j
+                      </span>
+                    )}
+                    {task.complexite && (
+                      <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-muted text-foreground-secondary">
+                        {Array.from({ length: 3 }).map((_, i) => (
+                          <span
+                            key={i}
+                            className="inline-block w-1.5 h-1.5 rounded-full"
+                            style={{
+                              backgroundColor: i < COMPLEXITE_CONFIG[task.complexite!].dots
+                                ? COMPLEXITE_CONFIG[task.complexite!].color
+                                : "hsl(var(--border))",
+                            }}
+                          />
+                        ))}
+                        {COMPLEXITE_CONFIG[task.complexite].label}
+                      </span>
+                    )}
+                    {task.ecosysteme && (
+                      <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-muted text-foreground-secondary">
+                        <Wrench size={10} />
+                        {ECOSYSTEM_LABELS[task.ecosysteme]}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Prerequisites */}
+                  {task.prerequis && task.prerequis.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-semibold text-foreground-muted uppercase tracking-wider mb-1">Prérequis</p>
+                      <ul className="space-y-0.5">
+                        {task.prerequis.map((p) => (
+                          <li key={p} className="text-xs text-foreground-muted">• {p}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Specific tools */}
+                  {task.outils_specifiques && task.outils_specifiques.length > 0 && (
+                    <p className="text-xs text-foreground-muted">
+                      <span className="font-semibold">Outils :</span>{" "}
+                      {task.outils_specifiques.join(" · ")}
+                    </p>
+                  )}
+
+                  {/* Accompagnement banner */}
+                  <div
+                    className="rounded-lg p-3 flex items-start gap-2.5"
+                    style={{
+                      backgroundColor: ACCOMPAGNEMENT_CONFIG[task.niveau_accompagnement].bgLight,
+                    }}
+                  >
+                    {task.niveau_accompagnement === "express" && <Zap size={14} style={{ color: ACCOMPAGNEMENT_CONFIG.express.color, marginTop: 1 }} />}
+                    {task.niveau_accompagnement === "guide" && <Sparkles size={14} style={{ color: ACCOMPAGNEMENT_CONFIG.guide.color, marginTop: 1 }} />}
+                    {task.niveau_accompagnement === "consultant" && <Users size={14} style={{ color: ACCOMPAGNEMENT_CONFIG.consultant.color, marginTop: 1 }} />}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold" style={{ color: ACCOMPAGNEMENT_CONFIG[task.niveau_accompagnement].textColor }}>
+                        {ACCOMPAGNEMENT_CONFIG[task.niveau_accompagnement].label}
+                      </p>
+                      {task.raison_accompagnement && (
+                        <p className="text-xs text-foreground-muted mt-0.5">{task.raison_accompagnement}</p>
+                      )}
+                      <div className="mt-1.5">
+                        {task.niveau_accompagnement === "express" && (
+                          <span className="text-xs font-semibold" style={{ color: ACCOMPAGNEMENT_CONFIG.express.textColor }}>
+                            Lancez-vous !
+                          </span>
+                        )}
+                        {task.niveau_accompagnement === "guide" && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); openChat({ task, metier: metier ?? "" }); }}
+                            className="text-xs font-semibold hover:underline inline-flex items-center gap-1"
+                            style={{ color: ACCOMPAGNEMENT_CONFIG.guide.textColor }}
+                          >
+                            Ouvrir le Copilot <ArrowRight size={11} />
+                          </button>
+                        )}
+                        {task.niveau_accompagnement === "consultant" && (
+                          <a
+                            href="https://calendly.com/lecko/decouverte"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-semibold hover:underline inline-flex items-center gap-1"
+                            style={{ color: ACCOMPAGNEMENT_CONFIG.consultant.textColor }}
+                          >
+                            Échanger avec un expert <ArrowRight size={11} />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Metrics row + sparkline */}
               <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-full"
                   style={{ backgroundColor: "hsl(214 100% 97%)", color: "hsl(221 83% 40%)" }}>
                   <Clock size={11} />
                   ~{task.temps_gagne_heures_semaine}h / semaine
                 </span>
+
+                {task.temps_gagne_heures_semaine > 0 && (
+                  <MiniSparkline values={sparklineValues} color={sparklineColor} />
+                )}
 
                 {roiPerWeek !== undefined && roiPerWeek > 0 && (
                   <span className="text-sm font-semibold text-lecko-blue">
@@ -192,13 +381,13 @@ export default function TaskCard({ task, index, roiPerWeek, metier }: TaskCardPr
                 )}
               </div>
 
-              {/* Coach CTA */}
+              {/* DÉCLIC Copilot CTA */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   openChat({ task, metier: metier ?? "" });
                 }}
-                className="inline-flex items-center gap-2 text-sm font-medium text-lecko-blue hover:underline transition-colors mt-1"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline transition-colors mt-1"
               >
                 Se faire accompagner
                 <ArrowRight size={14} />
