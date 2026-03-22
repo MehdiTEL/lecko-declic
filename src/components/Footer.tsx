@@ -1,6 +1,5 @@
 import { Linkedin, CalendarDays } from "lucide-react";
 
-// TODO: mettre les vraies coordonnées Lecko
 const CALENDLY_URL = "https://calendly.com/lecko/decouverte";
 
 declare global {
@@ -20,14 +19,16 @@ function openCalendly() {
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "hsl(222 47% 11%)" }} className="px-6 pt-12 pb-8">
+    <footer className="bg-slate-900 px-6 pt-14 pb-8">
       <div className="max-w-5xl mx-auto">
         {/* Top */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 mb-10">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 mb-12">
           {/* Brand */}
           <div className="md:max-w-xs">
-            <p className="text-xl font-bold text-white mb-3 tracking-tight">lecko.</p>
-            <p className="text-sm leading-relaxed" style={{ color: "hsl(215 16% 57%)" }}>
+            <p className="font-heading text-xl font-bold text-white mb-3 tracking-tight">
+              DÉCLIC
+            </p>
+            <p className="text-sm leading-relaxed text-slate-400">
               Lecko accélère la transformation interne des organisations en apportant conseils
               et services aux acteurs du changement.
             </p>
@@ -35,73 +36,66 @@ export default function Footer() {
               href="https://www.linkedin.com/company/lecko"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-4 text-sm transition-colors hover:text-white"
-              style={{ color: "hsl(215 16% 57%)" }}
+              className="inline-flex items-center gap-2 mt-4 text-sm text-slate-400 transition-colors hover:text-white"
             >
-              <Linkedin size={16} />
+              <Linkedin size={16} strokeWidth={1.5} />
               LinkedIn
             </a>
           </div>
 
-          {/* Links */}
-          <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-6">
+          {/* Links grid */}
+          <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-8">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "hsl(215 16% 57%)" }}>
-                Lecko
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
+                Produit
               </p>
-              <div className="space-y-2">
-                {["Qui sommes-nous ?", "Blog", "Études"].map((l) => (
+              <div className="space-y-2.5">
+                {["Diagnostic métier", "Méthode DÉCLIC", "Résultats"].map((l) => (
                   <a key={l} href="https://lecko.fr" target="_blank" rel="noopener noreferrer"
-                    className="block text-sm transition-colors hover:text-white"
-                    style={{ color: "hsl(213 27% 75%)" }}>
+                    className="block text-sm text-slate-300 transition-colors hover:text-white">
                     {l}
                   </a>
                 ))}
               </div>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "hsl(215 16% 57%)" }}>
-                Produits
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
+                Méthode
               </p>
-              <div className="space-y-2">
-                {["Greet", "Academy", "IA × Métier"].map((l) => (
+              <div className="space-y-2.5">
+                {["Les 5 phases", "Équipe", "Historique"].map((l) => (
                   <a key={l} href="https://lecko.fr" target="_blank" rel="noopener noreferrer"
-                    className="block text-sm transition-colors hover:text-white"
-                    style={{ color: "hsl(213 27% 75%)" }}>
+                    className="block text-sm text-slate-300 transition-colors hover:text-white">
                     {l}
                   </a>
                 ))}
               </div>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "hsl(215 16% 57%)" }}>
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
                 Contact
               </p>
-              <p className="text-sm mb-1" style={{ color: "hsl(213 27% 75%)" }}>
-                64 rue des Archives, 75003 Paris {/* TODO: adresse à confirmer */}
+              <p className="text-sm text-slate-300 mb-1">
+                64 rue des Archives, 75003 Paris
               </p>
-              <p className="text-sm mb-3" style={{ color: "hsl(213 27% 75%)" }}>
-                01 83 79 01 74 {/* TODO: téléphone à confirmer */}
+              <p className="text-sm text-slate-300 mb-4">
+                01 83 79 01 74
               </p>
               <button
                 onClick={openCalendly}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
-                style={{
-                  border: "1px solid hsl(221 83% 53% / 0.4)",
-                  color: "hsl(221 83% 70%)",
-                }}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full border border-blue-500/40 text-blue-400 transition-all hover:border-blue-400 hover:text-blue-300"
               >
-                <CalendarDays size={12} />
+                <CalendarDays size={13} strokeWidth={1.5} />
                 Prendre rendez-vous
               </button>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div style={{ borderTop: "1px solid hsl(215 25% 20%)" }} className="pt-6">
-          <p className="text-xs" style={{ color: "hsl(215 16% 40%)" }}>
-            © Lecko — Tous droits réservés 2026
+        {/* Divider + copyright */}
+        <div className="border-t border-slate-700/60 pt-6">
+          <p className="text-xs text-slate-500">
+            © {new Date().getFullYear()} DÉCLIC par Lecko — Tous droits réservés
           </p>
         </div>
       </div>

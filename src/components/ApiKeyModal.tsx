@@ -76,7 +76,7 @@ export default function ApiKeyModal({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-foreground">
-            <Key size={18} className="text-lecko-blue" />
+            <Key size={18} className="text-primary" />
             Clé API requise
           </DialogTitle>
           <DialogDescription className="text-foreground-secondary text-sm leading-relaxed">
@@ -102,11 +102,11 @@ export default function ApiKeyModal({
                     onClick={() => { setSelectedProvider(p.id); setError(""); setValue(""); }}
                     className={`text-left p-3.5 rounded-xl border-2 transition-all duration-200 ${
                       isSelected
-                        ? "border-lecko-blue bg-lecko-blue/5 dark:bg-lecko-blue/10"
-                        : "border-border bg-background hover:border-lecko-blue/40"
+                        ? "border-primary bg-primary/5 dark:bg-primary/10"
+                        : "border-border bg-background hover:border-primary/40"
                     }`}
                   >
-                    <p className={`text-sm font-bold ${isSelected ? "text-lecko-blue" : "text-foreground"}`}>
+                    <p className={`text-sm font-bold ${isSelected ? "text-primary" : "text-foreground"}`}>
                       {p.name}
                     </p>
                     <p className="text-xs text-foreground-muted mt-0.5">{p.subtitle}</p>
@@ -123,7 +123,7 @@ export default function ApiKeyModal({
               href={currentProviderInfo.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-lecko-blue hover:text-lecko-orange transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
             >
               <ExternalLink size={13} />
               Obtenir une clé → {currentProviderInfo.linkLabel}
@@ -139,7 +139,7 @@ export default function ApiKeyModal({
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
               placeholder={currentProviderInfo?.placeholder ?? "sk-..."}
               disabled={!selectedProvider}
-              className="w-full h-11 px-4 pr-11 text-sm bg-background border-2 border-border rounded-xl outline-none focus:border-lecko-blue transition-colors text-foreground placeholder:text-foreground-muted font-mono disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-11 px-4 pr-11 text-sm bg-background border-2 border-border rounded-xl outline-none focus:border-primary transition-colors text-foreground placeholder:text-foreground-muted font-mono disabled:opacity-50 disabled:cursor-not-allowed"
               autoFocus={false}
             />
             <button
@@ -160,7 +160,7 @@ export default function ApiKeyModal({
           <button
             onClick={handleSave}
             disabled={!canSave}
-            className="w-full h-11 rounded-xl font-bold text-sm bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full h-11 rounded-full font-bold text-sm bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
           >
             Enregistrer et lancer l'analyse
           </button>

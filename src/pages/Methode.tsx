@@ -42,12 +42,12 @@ function CritereRow({ crit, checked, onToggle }: { crit: typeof CRITERES[0]; che
       onClick={onToggle}
       className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl border-2 text-left transition-all ${
         checked
-          ? "border-lecko-blue bg-lecko-blue/5"
+          ? "border-primary bg-primary/5"
           : "border-border bg-card hover:border-border/80"
       }`}
     >
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-        checked ? "bg-lecko-blue text-white" : "bg-muted text-foreground-muted"
+        checked ? "bg-primary text-white" : "bg-muted text-foreground-muted"
       }`}>
         <Icon size={14} strokeWidth={2} />
       </div>
@@ -57,7 +57,7 @@ function CritereRow({ crit, checked, onToggle }: { crit: typeof CRITERES[0]; che
       </div>
       <span className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${
         checked
-          ? "bg-lecko-blue text-white"
+          ? "bg-primary text-white"
           : "bg-muted text-foreground-muted"
       }`}>
         {checked ? "1" : "0"}
@@ -118,11 +118,11 @@ export default function Methode() {
         />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <motion.p initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="label-uppercase mb-4 text-lecko-blue">
-            Méthodologie Lecko
+            className="label-uppercase mb-4 text-primary">
+            Méthodologie DÉCLIC
           </motion.p>
           <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.05 }}
-            className="text-4xl md:text-5xl font-bold text-foreground mb-5"
+            className="text-4xl md:text-5xl font-bold font-heading text-foreground mb-5"
             style={{ lineHeight: "1.12", letterSpacing: "-0.02em" }}>
             La méthode <span className="underline-orange">DÉCLIC</span> —
             5 phases pour automatiser intelligemment
@@ -169,7 +169,7 @@ export default function Methode() {
             </div>
             <div>
               <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(215 16% 47%)" }}>Phase 0 — Prérequis</p>
-              <h2 className="text-xl font-bold text-foreground">Avant toute chose : est-ce que votre process est clair ?</h2>
+              <h2 className="text-xl font-bold font-heading text-foreground">Avant toute chose : est-ce que votre process est clair ?</h2>
             </div>
           </div>
           <p className="text-foreground-secondary mb-5 leading-relaxed">
@@ -187,7 +187,7 @@ export default function Methode() {
                 value={thirtySecText}
                 onChange={(e) => { setThirtySecText(e.target.value); if (!timerStarted && e.target.value.length > 0) startTimer(); }}
                 placeholder="Ex : Quand un formulaire est soumis, je l'envoie dans Notion et j'envoie un email..."
-                className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-lecko-blue/30 text-foreground placeholder:text-foreground-muted"
+                className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 text-foreground placeholder:text-foreground-muted"
               />
               {timerStarted && !timerDone && (
                 <div className="flex items-center justify-center w-14 h-10 rounded-xl text-white text-sm font-bold shrink-0"
@@ -197,7 +197,7 @@ export default function Methode() {
               )}
             </div>
             {timerDone && thirtySecText.trim() && (
-              <p className="text-sm text-lecko-green mt-3 font-medium">
+              <p className="text-sm text-gr33t-500 mt-3 font-medium">
                 Bien joué ! Ce process est probablement prêt à être automatisé.
               </p>
             )}
@@ -218,7 +218,7 @@ export default function Methode() {
             </div>
             <div>
               <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(38 92% 50%)" }}>Phase 1 — Détecter</p>
-              <h2 className="text-xl font-bold text-foreground">Identifiez les tâches qui vous freinent</h2>
+              <h2 className="text-xl font-bold font-heading text-foreground">Identifiez les tâches qui vous freinent</h2>
             </div>
           </div>
           <p className="text-foreground-secondary mb-5 leading-relaxed">
@@ -241,7 +241,7 @@ export default function Methode() {
             </div>
             <div>
               <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(221 83% 53%)" }}>Phase 2 — Évaluer</p>
-              <h2 className="text-xl font-bold text-foreground">Mesurez le vrai potentiel de chaque tâche</h2>
+              <h2 className="text-xl font-bold font-heading text-foreground">Mesurez le vrai potentiel de chaque tâche</h2>
             </div>
           </div>
           <p className="text-foreground-secondary mb-5 leading-relaxed">
@@ -273,7 +273,7 @@ export default function Methode() {
             </div>
             <div>
               <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(271 55% 50%)" }}>Phase 3 — Concevoir</p>
-              <h2 className="text-xl font-bold text-foreground">Dessinez votre automatisation avant de la construire</h2>
+              <h2 className="text-xl font-bold font-heading text-foreground">Dessinez votre automatisation avant de la construire</h2>
             </div>
           </div>
           <p className="text-foreground-secondary mb-5 leading-relaxed">
@@ -316,7 +316,7 @@ export default function Methode() {
             </div>
             <div>
               <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(160 72% 35%)" }}>Phase 4 — Lancer</p>
-              <h2 className="text-xl font-bold text-foreground">Testez, ajustez, déployez</h2>
+              <h2 className="text-xl font-bold font-heading text-foreground">Testez, ajustez, déployez</h2>
             </div>
           </div>
           <div className="space-y-4">
@@ -351,7 +351,7 @@ export default function Methode() {
             </div>
             <div>
               <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(32 95% 42%)" }}>Phase 5 — Consolider</p>
-              <h2 className="text-xl font-bold text-foreground">Ancrez les gains et passez à la suivante</h2>
+              <h2 className="text-xl font-bold font-heading text-foreground">Ancrez les gains et passez à la suivante</h2>
             </div>
           </div>
           <p className="text-foreground-secondary mb-5 leading-relaxed">
@@ -364,7 +364,7 @@ export default function Methode() {
               <button key={i} onClick={() => toggleCheck(i)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors text-left">
                 {checklist[i]
-                  ? <CheckSquare size={16} className="text-lecko-green shrink-0" />
+                  ? <CheckSquare size={16} className="text-gr33t-500 shrink-0" />
                   : <Square size={16} className="text-foreground-muted shrink-0" />}
                 <span className={`text-sm ${checklist[i] ? "line-through text-foreground-muted" : "text-foreground"}`}>
                   {item}
@@ -384,8 +384,8 @@ export default function Methode() {
 
         {/* CTA */}
         <section className="rounded-2xl p-8 text-center" style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
-          <p className="label-uppercase mb-3 text-lecko-blue">Passer à la pratique</p>
-          <h2 className="text-2xl font-bold text-foreground mb-3">
+          <p className="label-uppercase mb-3 text-primary">Passer à la pratique</p>
+          <h2 className="text-2xl font-bold font-heading text-foreground mb-3">
             Envie de passer de la théorie à la pratique ?
           </h2>
           <p className="text-foreground-secondary mb-7 max-w-md mx-auto leading-relaxed">
@@ -393,15 +393,14 @@ export default function Methode() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/"
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm text-white transition-colors"
-              style={{ backgroundColor: "hsl(var(--lecko-blue))" }}>
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm text-white bg-primary transition-colors">
               Analyser mon métier
               <ArrowRight size={15} />
             </Link>
             <button
               onClick={() => openChat()}
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm border-2 border-lecko-blue text-lecko-blue hover:bg-lecko-blue hover:text-white transition-all duration-200">
-              Parler au Coach
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-200">
+              Parler au Copilot
             </button>
           </div>
         </section>

@@ -13,13 +13,17 @@ export default {
     extend: {
       fontFamily: {
         sans: ["'Source Sans 3'", "Calibri", "sans-serif"],
+        heading: ["'Inter'", "system-ui", "sans-serif"],
       },
       fontSize: {
-        "display": ["3.5rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
-        "heading-xl": ["3rem", { lineHeight: "1.15", letterSpacing: "-0.02em" }],
-        "heading-lg": ["2.25rem", { lineHeight: "1.2", letterSpacing: "-0.01em" }],
-        "heading-md": ["1.75rem", { lineHeight: "1.25", letterSpacing: "-0.01em" }],
-        "heading-sm": ["1.25rem", { lineHeight: "1.3" }],
+        "display": ["3.75rem", { lineHeight: "1.08", letterSpacing: "-0.03em", fontWeight: "800" }],
+        "heading-xl": ["3rem", { lineHeight: "1.12", letterSpacing: "-0.025em", fontWeight: "700" }],
+        "heading-lg": ["2.25rem", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "heading-md": ["1.75rem", { lineHeight: "1.25", letterSpacing: "-0.015em", fontWeight: "700" }],
+        "heading-sm": ["1.25rem", { lineHeight: "1.3", fontWeight: "600" }],
+        "body-lg": ["1.25rem", { lineHeight: "1.7" }],
+        "body": ["1.125rem", { lineHeight: "1.7" }],
+        "body-sm": ["0.9375rem", { lineHeight: "1.6" }],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -29,6 +33,7 @@ export default {
         foreground: "hsl(var(--foreground))",
         "foreground-secondary": "hsl(var(--foreground-secondary))",
         "foreground-muted": "hsl(var(--foreground-muted))",
+        "foreground-light": "hsl(var(--foreground-light))",
         surface: "hsl(var(--surface))",
         "surface-alt": "hsl(var(--surface-alt))",
         "surface-accent": "hsl(var(--surface-accent))",
@@ -36,6 +41,20 @@ export default {
           blue: "hsl(var(--lecko-blue))",
           orange: "hsl(var(--lecko-orange))",
           green: "hsl(var(--lecko-green))",
+        },
+        /* Gr33t green as semantic color */
+        gr33t: {
+          DEFAULT: "hsl(var(--lecko-green))",
+          50: "hsl(152 81% 96%)",
+          100: "hsl(149 80% 90%)",
+          200: "hsl(152 76% 80%)",
+          300: "hsl(156 72% 67%)",
+          400: "hsl(158 64% 52%)",
+          500: "hsl(160 84% 39%)",
+          600: "hsl(162 93% 31%)",
+          700: "hsl(163 94% 24%)",
+          800: "hsl(163 88% 20%)",
+          900: "hsl(164 86% 16%)",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -90,12 +109,14 @@ export default {
         sm: "calc(var(--radius) - 4px)",
         xl: "calc(var(--radius) + 4px)",
         "2xl": "calc(var(--radius) + 8px)",
+        "3xl": "calc(var(--radius) + 16px)",
       },
       boxShadow: {
         card: "var(--shadow-card)",
         "card-hover": "var(--shadow-card-hover)",
-        "editorial": "0 1px 2px 0 hsl(222 47% 11% / 0.05)",
-        "elevated": "0 4px 24px -4px hsl(222 47% 11% / 0.08)",
+        "elevated": "var(--shadow-elevated)",
+        "float": "var(--shadow-float)",
+        "editorial": "0 1px 2px 0 hsl(222 47% 11% / 0.04)",
       },
       keyframes: {
         "accordion-down": {
@@ -107,7 +128,7 @@ export default {
           to: { height: "0" },
         },
         "fade-in-up": {
-          from: { opacity: "0", transform: "translateY(16px)" },
+          from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
@@ -130,16 +151,21 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.6" },
         },
+        "scale-in": {
+          from: { opacity: "0", transform: "scale(0.95)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in-up": "fade-in-up 0.45s ease-out forwards",
+        "fade-in-up": "fade-in-up 0.5s ease-out forwards",
         "fade-in": "fade-in 0.35s ease-out forwards",
         "slide-in-right": "slide-in-right 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "slide-in-bottom": "slide-in-bottom 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "slide-out-right": "slide-out-right 0.25s ease-in forwards",
         "pulse-subtle": "pulse-subtle 2s ease-in-out infinite",
+        "scale-in": "scale-in 0.2s ease-out forwards",
       },
     },
   },

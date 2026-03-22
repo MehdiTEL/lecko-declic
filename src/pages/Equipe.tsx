@@ -132,11 +132,11 @@ export default function Equipe() {
           transition={{ duration: 0.4 }}
           className="mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-lecko-blue/10 border border-lecko-blue/20 text-lecko-blue text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-4">
             <Users size={13} />
             Mode Équipe
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold font-heading text-foreground mb-2">
             Analyse d'<span className="text-lecko-orange">équipe</span>
           </h1>
           <p className="text-foreground-secondary text-sm">
@@ -155,7 +155,7 @@ export default function Equipe() {
             >
               <div className="lecko-card p-8 max-w-md w-full space-y-5">
                 <div className="flex items-center justify-center">
-                  <div className="w-12 h-12 border-4 border-lecko-blue border-t-transparent rounded-full animate-spin" />
+                  <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
                 </div>
                 <p className="text-center font-semibold text-foreground text-sm">{progressLabel}</p>
                 <div className="space-y-2">
@@ -164,12 +164,12 @@ export default function Equipe() {
                       <span className="w-5 text-center">
                         {p.status === "done" && "✅"}
                         {p.status === "running" && (
-                          <span className="inline-block w-3 h-3 border-2 border-lecko-blue border-t-transparent rounded-full animate-spin" />
+                          <span className="inline-block w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                         )}
                         {p.status === "pending" && <span className="text-foreground-muted">○</span>}
                         {p.status === "error" && "❌"}
                       </span>
-                      <span className={p.status === "done" ? "text-lecko-green font-semibold" : "text-foreground-secondary"}>
+                      <span className={p.status === "done" ? "text-gr33t-500 font-semibold" : "text-foreground-secondary"}>
                         {p.metier}
                       </span>
                     </div>
@@ -178,7 +178,7 @@ export default function Equipe() {
                 {/* Progress bar */}
                 <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-lecko-blue transition-all duration-500 rounded-full"
+                    className="h-full bg-primary transition-all duration-500 rounded-full"
                     style={{
                       width: `${(progress.filter((p) => p.status === "done" || p.status === "error").length / Math.max(progress.length, 1)) * 100}%`,
                     }}
@@ -207,12 +207,12 @@ export default function Equipe() {
               onKeyDown={(e) => e.key === "Enter" && addMember()}
               placeholder="Ex : Comptable, Chef de projet..."
               disabled={members.length >= MAX_MEMBERS}
-              className="flex-1 h-10 px-4 text-sm bg-background border border-border rounded-lg outline-none focus:border-lecko-blue transition-colors text-foreground placeholder:text-foreground-muted disabled:opacity-50"
+              className="flex-1 h-10 px-4 text-sm bg-background border border-border rounded-lg outline-none focus:border-primary transition-colors text-foreground placeholder:text-foreground-muted disabled:opacity-50"
             />
             <button
               onClick={() => addMember()}
               disabled={!input.trim() || members.length >= MAX_MEMBERS}
-              className="h-10 px-4 rounded-lg font-bold text-sm flex items-center gap-1.5 bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="h-10 px-4 rounded-lg font-bold text-sm flex items-center gap-1.5 bg-primary text-primary-foreground hover:bg-lecko-orange transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Plus size={16} />
               Ajouter
@@ -222,7 +222,7 @@ export default function Equipe() {
           {/* Quick suggestions */}
           <div className="mt-3">
             <p className="text-xs text-foreground-muted mb-2 flex items-center gap-1">
-              <Sparkles size={10} className="text-lecko-blue" />
+              <Sparkles size={10} className="text-primary" />
               Suggestions rapides :
             </p>
             <div className="tags-scroll flex-wrap">
@@ -234,7 +234,7 @@ export default function Equipe() {
                     members.length >= MAX_MEMBERS ||
                     members.some((m) => m.metier.toLowerCase() === label.toLowerCase())
                   }
-                  className="shrink-0 px-2.5 py-1 text-xs font-semibold rounded-full border border-lecko-blue/30 bg-lecko-blue/5 text-lecko-blue hover:bg-lecko-blue hover:text-primary-foreground transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="shrink-0 px-2.5 py-1 text-xs font-semibold rounded-full border border-primary/30 bg-primary/5 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   {label}
                 </button>
@@ -281,7 +281,7 @@ export default function Equipe() {
                         min={1}
                         max={50}
                         onChange={(e) => updateCount(m.id, parseInt(e.target.value) || 1)}
-                        className="w-14 h-7 text-center text-sm font-bold bg-card border border-border rounded-md outline-none focus:border-lecko-blue transition-colors"
+                        className="w-14 h-7 text-center text-sm font-bold bg-card border border-border rounded-md outline-none focus:border-primary transition-colors"
                       />
                       <span className="text-xs text-foreground-muted">pers.</span>
                     </div>
@@ -307,7 +307,7 @@ export default function Equipe() {
           <button
             onClick={handleAnalyze}
             disabled={members.length < 2 || isAnalyzing}
-            className="w-full h-12 rounded-xl font-bold text-base flex items-center justify-center gap-2 bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-card hover:shadow-card-hover"
+            className="w-full h-12 rounded-full font-bold text-base flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-lecko-orange transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-card hover:shadow-card-hover"
           >
             <Rocket size={18} />
             Analyser l'équipe

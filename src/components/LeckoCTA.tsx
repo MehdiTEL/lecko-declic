@@ -86,7 +86,7 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
   if (sent) {
     return (
       <div className="text-center py-6">
-        <CheckCircle2 size={32} className="text-lecko-green mx-auto mb-3" />
+        <CheckCircle2 size={32} className="text-gr33t-500 mx-auto mb-3" />
         <p className="font-semibold text-foreground mb-1">Demande envoyée !</p>
         <p className="text-sm text-foreground-secondary mb-4">Notre équipe vous recontactera dans les 24h.</p>
         <button onClick={onClose} className="text-xs text-foreground-muted hover:text-foreground transition-colors">
@@ -182,8 +182,8 @@ export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", on
       style={{ backgroundColor: "hsl(var(--surface-accent))" }}
     >
       <div className="max-w-2xl">
-        <p className="label-uppercase mb-3 text-lecko-blue text-[11px]">Aller plus loin</p>
-        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3" style={{ letterSpacing: "-0.01em" }}>
+        <span className="section-label mb-4 inline-block text-[11px]">Aller plus loin</span>
+        <h3 className="font-heading text-2xl md:text-heading-lg font-bold text-foreground mb-3">
           Vous avez identifié le potentiel.
           <br />Structurons ensemble le passage à l'action.
         </h3>
@@ -194,7 +194,7 @@ export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", on
         <ul className="space-y-2 mb-7">
           {bullets.map((b) => (
             <li key={b} className="flex items-start gap-2.5 text-sm text-foreground-secondary">
-              <CheckCircle2 size={15} className="shrink-0 mt-0.5 text-lecko-green" />
+              <CheckCircle2 size={15} className="shrink-0 mt-0.5 text-gr33t-500" strokeWidth={1.5} />
               {b}
             </li>
           ))}
@@ -208,10 +208,7 @@ export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", on
           <div className="flex flex-wrap items-center gap-4">
             <button
               onClick={handleCTA}
-              className="px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-colors"
-              style={{ backgroundColor: "hsl(var(--lecko-blue))" }}
-              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "hsl(221 83% 45%)")}
-              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--lecko-blue))")}
+              className="px-8 py-3 rounded-full font-semibold text-sm text-white bg-primary hover:bg-primary/90 hover:shadow-md transition-all active:scale-[0.98]"
             >
               Réserver un échange
             </button>
@@ -219,7 +216,7 @@ export default function LeckoCTA({ score, metier, typeAnalyse = "individuel", on
               href="https://lecko.fr"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-lecko-blue hover:underline transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline transition-colors"
             >
               En savoir plus <ExternalLink size={13} />
             </a>

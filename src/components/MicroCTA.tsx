@@ -59,15 +59,14 @@ export default function MicroCTA({ ctaVisible, metier = "", score = 0 }: MicroCT
           className="fixed bottom-[72px] left-0 right-0 z-40 flex justify-center px-4 pointer-events-none"
         >
           <div
-            className="pointer-events-auto flex items-center gap-3 bg-card border border-border rounded-2xl shadow-2xl px-4 py-2.5 max-w-lg w-full"
-            style={{ boxShadow: "0 -4px 24px hsl(var(--lecko-blue) / 0.15)" }}
+            className="pointer-events-auto flex items-center gap-3 bg-white dark:bg-card border border-border/50 rounded-2xl shadow-float px-5 py-3 max-w-lg w-full"
           >
             <span className="text-sm font-semibold text-foreground flex-1 min-w-0 truncate">
-              💬 Besoin d'aide pour passer à l'action ?
+              Besoin d'aide pour passer à l'action ?
             </span>
             <button
               onClick={handleRDV}
-              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-200"
+              className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-primary text-white hover:bg-primary/90 hover:shadow-md transition-all duration-200 active:scale-[0.98]"
             >
               <CalendarDays size={12} />
               Prendre RDV

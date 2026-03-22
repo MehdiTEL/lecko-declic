@@ -44,15 +44,15 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
         onInput={handleInput}
         disabled={disabled}
         rows={1}
-        placeholder="Posez votre question…"
-        className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 min-h-[38px] max-h-[120px] overflow-y-auto"
+        placeholder="Posez votre question..."
+        className="flex-1 resize-none rounded-full border border-border bg-background px-4 py-2 text-sm placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 min-h-[38px] max-h-[120px] overflow-y-auto"
       />
       <button
         onClick={handleSend}
         disabled={disabled || !value.trim()}
-        className="shrink-0 w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+        className="shrink-0 w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:pointer-events-none"
       >
-        <Send size={15} />
+        <Send size={15} strokeWidth={1.5} />
       </button>
     </div>
   );

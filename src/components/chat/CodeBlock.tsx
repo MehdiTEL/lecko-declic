@@ -49,9 +49,9 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
   };
 
   return (
-    <div className="rounded-lg overflow-hidden my-2 border border-border/50">
+    <div className="rounded-xl overflow-hidden my-2 border border-border/50">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 bg-[hsl(220,15%,13%)]">
+      <div className="flex items-center justify-between px-3 py-2 bg-slate-800 dark:bg-slate-900">
         <span className="text-xs text-slate-400 font-mono">
           {isWorkflow
             ? n8n
@@ -65,7 +65,7 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
               onClick={handleDownload}
               className="flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors px-2 py-0.5 rounded hover:bg-white/10"
             >
-              <Download size={11} />
+              <Download size={11} strokeWidth={1.5} />
               Télécharger .json
             </button>
           )}
@@ -73,14 +73,14 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
             onClick={handleCopy}
             className="flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors px-2 py-0.5 rounded hover:bg-white/10"
           >
-            {copied ? <Check size={11} className="text-green-400" /> : <Copy size={11} />}
+            {copied ? <Check size={11} strokeWidth={1.5} className="text-green-400" /> : <Copy size={11} strokeWidth={1.5} />}
             {copied ? "Copié !" : "Copier"}
           </button>
         </div>
       </div>
 
       {/* Code */}
-      <div className="bg-[hsl(220,15%,10%)] overflow-x-auto">
+      <div className="bg-slate-900 dark:bg-slate-950 overflow-x-auto">
         <pre className="p-3 text-xs text-slate-200 font-mono leading-relaxed whitespace-pre-wrap break-words">
           {code}
         </pre>
@@ -88,7 +88,7 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
 
       {/* N8N import hint */}
       {isWorkflow && (
-        <div className="bg-[hsl(220,15%,10%)] border-t border-white/5 px-3 py-2">
+        <div className="bg-slate-900 dark:bg-slate-950 border-t border-white/5 px-3 py-2">
           <p className="text-[10px] text-slate-500">
             {n8n
               ? "Pour importer : N8N → ⋯ Menu → Import from File → sélectionnez ce fichier"

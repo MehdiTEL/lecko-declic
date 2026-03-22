@@ -1,31 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* =====================================================
-   LECKO DESIGN SYSTEM — Editorial / Greet-inspired
-   White-dominant, professional, human
+   DÉCLIC DESIGN SYSTEM — Gr33t-inspired
+   White-dominant, modern SaaS, green accents
 ===================================================== */
 
 @layer base {
   :root {
-    /* Lecko Brand */
+    /* Lecko Brand — bleu primary conservé */
     --lecko-blue: 221 83% 53%;        /* #2563EB */
     --lecko-orange: 38 92% 50%;       /* #F59E0B */
-    --lecko-green: 160 72% 35%;       /* #059669 emerald-600 */
+    --lecko-green: 160 84% 39%;       /* Gr33t green — teal/émeraude vif */
 
-    /* Surfaces — white dominant */
+    /* Surfaces — white dominant avec alternance gris très clair */
     --background: 0 0% 100%;          /* #FFFFFF */
     --surface-alt: 210 40% 98%;       /* #F8FAFC slate-50 */
-    --surface-accent: 226 100% 97%;   /* #EEF2FF */
+    --surface-accent: 210 40% 99%;    /* très légèrement teinté bleu */
     --surface: 0 0% 100%;             /* #FFFFFF cards */
 
-    /* Foreground — slate tones */
+    /* Foreground — slate tones Gr33t */
     --foreground: 222 47% 11%;        /* #0F172A slate-900 */
-    --foreground-secondary: 215 25% 27%; /* #334155 slate-700 */
+    --foreground-secondary: 215 20% 35%; /* ~slate-600 #475569 */
     --foreground-muted: 215 16% 47%;  /* #64748B slate-500 */
+    --foreground-light: 215 20% 65%;  /* #94A3B8 slate-400 */
 
     /* Shadcn tokens */
     --card: 0 0% 100%;
@@ -42,10 +43,10 @@
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 91%;            /* #E2E8F0 slate-200 */
+    --border: 214 32% 93%;            /* plus subtil, quasi invisible */
     --input: 214 32% 91%;
     --ring: 221 83% 53%;
-    --radius: 0.75rem;
+    --radius: 1rem;                   /* 16px — plus généreux */
 
     /* Sidebar */
     --sidebar-background: 0 0% 100%;
@@ -54,35 +55,38 @@
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 96%;
     --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 214 32% 91%;
+    --sidebar-border: 214 32% 93%;
     --sidebar-ring: 221 83% 53%;
 
-    /* Semantic badge backgrounds — soft, professional */
-    --badge-auto-bg: 138 76% 97%;     /* emerald-50 */
-    --badge-auto-text: 160 72% 30%;   /* emerald-700 */
+    /* Semantic badge backgrounds — Gr33t style pills */
+    --badge-auto-bg: 152 81% 96%;     /* emerald-50 plus vif */
+    --badge-auto-text: 160 84% 30%;   /* gr33t green foncé */
     --badge-partial-bg: 48 100% 96%;  /* amber-50 */
     --badge-partial-text: 32 95% 35%; /* amber-700 */
     --badge-hard-bg: 210 40% 96%;     /* slate-100 */
     --badge-hard-text: 215 16% 47%;   /* slate-500 */
 
-    /* Shadows */
-    --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.06), 0 1px 2px -1px hsl(222 47% 11% / 0.04);
-    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 53% / 0.12);
+    /* Shadows — plus douces, teinte bleu au hover */
+    --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.04), 0 1px 2px -1px hsl(222 47% 11% / 0.03);
+    --shadow-card-hover: 0 8px 24px -4px hsl(221 83% 53% / 0.10), 0 2px 8px -2px hsl(222 47% 11% / 0.06);
+    --shadow-elevated: 0 4px 24px -4px hsl(222 47% 11% / 0.08);
+    --shadow-float: 0 12px 40px -8px hsl(221 83% 53% / 0.15);
   }
 
   .dark {
     --lecko-blue: 221 83% 60%;
     --lecko-orange: 38 92% 55%;
-    --lecko-green: 160 72% 45%;
+    --lecko-green: 160 84% 50%;
 
     --background: 222 47% 11%;        /* #0F172A slate-900 */
     --surface-alt: 215 28% 17%;       /* #1E293B slate-800 */
-    --surface-accent: 215 28% 17%;
-    --surface: 215 28% 17%;           /* #1E293B slate-800 */
+    --surface-accent: 215 28% 16%;
+    --surface: 215 28% 17%;
 
     --foreground: 210 40% 96%;        /* #F1F5F9 slate-100 */
     --foreground-secondary: 213 27% 84%; /* #CBD5E1 slate-300 */
     --foreground-muted: 215 16% 57%;  /* #94A3B8 slate-400 */
+    --foreground-light: 215 16% 47%;
 
     --card: 215 28% 17%;
     --card-foreground: 210 40% 96%;
@@ -98,7 +102,7 @@
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 210 40% 98%;
-    --border: 215 25% 27%;            /* #334155 slate-700 */
+    --border: 215 25% 25%;
     --input: 215 25% 27%;
     --ring: 221 83% 60%;
 
@@ -108,7 +112,7 @@
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 215 28% 17%;
     --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 215 25% 27%;
+    --sidebar-border: 215 25% 25%;
     --sidebar-ring: 221 83% 60%;
 
     --badge-auto-bg: 158 64% 15%;
@@ -119,7 +123,9 @@
     --badge-hard-text: 215 16% 57%;
 
     --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.25);
-    --shadow-card-hover: 0 4px 12px 0 hsl(221 83% 60% / 0.2);
+    --shadow-card-hover: 0 8px 24px -4px hsl(221 83% 60% / 0.18);
+    --shadow-elevated: 0 4px 24px -4px hsl(0 0% 0% / 0.3);
+    --shadow-float: 0 12px 40px -8px hsl(221 83% 60% / 0.25);
   }
 }
 
@@ -152,34 +158,57 @@
     transition: none;
   }
 
+  /* Headings — Inter font, Gr33t style */
   h1, h2, h3, h4 {
-    letter-spacing: -0.01em;
+    font-family: 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
     line-height: 1.2;
     color: hsl(var(--foreground));
+    font-weight: 700;
+  }
+
+  h1 {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
   }
 }
 
 @layer components {
-  /* Editorial card */
+  /* Gr33t-style card — rounded-2xl, shadow douce, pas de bordure visible */
   .lecko-card {
-    @apply bg-card rounded-xl border border-border;
+    @apply bg-card rounded-2xl;
+    border: 1px solid hsl(var(--border) / 0.5);
     box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
   }
 
   .lecko-card:hover {
+    transform: translateY(-2px);
     box-shadow: var(--shadow-card-hover);
   }
 
-  /* Orange square decoration — fixed corner */
-  .lecko-deco-square {
-    @apply fixed bottom-6 left-6 w-8 h-8 rounded-lg z-10 pointer-events-none hidden md:block;
-    background-color: hsl(var(--lecko-orange));
-    opacity: 0.6;
+  /* Section accent decorator — blue left bar */
+  .section-accent-bar {
+    @apply relative pl-4;
+  }
+  .section-accent-bar::before {
+    content: '';
+    @apply absolute left-0 top-0 bottom-0 w-1 rounded-full;
+    background-color: hsl(var(--lecko-blue));
   }
 
-  /* Uppercase label */
+  /* Section label — Gr33t style uppercase badge */
+  .section-label {
+    @apply inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full;
+    background-color: hsl(var(--lecko-blue) / 0.08);
+    color: hsl(var(--lecko-blue));
+  }
+
+  /* Legacy alias */
   .label-uppercase {
-    @apply text-xs font-semibold uppercase tracking-widest text-foreground-muted;
+    @apply text-xs font-semibold uppercase tracking-widest;
+    color: hsl(var(--foreground-muted));
   }
 
   /* Underline accent decoration */
@@ -205,9 +234,9 @@
     background-color: hsl(var(--surface-alt));
   }
 
-  /* Insight/advice callout — orange border */
+  /* Callout — orange border */
   .callout-orange {
-    @apply rounded-lg px-4 py-3 text-sm;
+    @apply rounded-xl px-4 py-3 text-sm;
     border-left: 3px solid hsl(var(--lecko-orange));
     background-color: hsl(38 100% 97%);
     color: hsl(32 95% 28%);
@@ -218,9 +247,9 @@
     color: hsl(38 92% 70%);
   }
 
-  /* Insight/advice callout — blue border */
+  /* Callout — blue border */
   .callout-blue {
-    @apply rounded-lg px-4 py-3 text-sm;
+    @apply rounded-xl px-4 py-3 text-sm;
     border-left: 3px solid hsl(var(--lecko-blue));
     background-color: hsl(214 100% 97%);
     color: hsl(221 55% 28%);
@@ -229,6 +258,37 @@
   .dark .callout-blue {
     background-color: hsl(221 45% 14%);
     color: hsl(221 83% 75%);
+  }
+
+  /* Callout — green (Gr33t) */
+  .callout-green {
+    @apply rounded-xl px-4 py-3 text-sm;
+    border-left: 3px solid hsl(var(--lecko-green));
+    background-color: hsl(152 81% 96%);
+    color: hsl(160 84% 25%);
+  }
+
+  .dark .callout-green {
+    background-color: hsl(158 64% 10%);
+    color: hsl(152 76% 74%);
+  }
+
+  /* Gr33t-style progress bar gradient */
+  .progress-gr33t {
+    @apply rounded-full overflow-hidden;
+    background: hsl(var(--muted));
+  }
+  .progress-gr33t .bar {
+    @apply h-full rounded-full;
+    background: linear-gradient(90deg, hsl(160 84% 45%), hsl(160 84% 35%));
+  }
+
+  /* Pill button utility */
+  .btn-pill {
+    @apply inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold transition-all;
+  }
+  .btn-pill:hover {
+    transform: scale(1.02);
   }
 }
 
@@ -246,4 +306,10 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--foreground-muted));
+}
+
+/* ── Sparkline draw animation ── */
+@keyframes draw-line {
+  from { stroke-dashoffset: 200; }
+  to { stroke-dashoffset: 0; }
 }

@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import { Sparkles } from "lucide-react";
 import { CodeBlock } from "./CodeBlock";
 import { ChatMessage as ChatMessageType } from "@/context/ChatContext";
 import { cn } from "@/lib/utils";
@@ -21,7 +22,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
     >
       {!isUser && (
         <div className="shrink-0 w-7 h-7 rounded-full bg-primary flex items-center justify-center text-sm mt-0.5">
-          🤖
+          <Sparkles size={14} strokeWidth={1.5} className="text-white" />
         </div>
       )}
 
@@ -29,8 +30,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
         className={cn(
           "max-w-[85%] rounded-2xl px-3 py-2.5 text-sm",
           isUser
-            ? "bg-primary text-primary-foreground rounded-br-sm"
-            : "bg-[hsl(var(--muted))] text-foreground rounded-bl-sm"
+            ? "bg-blue-50 dark:bg-blue-900/20 text-foreground rounded-br-sm"
+            : "bg-white dark:bg-card border border-border/50 text-foreground rounded-bl-sm"
         )}
       >
         {isUser ? (

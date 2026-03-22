@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { X, RotateCcw, ClipboardList } from "lucide-react";
+import { X, RotateCcw, ClipboardList, Sparkles } from "lucide-react";
 import { useChatContext } from "@/context/ChatContext";
 import { useChat } from "@/hooks/useChat";
 import { ChatMessage } from "./ChatMessage";
@@ -76,37 +76,40 @@ export function ChatPanel() {
 
       {/* Panel */}
       <div
-        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col border-l border-border shadow-elevated animate-slide-in-right"
-        style={{ width: "min(450px, 100vw)", backgroundColor: "hsl(var(--background))" }}
+        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col border-l border-border shadow-elevated animate-slide-in-right bg-white dark:bg-card"
+        style={{ width: "min(450px, 100vw)" }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
-          <div>
-            <p className="text-sm font-semibold text-foreground">Coach Automatisation</p>
-            <p className="text-xs text-foreground-muted mt-0.5">Votre guide étape par étape</p>
+        <div className="flex items-center justify-between px-5 py-4 bg-primary shrink-0">
+          <div className="flex items-center gap-2">
+            <Sparkles size={18} strokeWidth={1.5} className="text-white" />
+            <div>
+              <p className="text-sm font-semibold text-white">DÉCLIC Copilot</p>
+              <p className="text-xs text-white/70 mt-0.5">Votre guide étape par étape</p>
+            </div>
           </div>
           <div className="flex items-center gap-1">
             <button
               onClick={handleRecap}
               disabled={isStreaming || messages.filter((m) => m.role !== "system").length < 2}
               title="Récapituler"
-              className="p-1.5 rounded-lg hover:bg-muted text-foreground-muted hover:text-foreground transition-colors disabled:opacity-30 disabled:pointer-events-none"
+              className="p-1.5 rounded-lg hover:bg-white/20 text-white/70 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
             >
-              <ClipboardList size={15} />
+              <ClipboardList size={15} strokeWidth={1.5} />
             </button>
             <button
               onClick={() => setShowResetConfirm(true)}
               title="Nouveau sujet"
               disabled={isStreaming}
-              className="p-1.5 rounded-lg hover:bg-muted text-foreground-muted hover:text-foreground transition-colors disabled:opacity-30 disabled:pointer-events-none"
+              className="p-1.5 rounded-lg hover:bg-white/20 text-white/70 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
             >
-              <RotateCcw size={15} />
+              <RotateCcw size={15} strokeWidth={1.5} />
             </button>
             <button
               onClick={closeChat}
-              className="p-1.5 rounded-lg hover:bg-muted text-foreground-muted hover:text-foreground transition-colors"
+              className="p-1.5 rounded-lg hover:bg-white/20 text-white/70 hover:text-white transition-colors"
             >
-              <X size={16} />
+              <X size={16} strokeWidth={1.5} />
             </button>
           </div>
         </div>
@@ -115,7 +118,7 @@ export function ChatPanel() {
         {taskContext && (
           <div className="px-5 py-2.5 border-b border-border shrink-0"
             style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
-            <p className="text-xs text-lecko-blue font-medium truncate">
+            <p className="text-xs text-primary font-medium truncate">
               Tâche : {taskContext.task.nom}
             </p>
           </div>

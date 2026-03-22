@@ -35,7 +35,7 @@ export default function History() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+          <h1 className="text-3xl font-bold font-heading text-foreground mb-2">
             Historique de vos <span className="text-lecko-orange">analyses</span>
           </h1>
           <p className="text-foreground-secondary text-sm mb-8">
@@ -55,7 +55,7 @@ export default function History() {
             </p>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-lecko-blue text-primary-foreground rounded-xl font-bold text-sm hover:bg-lecko-orange transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-full font-bold text-sm hover:bg-lecko-orange transition-colors"
             >
               Lancer une analyse
             </Link>
@@ -78,13 +78,13 @@ export default function History() {
                       <div className="flex flex-wrap items-center gap-2 mb-1">
                         <span className="font-bold text-foreground">{entry.metier}</span>
                         {/* Score badge */}
-                        <div className="flex items-center gap-1 bg-lecko-blue/10 text-lecko-blue text-xs font-bold px-2 py-0.5 rounded-full">
+                        <div className="flex items-center gap-1 bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
                           <BarChart size={11} />
                           {entry.result.score_global}%
                         </div>
                         {/* Source badge */}
                         {entry.source === "api" ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-lecko-blue/10 text-lecko-blue border border-lecko-blue/20">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
                             <Bot size={10} />
                             API
                           </span>
@@ -115,7 +115,7 @@ export default function History() {
                     <div className="flex items-center gap-2 shrink-0">
                       <Link
                         to={`/resultats?metier=${encodeURIComponent(entry.metier)}&cached=${encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(entry.result))))}&source=${entry.source ?? "local"}`}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-lecko-blue/10 text-lecko-blue hover:bg-lecko-blue hover:text-primary-foreground transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
                       >
                         <Eye size={13} />
                         Revoir

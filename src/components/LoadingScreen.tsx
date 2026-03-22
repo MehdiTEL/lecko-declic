@@ -33,21 +33,21 @@ export default function LoadingScreen() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="max-w-md w-full text-center">
-        {/* Spinner */}
-        <div className="flex justify-center mb-8">
+        {/* Logo + Spinner */}
+        <div className="flex flex-col items-center justify-center mb-8">
+          <span className="font-heading text-2xl font-bold text-primary mb-6 tracking-tight">DÉCLIC</span>
           <div className="relative w-20 h-20">
-            {/* Outer ring */}
             <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
               <circle
                 cx="40" cy="40" r="34"
                 fill="none"
-                stroke="hsl(var(--border))"
+                stroke="hsl(var(--muted))"
                 strokeWidth="6"
               />
               <circle
                 cx="40" cy="40" r="34"
                 fill="none"
-                stroke="hsl(var(--lecko-blue))"
+                stroke="hsl(var(--lecko-green))"
                 strokeWidth="6"
                 strokeLinecap="round"
                 strokeDasharray="213.6"
@@ -55,9 +55,8 @@ export default function LoadingScreen() {
                 style={{ transition: "stroke-dashoffset 0.3s ease" }}
               />
             </svg>
-            {/* Inner orange dot */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-6 h-6 rounded-full bg-lecko-orange animate-pulse-glow" />
+              <span className="font-heading text-sm font-bold text-foreground-muted">{Math.round(progress)}%</span>
             </div>
           </div>
         </div>
@@ -84,7 +83,7 @@ export default function LoadingScreen() {
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                i <= stepIndex ? "bg-lecko-blue w-6" : "bg-border w-2"
+                i <= stepIndex ? "bg-primary w-6" : "bg-border w-2"
               }`}
             />
           ))}
@@ -93,7 +92,7 @@ export default function LoadingScreen() {
         {/* Progress bar */}
         <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
           <div
-            className="h-full bg-lecko-blue rounded-full transition-all duration-300 ease-out"
+            className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>

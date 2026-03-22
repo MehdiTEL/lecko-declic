@@ -93,16 +93,16 @@ export default function Settings() {
       <div className="lecko-deco-square" aria-hidden />
 
       <main className="max-w-2xl mx-auto w-full px-4 py-10 space-y-6 flex-1">
-        <h1 className="text-2xl font-bold text-foreground">Paramètres</h1>
+        <h1 className="text-2xl font-bold font-heading text-foreground">Paramètres</h1>
 
         {/* AI Provider & API Key section */}
         <section className="lecko-card p-6 space-y-4">
           <div className="flex items-center gap-2 mb-1">
-            <Key size={18} className="text-lecko-blue" />
-            <h2 className="font-bold text-foreground">Fournisseur IA &amp; Clé API</h2>
+            <Key size={18} className="text-primary" />
+            <h2 className="font-bold font-heading text-foreground">Fournisseur IA &amp; Clé API</h2>
             {apiKey && provider ? (
-              <span className="ml-auto text-xs font-semibold text-lecko-green flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-lecko-green inline-block" />
+              <span className="ml-auto text-xs font-semibold text-gr33t-500 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-gr33t-500 inline-block" />
                 Configurée
               </span>
             ) : (
@@ -132,14 +132,14 @@ export default function Settings() {
               <code className="text-sm font-mono text-foreground flex-1">{maskApiKey(apiKey)}</code>
               <button
                 onClick={() => setShowChangeProviderModal(true)}
-                className="text-xs font-bold text-foreground-secondary hover:text-lecko-blue transition-colors flex items-center gap-1"
+                className="text-xs font-bold text-foreground-secondary hover:text-primary transition-colors flex items-center gap-1"
               >
                 <RefreshCw size={11} />
                 Changer
               </button>
               <button
                 onClick={() => { setEditKeyMode(true); setNewKey(""); }}
-                className="text-xs font-bold text-lecko-blue hover:text-lecko-orange transition-colors"
+                className="text-xs font-bold text-primary hover:text-lecko-orange transition-colors"
               >
                 Modifier la clé
               </button>
@@ -165,7 +165,7 @@ export default function Settings() {
                   onChange={(e) => { setNewKey(e.target.value); setEditError(""); }}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveKey()}
                   placeholder={provider === "anthropic" ? "sk-ant-api03-..." : "sk-proj-..."}
-                  className="w-full h-11 px-4 pr-11 text-sm bg-background border-2 border-border rounded-xl outline-none focus:border-lecko-blue transition-colors text-foreground placeholder:text-foreground-muted font-mono"
+                  className="w-full h-11 px-4 pr-11 text-sm bg-background border-2 border-border rounded-xl outline-none focus:border-primary transition-colors text-foreground placeholder:text-foreground-muted font-mono"
                 />
                 <button
                   type="button"
@@ -180,13 +180,13 @@ export default function Settings() {
                 <button
                   onClick={handleSaveKey}
                   disabled={!newKey.trim()}
-                  className="flex-1 h-10 rounded-xl font-bold text-sm bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex-1 h-10 rounded-full font-bold text-sm bg-primary text-primary-foreground hover:bg-lecko-orange transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {savedFeedback ? "✓ Enregistrée !" : "Enregistrer la clé"}
                 </button>
                 <button
                   onClick={() => { setEditKeyMode(false); setNewKey(""); setEditError(""); }}
-                  className="px-4 h-10 rounded-xl font-bold text-sm border-2 border-border text-foreground-secondary hover:border-lecko-blue hover:text-lecko-blue transition-colors"
+                  className="px-4 h-10 rounded-xl font-bold text-sm border-2 border-border text-foreground-secondary hover:border-primary hover:text-primary transition-colors"
                 >
                   Annuler
                 </button>
@@ -198,22 +198,22 @@ export default function Settings() {
           {!apiKey && !editKeyMode && (
             <button
               onClick={() => setShowChangeProviderModal(true)}
-              className="w-full h-10 rounded-xl font-bold text-sm bg-lecko-blue text-primary-foreground hover:bg-lecko-orange transition-all duration-300"
+              className="w-full h-10 rounded-full font-bold text-sm bg-primary text-primary-foreground hover:bg-lecko-orange transition-all duration-300"
             >
               Configurer un fournisseur IA
             </button>
           )}
 
           <p className="text-xs text-foreground-muted leading-relaxed">
-            💡 Votre clé est stockée localement dans votre navigateur. Elle n'est jamais transmise à Lecko.
+            💡 Votre clé est stockée localement dans votre navigateur. Elle n'est jamais transmise à DÉCLIC.
           </p>
         </section>
 
         {/* Local data section */}
         <section className="lecko-card p-6 space-y-4">
           <div className="flex items-center gap-2 mb-1">
-            <History size={18} className="text-lecko-blue" />
-            <h2 className="font-bold text-foreground">Données locales</h2>
+            <History size={18} className="text-primary" />
+            <h2 className="font-bold font-heading text-foreground">Données locales</h2>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -241,14 +241,14 @@ export default function Settings() {
         {/* Analysis mode section */}
         <section className="lecko-card p-6 space-y-4">
           <div className="flex items-center gap-2 mb-1">
-            <Bot size={18} className="text-lecko-blue" />
-            <h2 className="font-bold text-foreground">Mode d'analyse</h2>
+            <Bot size={18} className="text-primary" />
+            <h2 className="font-bold font-heading text-foreground">Mode d'analyse</h2>
           </div>
 
           <div className="flex items-center gap-3 bg-muted/50 rounded-xl px-4 py-3">
             {apiKey && provider ? (
               <>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-lecko-blue/10 text-lecko-blue border border-lecko-blue/20">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
                   <Bot size={11} />
                   API — {provider === "openai" ? "OpenAI GPT-4o" : "Anthropic Claude"}
                 </span>
@@ -269,7 +269,7 @@ export default function Settings() {
                 <span className="text-xs text-foreground-muted flex-1">15 métiers disponibles</span>
                 <button
                   onClick={() => setShowChangeProviderModal(true)}
-                  className="text-xs font-semibold text-lecko-blue hover:text-lecko-orange transition-colors"
+                  className="text-xs font-semibold text-primary hover:text-lecko-orange transition-colors"
                 >
                   Configurer une clé API
                 </button>
@@ -285,7 +285,7 @@ export default function Settings() {
                   key={label}
                   className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full border border-border bg-muted/50 text-foreground-secondary"
                 >
-                  <Sparkles size={9} className="text-lecko-blue" />
+                  <Sparkles size={9} className="text-primary" />
                   {label}
                 </span>
               ))}

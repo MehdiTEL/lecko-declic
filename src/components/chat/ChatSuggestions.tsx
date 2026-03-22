@@ -14,7 +14,7 @@ export function ChatSuggestions({ suggestions, onSelect, disabled }: ChatSuggest
           key={s}
           onClick={() => onSelect(s)}
           disabled={disabled}
-          className="text-xs border border-border rounded-full px-3 py-1.5 text-foreground-secondary bg-background hover:border-lecko-blue hover:text-lecko-blue transition-colors disabled:opacity-40 disabled:pointer-events-none truncate max-w-[200px]"
+          className="text-xs rounded-full px-3 py-1.5 text-foreground-secondary bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-40 disabled:pointer-events-none truncate max-w-[200px]"
         >
           {s}
         </button>
