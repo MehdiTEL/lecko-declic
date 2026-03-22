@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "declic-dev",
+      "runtimeExecutable": "/Users/Lecko/local/node/bin/npx",
+      "runtimeArgs": ["vite", "--host"],
+      "port": 5173
+    }
+  ]
+}

@@ -12,6 +12,26 @@ export type ToolType =
 
 export type AnalysisSource = "local" | "api";
 
+// ─── Niveau d'accompagnement ───────────────────────────────────────────
+export type AccompagnementLevel = "express" | "guide" | "consultant";
+
+// ─── Complexité de mise en place ───────────────────────────────────────
+export type ComplexiteMiseEnPlace = "faible" | "moyenne" | "elevee";
+
+// ─── Écosystème d'outils enrichi ───────────────────────────────────────
+export type ToolEcosystem =
+  | "M365_PowerAutomate"
+  | "M365_Copilot"
+  | "N8N"
+  | "Make_Zapier"
+  | "Google_AppsScript"
+  | "LLM_API"
+  | "Agent_IA"
+  | "Notion_Airtable"
+  | "Python_Script"
+  | "RPA"
+  | "Natif_SaaS";
+
 export interface TaskCriteres {
   recurrence: boolean;
   energie: boolean;
@@ -32,6 +52,14 @@ export interface AnalysisTask {
   score_criteres?: number; // 0-5
   peut_fonctionner_sans_ia?: boolean;
   raison_ia?: string;
+  // ─── Nouveaux champs (optionnels, rétro-compat) ─────────────────────
+  ecosysteme?: ToolEcosystem;
+  outils_specifiques?: string[];
+  niveau_accompagnement?: AccompagnementLevel;
+  raison_accompagnement?: string;
+  complexite?: ComplexiteMiseEnPlace;
+  temps_mise_en_place_jours?: number;
+  prerequis?: string[];
 }
 
 export interface AnalysisResult {
@@ -50,7 +78,8 @@ export interface HistoryEntry {
   supabaseId?: string;
 }
 
-// Helpers
+// ─── Helpers ───────────────────────────────────────────────────────────
+
 export function computeScoreCriteres(criteres?: TaskCriteres): number {
   if (!criteres) return 0;
   return [criteres.recurrence, criteres.energie, criteres.scalabilite, criteres.fiabilite, criteres.penibilite]
@@ -68,3 +97,63 @@ export function getScoreBadgeClass(score: number): string {
   if (score >= 2) return "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300";
   return "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300";
 }
+
+// ─── Accompagnement config ─────────────────────────────────────────────
+
+export const ACCOMPAGNEMENT_CONFIG: Record<AccompagnementLevel, {
+  label: string;
+  icon: string;
+  color: string;
+  bgLight: string;
+  textColor: string;
+  description: string;
+}> = {
+  express: {
+    label: "Express",
+    icon: "Zap",
+    color: "#10B981",
+    bgLight: "hsl(152 76% 94%)",
+    textColor: "hsl(160 72% 28%)",
+    description: "Faisable en autonomie en quelques heures. Pas besoin d'aide externe.",
+  },
+  guide: {
+    label: "Guidé",
+    icon: "Sparkles",
+    color: "#2563EB",
+    bgLight: "hsl(221 100% 96%)",
+    textColor: "hsl(221 83% 40%)",
+    description: "Le DÉCLIC Copilot vous guide pas à pas. Quelques jours de mise en place.",
+  },
+  consultant: {
+    label: "Accompagnement Lecko",
+    icon: "Users",
+    color: "#F59E0B",
+    bgLight: "hsl(48 100% 96%)",
+    textColor: "hsl(32 95% 35%)",
+    description: "Nécessite l'expertise d'un consultant Lecko. Intégration complexe ou conduite du changement.",
+  },
+};
+
+export const COMPLEXITE_CONFIG: Record<ComplexiteMiseEnPlace, {
+  label: string;
+  dots: number;
+  color: string;
+}> = {
+  faible: { label: "Faible", dots: 1, color: "#10B981" },
+  moyenne: { label: "Moyenne", dots: 2, color: "#F59E0B" },
+  elevee: { label: "Élevée", dots: 3, color: "#EF4444" },
+};
+
+export const ECOSYSTEM_LABELS: Record<ToolEcosystem, string> = {
+  M365_PowerAutomate: "Power Automate",
+  M365_Copilot: "Microsoft Copilot",
+  N8N: "N8N",
+  Make_Zapier: "Make / Zapier",
+  Google_AppsScript: "Google Apps Script",
+  LLM_API: "API LLM (Claude / GPT)",
+  Agent_IA: "Agent IA",
+  Notion_Airtable: "Notion / Airtable",
+  Python_Script: "Script Python",
+  RPA: "RPA (UiPath / PA Desktop)",
+  Natif_SaaS: "Fonctionnalité native",
+};

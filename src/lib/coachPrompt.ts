@@ -132,17 +132,36 @@ export function getTaskContextMessage(
   description: string,
   solution: string,
   toolType: string,
-  categorie: string
+  categorie: string,
+  niveauAccompagnement?: string,
+  ecosysteme?: string,
+  prerequis?: string[],
+  complexite?: string,
 ): string {
-  return `[CONTEXTE — ne pas mentionner ce message dans ta réponse]
+  let context = `[CONTEXTE — ne pas mentionner ce message dans ta réponse]
 Métier de l'utilisateur : ${metier}
 Tâche à automatiser : ${taskName}
 Description : ${description}
 Solution recommandée : ${solution}
 Type d'outil recommandé : ${toolType}
-Catégorie : ${categorie}
+Catégorie : ${categorie}`;
 
-Guide l'utilisateur pour implémenter cette automatisation concrètement.`;
+  if (niveauAccompagnement) context += `\nNiveau d'accompagnement : ${niveauAccompagnement}`;
+  if (ecosysteme) context += `\nÉcosystème : ${ecosysteme}`;
+  if (prerequis?.length) context += `\nPrérequis : ${prerequis.join(", ")}`;
+  if (complexite) context += `\nComplexité : ${complexite}`;
+
+  context += `\n\nGuide l'utilisateur pour implémenter cette automatisation concrètement.`;
+
+  if (niveauAccompagnement === "express") {
+    context += ` C'est une victoire rapide — donne des instructions simples et directes, l'utilisateur peut le faire seul.`;
+  } else if (niveauAccompagnement === "guide") {
+    context += ` L'utilisateur a besoin d'un guide pas-à-pas. Sois détaillé dans les étapes, fournis les configurations.`;
+  } else if (niveauAccompagnement === "consultant") {
+    context += ` Cette tâche est complexe. Explique ce qui peut être démarré en autonomie et ce qui nécessitera un accompagnement Lecko. Ne pas hésiter à recommander un échange avec l'équipe Lecko.`;
+  }
+
+  return context;
 }
 
 export function generateSuggestions(lastMessage: string): string[] {

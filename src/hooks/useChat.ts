@@ -50,7 +50,11 @@ export function useChat(): UseChat {
           task.description,
           task.solution,
           task.type_outil,
-          task.categorie
+          task.categorie,
+          task.niveau_accompagnement,
+          task.ecosysteme,
+          task.prerequis,
+          task.complexite,
         ),
       });
 
