@@ -15,6 +15,7 @@ import DeclicProgress from "@/components/DeclicProgress";
 import WhereToStart from "@/components/WhereToStart";
 import BenchmarkBanner from "@/components/BenchmarkBanner";
 import AccompagnementSplit from "@/components/AccompagnementSplit";
+import ActionPlan from "@/components/ActionPlan";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
 import { DeclicPhase } from "@/types/declic";
@@ -23,6 +24,7 @@ import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiPr
 import { findInLocalDatabase } from "@/data/jobDatabase";
 import { supabase } from "@/integrations/supabase/client";
 import { generatePremiumPdf } from "@/lib/pdfReport";
+import { usePageContext } from "@/context/PageContext";
 
 type CategoryFilter = "all" | TaskCategory | "easy_wins" | "ai_needed";
 type ToolFilter = "all" | ToolType;
@@ -42,6 +44,9 @@ export default function Results() {
   const sharedId = searchParams.get("id");
   const cachedParam = searchParams.get("cached");
   const sourceParam = searchParams.get("source") as AnalysisSource | null;
+  const isDemo = searchParams.get("demo") === "1";
+  const demoRoiRate = searchParams.get("roiRate");
+  const demoRoiPeople = searchParams.get("roiPeople");
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -56,13 +61,22 @@ export default function Results() {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
   const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
-  // ROI state
-  const [roiHourlyRate, setRoiHourlyRate] = useState(45);
-  const [roiNbPeople, setRoiNbPeople] = useState(1);
+  // ROI state (pre-fill from demo params if present)
+  const [roiHourlyRate, setRoiHourlyRate] = useState(demoRoiRate ? parseInt(demoRoiRate, 10) : 45);
+  const [roiNbPeople, setRoiNbPeople] = useState(demoRoiPeople ? parseInt(demoRoiPeople, 10) : 1);
+  const { setPage, setAnalysis, setRoi } = usePageContext();
+
   const handleRoiParams = useCallback((r: number, p: number) => {
     setRoiHourlyRate(r);
     setRoiNbPeople(p);
-  }, []);
+    setRoi({ hourlyRate: r, nbPeople: p });
+  }, [setRoi]);
+
+  // Sync with PageContext for Copilot awareness
+  useEffect(() => { setPage("results"); }, [setPage]);
+  useEffect(() => {
+    if (result) setAnalysis(result, result.metier);
+  }, [result, setAnalysis]);
 
   const minLoadMs = 3000;
 
@@ -85,13 +99,15 @@ export default function Results() {
         if (localResult) {
           setResult(localResult);
           setAnalysisSource("local");
-          saveToHistory({
-            id: crypto.randomUUID(),
-            metier,
-            date: new Date().toISOString(),
-            result: localResult,
-            source: "local",
-          });
+          if (!isDemo) {
+            saveToHistory({
+              id: crypto.randomUUID(),
+              metier,
+              date: new Date().toISOString(),
+              result: localResult,
+              source: "local",
+            });
+          }
           // Small delay for visual polish
           setTimeout(() => setLoading(false), 900);
           return;
@@ -159,19 +175,21 @@ export default function Results() {
       setResult(parsed);
       setAnalysisSource("api");
 
-      saveToHistory({
-        id: crypto.randomUUID(),
-        metier: job,
-        date: new Date().toISOString(),
-        result: parsed,
-        source: "api",
-      });
+      if (!isDemo) {
+        saveToHistory({
+          id: crypto.randomUUID(),
+          metier: job,
+          date: new Date().toISOString(),
+          result: parsed,
+          source: "api",
+        });
 
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabase.from("analyses") as any).insert({ metier: job, resultats: parsed });
-      } catch {
-        // silent fail
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (supabase.from("analyses") as any).insert({ metier: job, resultats: parsed });
+        } catch {
+          // silent fail
+        }
       }
 
     } catch (err: unknown) {
@@ -283,6 +301,21 @@ export default function Results() {
       <Navbar />
       <div className="lecko-deco-square" aria-hidden />
 
+      {/* Demo banner */}
+      {isDemo && (
+        <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-3 flex items-center justify-between">
+          <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
+            ⚠️ MODE DÉMO — Données fictives à titre d'illustration
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="text-xs font-semibold text-amber-700 dark:text-amber-300 hover:underline"
+          >
+            Quitter la démo
+          </button>
+        </div>
+      )}
+
       <div ref={resultsRef}>
         {/* Header */}
         <div className="bg-card border-b border-border px-4 py-5">
@@ -361,6 +394,9 @@ export default function Results() {
             onFilterAI={() => { setCatFilter("ai_needed"); setToolFilter("all"); setAccompFilter("all"); }}
             onFilterAccompagnement={(level) => { setAccompFilter(level); setCatFilter("all"); setToolFilter("all"); }}
           />
+
+          {/* Action Plan timeline */}
+          <ActionPlan tasks={result.taches} metier={result.metier} />
 
           {/* Free mode upsell banner */}
           {analysisSource === "local" && (

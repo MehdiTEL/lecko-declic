@@ -5,8 +5,9 @@ import { useChat } from "@/hooks/useChat";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { ChatSuggestions } from "./ChatSuggestions";
-import { generateSuggestions, GENERAL_OPENING } from "@/lib/coachPrompt";
+import { generateSuggestions, getPageSuggestions } from "@/lib/coachPrompt";
 import { getApiKey } from "@/lib/aiProvider";
+import { usePageContext } from "@/context/PageContext";
 import { Link } from "react-router-dom";
 
 const INITIAL_SUGGESTIONS_TASK = [
@@ -16,19 +17,13 @@ const INITIAL_SUGGESTIONS_TASK = [
   "Quels outils installer ?",
 ];
 
-const INITIAL_SUGGESTIONS_GENERAL = [
-  "Automatiser mes emails",
-  "Créer un workflow N8N",
-  "Configurer un agent IA",
-  "Qu'est-ce que Make ?",
-];
-
 export function ChatPanel() {
   const { isOpen, closeChat, messages, isStreaming, taskContext, resetChat } = useChatContext();
+  const { currentPage, analysisResult, metier: pageMetier } = usePageContext();
   const { initChat, sendMessage, handleRecap } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [suggestions, setSuggestions] = useState<string[]>(
-    taskContext ? INITIAL_SUGGESTIONS_TASK : INITIAL_SUGGESTIONS_GENERAL
+    taskContext ? INITIAL_SUGGESTIONS_TASK : getPageSuggestions(currentPage, !!analysisResult)
   );
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true);
@@ -59,7 +54,7 @@ export function ChatPanel() {
   const handleReset = () => {
     setShowResetConfirm(false);
     resetChat();
-    setSuggestions(INITIAL_SUGGESTIONS_GENERAL);
+    setSuggestions(getPageSuggestions(currentPage, !!analysisResult));
     setTimeout(() => initChat(), 0);
   };
 
@@ -114,15 +109,29 @@ export function ChatPanel() {
           </div>
         </div>
 
-        {/* Task context banner */}
-        {taskContext && (
+        {/* Context banners */}
+        {taskContext ? (
           <div className="px-5 py-2.5 border-b border-border shrink-0"
             style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
             <p className="text-xs text-primary font-medium truncate">
-              Tâche : {taskContext.task.nom}
+              🎯 Tâche : {taskContext.task.nom}
             </p>
           </div>
-        )}
+        ) : analysisResult && (currentPage === "results" || currentPage === "equipe_results") ? (
+          <div className="px-5 py-2.5 border-b border-border shrink-0"
+            style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
+            <p className="text-xs text-primary font-medium truncate">
+              📊 Diagnostic : {pageMetier} · {analysisResult.score_global}%
+            </p>
+          </div>
+        ) : currentPage === "methode" ? (
+          <div className="px-5 py-2.5 border-b border-border shrink-0"
+            style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
+            <p className="text-xs text-primary font-medium truncate">
+              📖 Méthode DÉCLIC
+            </p>
+          </div>
+        ) : null}
 
         {/* No API key banner */}
         {!hasApiKey && (

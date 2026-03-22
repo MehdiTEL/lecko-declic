@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User } from "lucide-react";
 import Onboarding from "@/components/Onboarding";
+import { usePageContext } from "@/context/PageContext";
+import { getDemoScenario, DEMO_SCENARIOS } from "@/data/demoScenarios";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ApiKeyModal from "@/components/ApiKeyModal";
@@ -237,6 +239,9 @@ export default function Index() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const { setPage, clearAnalysis } = usePageContext();
+
+  useEffect(() => { setPage("landing"); clearAnalysis(); }, [setPage, clearAnalysis]);
 
   // Onboarding — show only once for new visitors
   const [showOnboarding, setShowOnboarding] = useState(
@@ -253,6 +258,22 @@ export default function Index() {
   useEffect(() => {
     if (searchParams.get("requireKey") === "1") setShowApiModal(true);
   }, [searchParams]);
+
+  // Demo mode redirect
+  useEffect(() => {
+    const demoParam = searchParams.get("demo");
+    if (demoParam) {
+      const scenario = getDemoScenario(demoParam === "true" ? undefined : demoParam);
+      const encoded = btoa(encodeURIComponent(JSON.stringify(scenario.result)));
+      navigate(
+        `/resultats?metier=${encodeURIComponent(scenario.result.metier)}&cached=${encoded}&source=local&demo=1&roiRate=${scenario.roiParams.hourlyRate}&roiPeople=${scenario.roiParams.nbPeople}`,
+        { replace: true }
+      );
+    }
+  }, [searchParams, navigate]);
+
+  // Demo selector mode (?demos)
+  const showDemoSelector = searchParams.get("demos") !== null;
 
   const handleAnalyze = (value?: string) => {
     const job = (value ?? metier).trim();
@@ -548,6 +569,38 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Demo selector (/?demos) */}
+      {showDemoSelector && (
+        <section className="px-4 py-16 section-alt">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-8">
+              <span className="section-label mb-4 inline-block">Mode démo</span>
+              <h2 className="font-heading text-heading-lg text-foreground mb-3">
+                Choisissez un scénario de démonstration
+              </h2>
+              <p className="text-body-lg text-foreground-secondary max-w-xl mx-auto">
+                Données fictives pré-remplies pour présenter DÉCLIC en réunion client ou en webinaire.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {DEMO_SCENARIOS.map((s) => (
+                <div key={s.id} className="lecko-card p-6 flex flex-col gap-3">
+                  <p className="font-heading font-semibold text-foreground">{s.label}</p>
+                  <p className="text-sm text-foreground-secondary flex-1">{s.description}</p>
+                  <p className="text-xs text-foreground-muted">{s.context}</p>
+                  <button
+                    onClick={() => navigate(`/?demo=${s.id}`)}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline mt-1"
+                  >
+                    Lancer cette démo <ArrowRight size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
 

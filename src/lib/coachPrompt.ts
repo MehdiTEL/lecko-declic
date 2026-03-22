@@ -164,6 +164,115 @@ Catégorie : ${categorie}`;
   return context;
 }
 
+// ─── Page-aware context functions ──────────────────────────────────────
+
+import type { AnalysisResult } from "@/types/analysis";
+import type { PageName } from "@/context/PageContext";
+
+const INITIAL_SUGGESTIONS_GENERAL = [
+  "Automatiser mes emails",
+  "Créer un workflow N8N",
+  "Configurer un agent IA",
+  "Qu'est-ce que Make ?",
+];
+
+export function buildFullDiagnosticContext(
+  result: AnalysisResult,
+  roiParams?: { hourlyRate: number; nbPeople: number } | null,
+): string {
+  const taskSummary = result.taches
+    .map(
+      (t, i) =>
+        `${i + 1}. "${t.nom}" — ${t.categorie} — ${t.temps_gagne_heures_semaine}h/sem — ${t.type_outil}${t.niveau_accompagnement ? ` — accompagnement: ${t.niveau_accompagnement}` : ""}`,
+    )
+    .join("\n");
+
+  const auto = result.taches.filter((t) => t.categorie === "automatisable").length;
+  const partial = result.taches.filter((t) => t.categorie === "partiellement_automatisable").length;
+  const hard = result.taches.filter((t) => t.categorie === "difficilement_automatisable").length;
+
+  let roiContext = "";
+  if (roiParams) {
+    const weekEur = result.heures_economisees_semaine * roiParams.hourlyRate * roiParams.nbPeople;
+    const yearEur = weekEur * 47;
+    roiContext = `\nROI estimé : ${Math.round(weekEur)}€/semaine, ${Math.round(yearEur)}€/an (${roiParams.hourlyRate}€/h, ${roiParams.nbPeople} personne(s))`;
+  }
+
+  return `[DIAGNOSTIC COMPLET — contexte silencieux, ne pas mentionner]
+Métier : ${result.metier}
+Score global : ${result.score_global}%
+Heures économisables : ${result.heures_economisees_semaine}h/semaine${roiContext}
+Répartition : ${auto} automatisables, ${partial} partiellement, ${hard} difficiles
+Tâches :
+${taskSummary}
+
+Tu as accès au diagnostic complet de cet utilisateur. Utilise ces données pour personnaliser tes réponses. Si on te demande "par où commencer", recommande les tâches avec le meilleur ratio score_criteres / temps_gagne. Si on te demande le ROI, utilise les chiffres ci-dessus.`;
+}
+
+export function getPageSuggestions(page: PageName, hasAnalysis: boolean): string[] {
+  switch (page) {
+    case "landing":
+      return [
+        "Quel métier analyser en premier ?",
+        "C'est quoi la méthode DÉCLIC ?",
+        "Combien de temps prend un diagnostic ?",
+        "Quels métiers sont les plus automatisables ?",
+      ];
+    case "results":
+      return hasAnalysis
+        ? [
+            "Par quelle tâche commencer ?",
+            "Résume mon diagnostic en 3 points",
+            "Quel est mon ROI estimé ?",
+            "Construis un plan d'action sur 3 mois",
+          ]
+        : INITIAL_SUGGESTIONS_GENERAL;
+    case "methode":
+      return [
+        "Explique la phase Détecter",
+        "Quelle différence entre Concevoir et Lancer ?",
+        "Comment appliquer DÉCLIC dans mon équipe ?",
+        "Donne un exemple concret pour chaque phase",
+      ];
+    case "equipe_results":
+      return hasAnalysis
+        ? [
+            "Quels sont les quick wins transverses ?",
+            "Quel métier a le plus fort potentiel ?",
+            "Propose une roadmap équipe sur 6 mois",
+            "Comment prioriser entre les métiers ?",
+          ]
+        : INITIAL_SUGGESTIONS_GENERAL;
+    case "settings":
+      return [
+        "Quelle clé API choisir ?",
+        "OpenAI ou Anthropic — quelle différence ?",
+        "Comment obtenir une clé API gratuite ?",
+      ];
+    default:
+      return INITIAL_SUGGESTIONS_GENERAL;
+  }
+}
+
+export function getPageOpeningMessage(page: PageName, hasAnalysis: boolean, metier?: string): string {
+  switch (page) {
+    case "results":
+      if (hasAnalysis && metier) {
+        return `Je connais votre diagnostic complet pour le métier **${metier}**. Je peux vous aider à :\n\n— 🎯 **Prioriser** les tâches à automatiser en premier\n— 🛠 **Construire** un workflow pour une tâche spécifique\n— 📊 **Estimer** le ROI précis de chaque automatisation\n— 📋 **Planifier** un plan d'action étape par étape\n\nQue souhaitez-vous faire ?`;
+      }
+      return GENERAL_OPENING;
+    case "methode":
+      return `Vous explorez la **méthode DÉCLIC** — je peux vous expliquer chaque phase en détail, avec des exemples concrets. Quelle phase vous intéresse ?`;
+    case "equipe_results":
+      if (hasAnalysis) {
+        return `J'ai accès au diagnostic complet de votre équipe. Je peux identifier les **quick wins transverses**, prioriser les automatisations par impact, et proposer une **roadmap d'équipe**. Par quoi on commence ?`;
+      }
+      return GENERAL_OPENING;
+    default:
+      return GENERAL_OPENING;
+  }
+}
+
 export function generateSuggestions(lastMessage: string): string[] {
   const suggestions: string[] = [];
   const lower = lastMessage.toLowerCase();

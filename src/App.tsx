@@ -12,6 +12,7 @@ import EquipeResultats from "./pages/EquipeResultats";
 import Methode from "./pages/Methode";
 import NotFound from "./pages/NotFound";
 import { ChatProvider } from "./context/ChatContext";
+import { PageProvider } from "./context/PageContext";
 import { ChatPanel } from "./components/chat/ChatPanel";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <PageProvider>
         <ChatProvider>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -36,6 +38,7 @@ const App = () => (
           </Routes>
           <ChatPanel />
         </ChatProvider>
+        </PageProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

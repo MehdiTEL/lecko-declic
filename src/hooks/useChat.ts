@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 import { useChatContext } from "@/context/ChatContext";
+import { usePageContext } from "@/context/PageContext";
 import { getApiKey, getProvider } from "@/lib/aiProvider";
 import { streamChatResponse } from "@/lib/streamResponse";
 import {
@@ -8,6 +9,8 @@ import {
   getTaskOpeningMessage,
   getTaskContextMessage,
   generateSuggestions,
+  buildFullDiagnosticContext,
+  getPageOpeningMessage,
 } from "@/lib/coachPrompt";
 import { PREMADE_GUIDES, FREE_GUIDE_LIMIT } from "@/data/coachResponses";
 import { AnalysisTask } from "@/types/analysis";
@@ -30,6 +33,8 @@ export function useChat(): UseChat {
     incrementFreemium,
   } = useChatContext();
 
+  const { currentPage, analysisResult, metier: pageMetier, roiParams } = usePageContext();
+
   const streamingRef = useRef(false);
 
   const initChat = useCallback(() => {
@@ -37,11 +42,20 @@ export function useChat(): UseChat {
     if (messages.length > 0) return;
 
     const apiKey = getApiKey();
+    const hasAnalysis = !!analysisResult;
+
+    // Inject full diagnostic context if available (results or equipe_results pages)
+    if (hasAnalysis && analysisResult && (currentPage === "results" || currentPage === "equipe_results")) {
+      addMessage({
+        role: "system",
+        content: buildFullDiagnosticContext(analysisResult, roiParams),
+      });
+    }
 
     if (taskContext) {
       const { task, metier } = taskContext;
 
-      // Add invisible context message (hidden from display)
+      // Add task-specific context message
       addMessage({
         role: "system",
         content: getTaskContextMessage(
@@ -76,6 +90,7 @@ export function useChat(): UseChat {
         });
       }
     } else {
+      // No task context — use page-aware opening
       if (!apiKey) {
         addMessage({
           role: "assistant",
@@ -83,10 +98,11 @@ export function useChat(): UseChat {
             `Bonjour ! 👋 Je suis votre **Coach Automatisation Lecko**.\n\nPour une expérience complète avec des réponses personnalisées, configurez votre clé API dans les **paramètres**.\n\nEn attendant, je peux vous montrer des guides génériques sur N8N, Make, Power Automate ou les Agents IA. Quel sujet vous intéresse ?`,
         });
       } else {
-        addMessage({ role: "assistant", content: GENERAL_OPENING });
+        const opening = getPageOpeningMessage(currentPage, hasAnalysis, pageMetier ?? undefined);
+        addMessage({ role: "assistant", content: opening });
       }
     }
-  }, [messages.length, taskContext, addMessage]);
+  }, [messages.length, taskContext, addMessage, currentPage, analysisResult, pageMetier, roiParams]);
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -134,13 +150,13 @@ export function useChat(): UseChat {
         return;
       }
 
-      // Build messages for API (last 10, exclude system messages from display but include first system for context)
+      // Build messages for API — include ALL system messages (diagnostic + task context)
       const systemMessages = messages.filter((m) => m.role === "system");
       const conversationMessages = messages.filter((m) => m.role !== "system");
       const recentMessages = conversationMessages.slice(-10);
 
       const apiMessages = [
-        ...systemMessages.slice(0, 1), // context message if present
+        ...systemMessages, // all system messages (diagnostic context + task context)
         ...recentMessages,
         { role: "user" as const, content: text },
       ].map((m) => ({ role: m.role as "user" | "assistant" | "system", content: m.content }));

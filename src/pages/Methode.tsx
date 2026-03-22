@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckSquare, Square, Search, BarChart3, Wrench, Play, Award, ShieldCheck, RefreshCw, AlertTriangle, Lightbulb, Target, Inbox, GitBranch, Send, BellRing } from "lucide-react";
@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { DECLIC_PHASES } from "@/types/declic";
 import { useChatContext } from "@/context/ChatContext";
+import { usePageContext } from "@/context/PageContext";
 
 const PHASE_ICONS = [ShieldCheck, Search, BarChart3, Wrench, Play, Award];
 
@@ -67,6 +68,9 @@ function CritereRow({ crit, checked, onToggle }: { crit: typeof CRITERES[0]; che
 }
 
 export default function Methode() {
+  const { setPage } = usePageContext();
+  useEffect(() => { setPage("methode"); }, [setPage]);
+
   const [thirtySecText, setThirtySecText] = useState("");
   const [timerStarted, setTimerStarted] = useState(false);
   const [timerDone, setTimerDone] = useState(false);

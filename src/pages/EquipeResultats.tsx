@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/accordion";
 import TaskCard from "@/components/TaskCard";
 import { generateTeamPdf } from "@/lib/pdfReport";
+import { usePageContext } from "@/context/PageContext";
 
 const CAT_COLORS: Record<TaskCategory, string> = {
   automatisable: "hsl(160 84% 39%)",
@@ -89,6 +90,9 @@ export default function EquipeResultats() {
   const [ctaVisible, setCtaVisible] = useState(false);
   const handleCtaVisible = useCallback((v: boolean) => setCtaVisible(v), []);
   const [teamRates, setTeamRates] = useState<Record<string, number>>({});
+  const { setPage, setAnalysis } = usePageContext();
+
+  useEffect(() => { setPage("equipe_results"); }, [setPage]);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("lecko-team-result");
@@ -102,6 +106,14 @@ export default function EquipeResultats() {
       navigate("/equipe");
     }
   }, [navigate]);
+
+  // Sync first result to PageContext for Copilot
+  useEffect(() => {
+    if (team && team.results.length > 0) {
+      const first = team.results[0];
+      setAnalysis(first.result, `Équipe (${team.members.length} métiers)`);
+    }
+  }, [team, setAnalysis]);
 
   if (!team) return null;
 
