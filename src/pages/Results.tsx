@@ -15,6 +15,8 @@ import DeclicProgress from "@/components/DeclicProgress";
 import WhereToStart from "@/components/WhereToStart";
 import BenchmarkBanner from "@/components/BenchmarkBanner";
 import AccompagnementSplit from "@/components/AccompagnementSplit";
+import BadgeShelf from "@/components/BadgeShelf";
+import ChallengeCards from "@/components/ChallengeCards";
 import ActionPlan from "@/components/ActionPlan";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
@@ -66,7 +68,7 @@ export default function Results() {
   const [roiHourlyRate, setRoiHourlyRate] = useState(demoRoiRate ? parseInt(demoRoiRate, 10) : 45);
   const [roiNbPeople, setRoiNbPeople] = useState(demoRoiPeople ? parseInt(demoRoiPeople, 10) : 1);
   const { setPage, setAnalysis, setRoi } = usePageContext();
-  const { initAnalysisTracking, setTaskStatus, getTasksForAnalysis } = useProgress();
+  const { initAnalysisTracking, setTaskStatus, getTasksForAnalysis, recordUserAction, badgeShelf, activeChallenges } = useProgress();
 
   const handleRoiParams = useCallback((r: number, p: number) => {
     setRoiHourlyRate(r);
@@ -242,6 +244,7 @@ export default function Results() {
     try {
       await navigator.clipboard.writeText(url);
       showToast("Lien copié dans le presse-papier !");
+      recordUserAction("hasSharedDiagnostic");
     } catch {
       showToast("Erreur lors de la copie du lien.", "error");
     }
@@ -258,6 +261,7 @@ export default function Results() {
         nbPeople: roiNbPeople,
       });
       showToast("PDF exporté avec succès !");
+      recordUserAction("hasExportedPDF");
     } catch {
       showToast("Erreur lors de la génération du PDF.", "error");
     }
@@ -393,6 +397,24 @@ export default function Results() {
             currentPhase={3}
             completedPhases={[0, 1, 2]}
           />
+
+          {/* Badges & challenges compact */}
+          {(badgeShelf.some(b => b.earned) || activeChallenges.length > 0) && (
+            <div className="lecko-card p-4 space-y-3">
+              {badgeShelf.some(b => b.earned) && (
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-foreground-muted mb-2">Badges</p>
+                  <BadgeShelf badges={badgeShelf} compact />
+                </div>
+              )}
+              {activeChallenges.filter(c => c.status === "active").length > 0 && (
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-foreground-muted mb-2">Défis en cours</p>
+                  <ChallengeCards challenges={activeChallenges.filter(c => c.status === "active").slice(0, 1)} />
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Accompagnement split */}
           <AccompagnementSplit tasks={result.taches} metier={result.metier} />

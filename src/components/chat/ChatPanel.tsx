@@ -8,6 +8,7 @@ import { ChatSuggestions } from "./ChatSuggestions";
 import { generateSuggestions, getPageSuggestions } from "@/lib/coachPrompt";
 import { getApiKey } from "@/lib/aiProvider";
 import { usePageContext } from "@/context/PageContext";
+import { useProgress } from "@/context/ProgressContext";
 import { Link } from "react-router-dom";
 
 const INITIAL_SUGGESTIONS_TASK = [
@@ -20,6 +21,7 @@ const INITIAL_SUGGESTIONS_TASK = [
 export function ChatPanel() {
   const { isOpen, closeChat, messages, isStreaming, taskContext, resetChat } = useChatContext();
   const { currentPage, analysisResult, metier: pageMetier } = usePageContext();
+  const { recordUserAction } = useProgress();
   const { initChat, sendMessage, handleRecap } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [suggestions, setSuggestions] = useState<string[]>(
@@ -31,7 +33,10 @@ export function ChatPanel() {
   const hasApiKey = !!getApiKey();
 
   useEffect(() => {
-    if (isOpen) initChat();
+    if (isOpen) {
+      initChat();
+      recordUserAction("hasUsedCopilot");
+    }
   }, [isOpen]); // eslint-disable-line
 
   useEffect(() => {

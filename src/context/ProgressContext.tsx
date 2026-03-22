@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import {
   ProgressState,
   TaskStatus,
@@ -7,6 +7,8 @@ import {
   getMaturityLevel,
   computeProgressPercent,
 } from "@/types/gamification";
+import type { BadgeDefinition, EarnedBadge, ActiveChallenge } from "@/types/badges";
+import type { UserActions } from "@/lib/achievementEngine";
 import {
   loadProgress,
   initTracking,
@@ -15,12 +17,21 @@ import {
   getTrackedForAnalysis,
   resetProgress,
 } from "@/lib/progressStorage";
+import {
+  evaluateBadges,
+  loadEarnedBadges,
+  getBadgeShelf,
+  refreshChallenges,
+  recordAction,
+  resetAchievements,
+} from "@/lib/achievementEngine";
 
 export interface CelebrationEvent {
-  type: "task_done" | "level_up" | "streak";
+  type: "task_done" | "level_up" | "streak" | "badge_earned" | "challenge_completed";
   message: string;
   level?: MaturityConfig;
   streakCount?: number;
+  badge?: BadgeDefinition;
 }
 
 interface ProgressContextValue {
@@ -28,12 +39,16 @@ interface ProgressContextValue {
   globalProgress: { percent: number; done: number; inProgress: number; total: number };
   currentMaturity: MaturityConfig;
   celebration: CelebrationEvent | null;
+  earnedBadges: EarnedBadge[];
+  activeChallenges: ActiveChallenge[];
+  badgeShelf: ReturnType<typeof getBadgeShelf>;
 
   initAnalysisTracking: (analysisId: string, metier: string, taskNames: string[]) => void;
   setTaskStatus: (analysisId: string, taskName: string, status: TaskStatus) => void;
   getTasksForAnalysis: (analysisId: string) => TrackedTask[];
   dismissCelebration: () => void;
   resetAll: () => void;
+  recordUserAction: (action: keyof UserActions) => void;
 }
 
 const ProgressContext = createContext<ProgressContextValue | null>(null);
@@ -41,14 +56,32 @@ const ProgressContext = createContext<ProgressContextValue | null>(null);
 export function ProgressProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ProgressState>(loadProgress);
   const [celebration, setCelebration] = useState<CelebrationEvent | null>(null);
+  const [earnedBadges, setEarnedBadges] = useState<EarnedBadge[]>(loadEarnedBadges);
+  const [activeChallenges, setActiveChallenges] = useState<ActiveChallenge[]>([]);
 
   const globalProgress = getGlobalProgress(state);
   const currentMaturity = getMaturityLevel(globalProgress.percent);
+
+  // Refresh challenges when progress changes
+  useEffect(() => {
+    const challenges = refreshChallenges(state);
+    setActiveChallenges(challenges);
+  }, [state.totalTasksCompleted, state.streak.currentStreak]);
 
   const initAnalysisTracking = useCallback(
     (analysisId: string, metier: string, taskNames: string[]) => {
       const updated = initTracking(analysisId, metier, taskNames);
       setState(updated);
+      // Evaluate badges after init (may earn "first_analysis")
+      const badgeResult = evaluateBadges(updated);
+      setEarnedBadges(badgeResult.allEarned);
+      if (badgeResult.newlyEarned.length > 0) {
+        setCelebration({
+          type: "badge_earned",
+          message: `Badge débloqué : ${badgeResult.newlyEarned[0].name}`,
+          badge: badgeResult.newlyEarned[0],
+        });
+      }
     },
     [],
   );
@@ -58,9 +91,19 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       const result = updateTaskStatus(analysisId, taskName, status);
       setState(result.state);
 
-      // Trigger celebrations
+      // Evaluate badges
+      const badgeResult = evaluateBadges(result.state);
+      setEarnedBadges(badgeResult.allEarned);
+
+      // Trigger celebrations (priority: badge > level_up > streak > task_done)
       if (status === "done") {
-        if (result.levelUp) {
+        if (badgeResult.newlyEarned.length > 0) {
+          setCelebration({
+            type: "badge_earned",
+            message: `Badge débloqué : ${badgeResult.newlyEarned[0].name}`,
+            badge: badgeResult.newlyEarned[0],
+          });
+        } else if (result.levelUp) {
           const newLevel = getMaturityLevel(
             computeProgressPercent(
               result.state.trackedTasks.filter((t) => t.analysisId === analysisId),
@@ -100,9 +143,28 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   const dismissCelebration = useCallback(() => setCelebration(null), []);
 
+  const recordUserAction = useCallback(
+    (action: keyof UserActions) => {
+      recordAction(action);
+      const badgeResult = evaluateBadges(state);
+      setEarnedBadges(badgeResult.allEarned);
+      if (badgeResult.newlyEarned.length > 0) {
+        setCelebration({
+          type: "badge_earned",
+          message: `Badge débloqué : ${badgeResult.newlyEarned[0].name}`,
+          badge: badgeResult.newlyEarned[0],
+        });
+      }
+    },
+    [state],
+  );
+
   const resetAll = useCallback(() => {
     resetProgress();
+    resetAchievements();
     setState(loadProgress());
+    setEarnedBadges([]);
+    setActiveChallenges([]);
   }, []);
 
   return (
@@ -112,11 +174,15 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         globalProgress,
         currentMaturity,
         celebration,
+        earnedBadges,
+        activeChallenges,
+        badgeShelf: getBadgeShelf(),
         initAnalysisTracking,
         setTaskStatus,
         getTasksForAnalysis,
         dismissCelebration,
         resetAll,
+        recordUserAction,
       }}
     >
       {children}

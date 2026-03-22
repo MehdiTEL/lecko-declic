@@ -4,8 +4,11 @@ import { Link } from "react-router-dom";
 import { Trophy, Flame, CheckCircle, BarChart3, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BadgeShelf from "@/components/BadgeShelf";
+import ChallengeCards from "@/components/ChallengeCards";
 import { useProgress } from "@/context/ProgressContext";
 import { usePageContext } from "@/context/PageContext";
+import type { BadgeCategory } from "@/types/badges";
 import {
   MATURITY_LEVELS,
   getMaturityLevel,
@@ -14,7 +17,7 @@ import {
 
 export default function MonParcours() {
   const { setPage } = usePageContext();
-  const { state, globalProgress, currentMaturity } = useProgress();
+  const { state, globalProgress, currentMaturity, badgeShelf, activeChallenges } = useProgress();
 
   useEffect(() => {
     setPage("history");
@@ -226,6 +229,30 @@ export default function MonParcours() {
                 </p>
               </motion.div>
             </div>
+
+            {/* ─── Challenges ───────────────────────────────────── */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+            >
+              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+                Défis en cours
+              </p>
+              <ChallengeCards challenges={activeChallenges} />
+            </motion.div>
+
+            {/* ─── Badges ───────────────────────────────────────── */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.22 }}
+            >
+              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+                Badges ({badgeShelf.filter(b => b.earned).length}/{badgeShelf.length} débloqués)
+              </p>
+              <BadgeShelf badges={badgeShelf} />
+            </motion.div>
 
             {/* ─── Activity History ───────────────────────────────── */}
             <motion.div
