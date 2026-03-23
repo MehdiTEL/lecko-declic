@@ -399,17 +399,54 @@ export default function Index() {
       {/* ═══ APERÇU PRODUIT ═══ */}
       <section className="px-4 pb-16 md:pb-24">
         <div className="max-w-4xl mx-auto">
-          <div className="relative rounded-2xl border border-border overflow-hidden shadow-2xl shadow-lecko-blue/5">
-            <div className="h-10 bg-card border-b border-border flex items-center gap-2 px-4">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-300/60" />
-                <div className="w-3 h-3 rounded-full bg-yellow-300/60" />
-                <div className="w-3 h-3 rounded-full bg-green-300/60" />
+          {/* Outer glow container */}
+          <div className="relative">
+            {/* Background glow effect */}
+            <div
+              className="absolute -inset-4 md:-inset-6 rounded-[28px] blur-2xl opacity-[0.07]"
+              style={{ background: "radial-gradient(ellipse at center, #2563EB 0%, transparent 70%)" }}
+              aria-hidden
+            />
+
+            {/* Browser frame */}
+            <div
+              className="relative rounded-2xl overflow-hidden"
+              style={{
+                border: "1.5px solid hsl(var(--border))",
+                boxShadow: "0 25px 60px -12px rgba(37, 99, 235, 0.12), 0 12px 30px -8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(37, 99, 235, 0.04)",
+              }}
+            >
+              {/* Title bar */}
+              <div className="h-11 bg-card border-b border-border flex items-center px-4">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#FF5F57" }} />
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#FEBC2E" }} />
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#28C840" }} />
+                </div>
+                <div className="flex-1 flex justify-center">
+                  <div className="flex items-center gap-2 px-4 py-1 rounded-md bg-muted/50 max-w-xs w-full">
+                    <svg width="10" height="10" viewBox="0 0 10 10" className="text-foreground-muted/40 shrink-0">
+                      <circle cx="5" cy="5" r="4" stroke="currentColor" fill="none" strokeWidth="1.2" />
+                      <line x1="8" y1="8" x2="10" y2="10" stroke="currentColor" strokeWidth="1.2" />
+                    </svg>
+                    <span className="text-[11px] text-foreground-muted font-mono truncate">declic.lecko.fr/resultats</span>
+                  </div>
+                </div>
+                <div className="w-[52px]" /> {/* Spacer to center the URL bar */}
               </div>
-              <span className="text-[11px] text-foreground-muted ml-2 font-mono">declic.lecko.fr/resultats</span>
+
+              {/* Screenshot */}
+              <div className="relative">
+                <img
+                  src="/preview-diagnostic.png"
+                  alt="Aperçu du diagnostic DÉCLIC — score, tâches automatisables, plan d'action"
+                  className="w-full block"
+                  loading="lazy"
+                />
+                {/* Bottom fade */}
+                <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background via-background/60 to-transparent" />
+              </div>
             </div>
-            <img src="/preview-diagnostic.png" alt="Aperçu du diagnostic DÉCLIC" className="w-full" loading="lazy" />
-            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent" />
           </div>
         </div>
       </section>
