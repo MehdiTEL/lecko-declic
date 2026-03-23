@@ -336,70 +336,121 @@ export default function Index() {
             automatisables, le temps récupérable, et un plan d'action concret.
           </p>
 
-          {/* Search bar */}
-          <div className="max-w-xl mx-auto mb-4">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-1">
-                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted pointer-events-none" />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={metier}
-                  onChange={(e) => setMetier(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
-                  placeholder="Ex : Chef de projet, Comptable, RH..."
-                  className="w-full h-[52px] pl-11 pr-4 text-base bg-white dark:bg-card border border-border rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-foreground-muted shadow-sm"
-                />
+          {/* ── Dual choice: Express vs Personnalisé ──────────────── */}
+          <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+            {/* CARD 1 — Diagnostic Express (gratuit) */}
+            <div className="lecko-card p-6 flex flex-col text-left relative overflow-hidden">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-gr33t-500/10 flex items-center justify-center shrink-0">
+                  <Search size={16} className="text-gr33t-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground">Diagnostic Express</p>
+                  <p className="text-[10px] font-semibold text-gr33t-600 uppercase tracking-wider">Gratuit — sans inscription</p>
+                </div>
               </div>
-              <button
-                onClick={() => handleAnalyze()}
-                disabled={!metier.trim()}
-                className="shrink-0 h-[52px] px-7 font-semibold text-sm text-white rounded-xl bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Analyser
-              </button>
-            </div>
-          </div>
 
-          {/* Job chips — compact, separated by dots */}
-          <div className="flex flex-wrap justify-center gap-x-1 gap-y-1 mb-8">
-            {FREE_JOB_LABELS.slice(0, 8).map((s, i) => (
-              <span key={s} className="inline-flex items-center">
+              <ul className="space-y-1.5 mb-5 flex-1">
+                {["Score d'automatisation", "Tâches identifiées + ROI", "Plan d'action en 6 phases", "Base de 15 métiers"].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-xs text-foreground-secondary">
+                    <div className="w-1 h-1 rounded-full bg-gr33t-500 shrink-0 mt-1.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex flex-col gap-2">
+                <div className="relative">
+                  <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted pointer-events-none" />
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={metier}
+                    onChange={(e) => setMetier(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
+                    placeholder="Votre métier..."
+                    className="w-full h-10 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-foreground-muted"
+                  />
+                </div>
                 <button
-                  onClick={() => handleAnalyze(s)}
-                  className="text-sm text-foreground-muted hover:text-primary transition-colors py-0.5 px-1"
+                  onClick={() => handleAnalyze()}
+                  disabled={!metier.trim()}
+                  className="w-full h-10 font-semibold text-sm text-white rounded-lg bg-gr33t-600 hover:bg-gr33t-700 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {s}
+                  Lancer le diagnostic
                 </button>
-                {i < 7 && <span className="text-foreground-muted/30 select-none">·</span>}
-              </span>
-            ))}
-          </div>
+              </div>
 
-          {/* CTA Diagnostic Personnalisé — card proéminente */}
-          <div className="max-w-lg mx-auto">
-            <button
-              onClick={() => {
-                const job = metier.trim() || "";
-                if (!getApiKey()) {
-                  navigate(`/configurer-api?metier=${encodeURIComponent(job)}&redirect=diagnostic`);
-                  return;
-                }
-                navigate(`/diagnostic?metier=${encodeURIComponent(job)}`);
-              }}
-              className="w-full flex items-center justify-between gap-4 p-4 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all text-left group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <div className="flex flex-wrap gap-1 mt-3">
+                {FREE_JOB_LABELS.slice(0, 6).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => handleAnalyze(s)}
+                    className="text-[11px] text-foreground-muted hover:text-primary transition-colors"
+                  >
+                    {s}{" "}·
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* CARD 2 — Diagnostic Personnalisé (clé API) */}
+            <div className="relative lecko-card p-6 flex flex-col text-left border-2 border-primary/20 bg-primary/[0.02]">
+              {/* Recommended badge */}
+              <div className="absolute top-3 right-3">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary uppercase tracking-wider">
+                  Recommandé
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <Sparkles size={16} className="text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-foreground">Diagnostic personnalisé</p>
-                  <p className="text-xs text-foreground-muted">Basé sur votre quotidien réel, vos outils, vos contraintes</p>
+                  <p className="text-sm font-bold text-foreground">Diagnostic Personnalisé</p>
+                  <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">Clé API requise</p>
                 </div>
               </div>
-              <ArrowRight size={16} className="text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
-            </button>
+
+              <ul className="space-y-1.5 mb-5 flex-1">
+                {[
+                  "Tout le diagnostic Express +",
+                  "Analyse de VOTRE quotidien réel",
+                  "Adapté à vos outils et contraintes",
+                  "Recommandations sur-mesure par l'IA",
+                ].map((item, i) => (
+                  <li key={item} className={`flex items-start gap-2 text-xs ${i === 0 ? "text-foreground-muted" : "text-foreground-secondary font-medium"}`}>
+                    <div className={`w-1 h-1 rounded-full shrink-0 mt-1.5 ${i === 0 ? "bg-foreground-muted" : "bg-primary"}`} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={() => {
+                  const job = metier.trim() || "";
+                  if (!getApiKey()) {
+                    navigate(`/configurer-api?metier=${encodeURIComponent(job)}&redirect=diagnostic`);
+                    return;
+                  }
+                  navigate(`/diagnostic?metier=${encodeURIComponent(job)}`);
+                }}
+                className="w-full h-10 font-semibold text-sm text-white rounded-lg bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              >
+                <Sparkles size={14} />
+                Démarrer le diagnostic
+              </button>
+
+              <p className="text-[10px] text-foreground-muted mt-2 text-center">
+                Utilise votre clé OpenAI ou Anthropic.{" "}
+                <Link to="/configurer-api" className="text-primary hover:underline">
+                  En savoir plus
+                </Link>
+              </p>
+            </div>
+
           </div>
 
           {/* Compteurs factuels */}
