@@ -8,7 +8,7 @@ import { DECLIC_PHASES } from "@/types/declic";
 import { useChatContext } from "@/context/ChatContext";
 import { usePageContext } from "@/context/PageContext";
 
-const PHASE_ICONS = [ShieldCheck, Search, BarChart3, Wrench, Play, Award];
+const PHASE_ICONS = [ShieldCheck, Search, BarChart3, Wrench, Play, RefreshCw, Award];
 
 const CRITERES = [
   { key: "recurrence", Icon: RefreshCw, label: "Récurrence", question: "Vous l'avez fait plus de 3 fois et vous allez le refaire ?" },
