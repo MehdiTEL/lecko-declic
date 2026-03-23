@@ -14,6 +14,7 @@ import RoiCalculator from "@/components/RoiCalculator";
 import DeclicProgress from "@/components/DeclicProgress";
 import WhereToStart from "@/components/WhereToStart";
 import BenchmarkBanner from "@/components/BenchmarkBanner";
+import InsightKiller from "@/components/InsightKiller";
 import AccompagnementSplit from "@/components/AccompagnementSplit";
 import BadgeShelf from "@/components/BadgeShelf";
 import ChallengeCards from "@/components/ChallengeCards";
@@ -302,7 +303,7 @@ export default function Results() {
     }
   };
 
-  if (loading) return <LoadingScreen />;
+  if (loading) return <LoadingScreen metier={metier} />;
 
   if (error) {
     return (
@@ -441,6 +442,9 @@ export default function Results() {
         <main className="max-w-5xl mx-auto px-4 py-4 space-y-2">
 
           {/* ═══ PHASE 1 — DÉTECTER ═══ */}
+          {/* Insight Killer — hook d'accroche */}
+          <InsightKiller result={result} />
+
           <div id="phase-1" className="scroll-mt-32 pt-8 pb-4">
             <div className="flex items-center gap-4 pb-4">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[1].color}15` }}>

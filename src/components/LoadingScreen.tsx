@@ -1,105 +1,137 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import DeclicLogo from "@/components/DeclicLogo";
+import { Check, Loader2 } from "lucide-react";
 
-const STEPS = [
-  "Analyse du métier en cours...",
-  "Identification des tâches quotidiennes...",
-  "Évaluation du potentiel d'automatisation...",
-  "Génération des recommandations...",
+interface LoadingScreenProps {
+  metier?: string;
+  tasks?: string[];
+}
+
+const GENERIC_TASKS = [
+  "Analyse des tâches récurrentes",
+  "Identification des processus manuels",
+  "Évaluation du potentiel d'automatisation",
+  "Calcul du temps récupérable",
+  "Recherche des outils adaptés",
+  "Génération du plan d'action",
 ];
 
-export default function LoadingScreen() {
-  const [stepIndex, setStepIndex] = useState(0);
+const PHASES = [
+  "Analyse du métier en cours",
+  "Identification des tâches",
+  "Évaluation des critères DÉCLIC",
+  "Génération des recommandations",
+];
+
+export default function LoadingScreen({ metier, tasks }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
+  const [visibleTasks, setVisibleTasks] = useState(0);
+  const [phaseIndex, setPhaseIndex] = useState(0);
+  const [showTasks, setShowTasks] = useState(false);
+
+  const displayTasks = tasks?.slice(0, 6) ?? GENERIC_TASKS;
 
   useEffect(() => {
-    const stepInterval = setInterval(() => {
-      setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
-    }, 900);
-
     const progressInterval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 95) return p;
-        return p + Math.random() * 4;
-      });
-    }, 150);
+      setProgress((p) => (p >= 95 ? p : p + Math.random() * 2.5));
+    }, 200);
+
+    const phaseInterval = setInterval(() => {
+      setPhaseIndex((i) => Math.min(i + 1, PHASES.length - 1));
+    }, 2000);
+
+    const taskDelay = setTimeout(() => setShowTasks(true), 1500);
 
     return () => {
-      clearInterval(stepInterval);
       clearInterval(progressInterval);
+      clearInterval(phaseInterval);
+      clearTimeout(taskDelay);
     };
   }, []);
 
+  useEffect(() => {
+    if (!showTasks || visibleTasks >= displayTasks.length) return;
+    const timer = setTimeout(() => setVisibleTasks((v) => v + 1), 700);
+    return () => clearTimeout(timer);
+  }, [showTasks, visibleTasks, displayTasks.length]);
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
-      <div className="max-w-md w-full text-center">
-        {/* Logo + Spinner */}
-        <div className="flex flex-col items-center justify-center mb-8">
-          <DeclicLogo size="lg" className="mb-6" />
-          <div className="relative w-20 h-20">
-            <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-              <circle
-                cx="40" cy="40" r="34"
-                fill="none"
-                stroke="hsl(var(--muted))"
-                strokeWidth="6"
-              />
-              <circle
-                cx="40" cy="40" r="34"
-                fill="none"
-                stroke="hsl(var(--lecko-green))"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeDasharray="213.6"
-                strokeDashoffset={213.6 - (213.6 * progress) / 100}
-                style={{ transition: "stroke-dashoffset 0.3s ease" }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-heading text-sm font-bold text-foreground-muted">{Math.round(progress)}%</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Step text */}
-        <div className="h-8 mb-6 flex items-center justify-center">
+      <div className="max-w-lg w-full">
+        {/* Phase title */}
+        <div className="text-center mb-8">
           <AnimatePresence mode="wait">
             <motion.p
-              key={stepIndex}
-              initial={{ opacity: 0, y: 10 }}
+              key={phaseIndex}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
               className="text-lg font-semibold text-foreground"
             >
-              {STEPS[stepIndex]}
+              {PHASES[phaseIndex]}
+              {metier && phaseIndex === 0 ? ` — ${metier}` : ""}
             </motion.p>
           </AnimatePresence>
         </div>
 
-        {/* Step indicators */}
-        <div className="flex justify-center gap-2 mb-6">
-          {STEPS.map((_, i) => (
-            <div
-              key={i}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i <= stepIndex ? "bg-primary w-6" : "bg-border w-2"
-              }`}
-            />
-          ))}
-        </div>
-
         {/* Progress bar */}
-        <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-          <div
-            className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
-            style={{ width: `${progress}%` }}
+        <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden mb-8">
+          <motion.div
+            className="h-full bg-primary rounded-full"
+            initial={{ width: "0%" }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           />
         </div>
-        <p className="text-foreground-muted text-sm mt-2">
-          {Math.round(progress)}% — Analyse en cours
-        </p>
+
+        {/* Tasks detected — sequential reveal */}
+        <div className="space-y-2">
+          <AnimatePresence>
+            {displayTasks.slice(0, visibleTasks).map((task, i) => {
+              const isLast = i === visibleTasks - 1 && visibleTasks < displayTasks.length;
+              return (
+                <motion.div
+                  key={task}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-xl"
+                  style={{
+                    backgroundColor: isLast ? "transparent" : "hsl(var(--surface-alt, 210 40% 98%))",
+                  }}
+                >
+                  {isLast ? (
+                    <Loader2 size={15} className="text-primary animate-spin shrink-0" />
+                  ) : (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.15, type: "spring", stiffness: 300 }}
+                    >
+                      <Check size={15} className="text-primary shrink-0" />
+                    </motion.div>
+                  )}
+                  <span className={`text-sm ${isLast ? "text-foreground-muted" : "text-foreground"}`}>
+                    {task}
+                    {isLast ? "..." : ""}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+
+        {/* Counter */}
+        {visibleTasks > 0 && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-xs text-foreground-muted text-center mt-6"
+          >
+            {visibleTasks} tâche{visibleTasks > 1 ? "s" : ""} identifiée{visibleTasks > 1 ? "s" : ""}
+          </motion.p>
+        )}
       </div>
     </div>
   );
