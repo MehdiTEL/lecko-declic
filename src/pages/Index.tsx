@@ -402,7 +402,7 @@ export default function Index() {
                 className="mt-4 pt-4 border-t border-border/40"
               >
                 <Link
-                  to={getApiKey() ? "/diagnostic" : "/?requireKey=1"}
+                  to={getApiKey() ? "/diagnostic" : "/configurer-api?redirect=diagnostic"}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline transition-colors"
                 >
                   <Target size={15} strokeWidth={1.5} />
@@ -410,7 +410,10 @@ export default function Index() {
                   <ArrowRight size={14} />
                 </Link>
                 <p className="text-xs text-foreground-muted mt-1">
-                  Décrivez vos tâches, vos outils, vos frustrations. L'IA analyse votre contexte exact.
+                  Diagnostic sur-mesure basé sur votre quotidien réel.{" "}
+                  <Link to="/configurer-api" className="text-primary hover:underline">
+                    Qu'est-ce qu'une clé API ?
+                  </Link>
                 </p>
               </motion.div>
             </div>

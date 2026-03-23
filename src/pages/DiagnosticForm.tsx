@@ -20,10 +20,12 @@ import {
   SECTOR_LABELS,
   TOOL_OPTIONS,
   AUTOMATION_EXPERIENCE_OPTIONS,
+  CONTRAINTE_LABELS,
   OrgSize,
   Sector,
   ToolId,
   AutomationExperience,
+  ContrainteIT,
 } from "@/types/diagnostic";
 
 /* ── animation variants ─────────────────────────────────── */
@@ -318,6 +320,50 @@ export default function DiagnosticForm() {
                   );
                 })}
               </div>
+            </div>
+
+            {/* IT Constraints */}
+            <div>
+              <label className={labelCls}>
+                Votre organisation a-t-elle des contraintes techniques ?
+              </label>
+              <p className="text-xs text-foreground-muted mb-3">
+                Cela nous permet de ne recommander que des solutions réellement déployables chez vous.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {(Object.entries(CONTRAINTE_LABELS) as [ContrainteIT, typeof CONTRAINTE_LABELS[ContrainteIT]][]).map(([id, conf]) => {
+                  const isAucune = id === "aucune";
+                  const selected = isAucune
+                    ? form.contraintesIT.includes("aucune")
+                    : form.contraintesIT.includes(id);
+                  return (
+                    <button
+                      type="button"
+                      key={id}
+                      onClick={() => {
+                        if (isAucune) {
+                          update("contraintesIT", ["aucune"]);
+                        } else {
+                          const without = form.contraintesIT.filter(c => c !== "aucune" && c !== id);
+                          update("contraintesIT", selected ? without : [...without, id]);
+                        }
+                      }}
+                      className={`lecko-card p-3 text-left border-2 transition-all cursor-pointer ${
+                        selected ? "border-primary bg-primary/5" : "border-transparent hover:border-border"
+                      }`}
+                    >
+                      <p className="text-sm font-medium text-foreground">{conf.label}</p>
+                      <p className="text-[11px] text-foreground-muted mt-0.5">{conf.detail}</p>
+                    </button>
+                  );
+                })}
+              </div>
+              {form.contraintesIT.includes("aucune") && (
+                <p className="text-xs text-gr33t-600 dark:text-gr33t-400 mt-2">Toutes les solutions sont envisageables.</p>
+              )}
+              {form.contraintesIT.length > 0 && !form.contraintesIT.includes("aucune") && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">Les recommandations seront adaptées à ces contraintes.</p>
+              )}
             </div>
           </div>
         );

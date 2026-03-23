@@ -12,6 +12,7 @@ import EquipeResultats from "./pages/EquipeResultats";
 import Methode from "./pages/Methode";
 import MonParcours from "./pages/MonParcours";
 import DiagnosticForm from "./pages/DiagnosticForm";
+import ConfigurerApi from "./pages/ConfigurerApi";
 import NotFound from "./pages/NotFound";
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/methode" element={<Methode />} />
             <Route path="/mon-parcours" element={<MonParcours />} />
             <Route path="/diagnostic" element={<DiagnosticForm />} />
+            <Route path="/configurer-api" element={<ConfigurerApi />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatPanel />

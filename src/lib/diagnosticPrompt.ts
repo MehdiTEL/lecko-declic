@@ -3,7 +3,7 @@
  * This is the core of what differentiates DÉCLIC from a raw ChatGPT prompt.
  */
 import type { DiagnosticFormData } from "@/types/diagnostic";
-import { ORG_SIZE_LABELS, SECTOR_LABELS, TOOL_OPTIONS } from "@/types/diagnostic";
+import { ORG_SIZE_LABELS, SECTOR_LABELS, TOOL_OPTIONS, CONTRAINTE_LABELS } from "@/types/diagnostic";
 
 export function buildPersonalizedSystemPrompt(): string {
   return `Tu es un expert en transformation digitale et automatisation des processus métier, intégré dans la plateforme DÉCLIC. Tu appliques la méthode DÉCLIC.
@@ -17,6 +17,8 @@ Tu dois :
 4. Prendre en compte la taille de l'organisation et le secteur pour les recommandations
 5. Évaluer les 5 critères DÉCLIC pour chaque tâche
 6. Attribuer un niveau d'accompagnement réaliste (express/guide/consultant)
+
+RÈGLE CONTRAINTES : si l'utilisateur a des CONTRAINTES ENVIRONNEMENTALES, elles sont IMPÉRATIVES. Ne recommande JAMAIS un outil qui les viole. Si une contrainte empêche l'automatisation d'une tâche, classe-la comme "difficilement_automatisable" et explique pourquoi. Propose une alternative conforme si elle existe.
 
 RÈGLE D'OR : ne recommande QUE des outils que l'utilisateur a déjà OU des alternatives gratuites/natives. Si l'utilisateur a Microsoft 365, privilégie Power Automate, Copilot M365, SharePoint. Si Google Workspace, privilégie Apps Script, Google Sheets automations.
 
@@ -85,8 +87,20 @@ export function buildUserMessage(data: DiagnosticFormData): string {
   if (data.painPoints) sections.push(`\nCE QUI ME FRUSTRE :\n${data.painPoints}`);
   if (data.timeWasters) sections.push(`\nCE QUI PREND TROP DE TEMPS :\n${data.timeWasters}`);
 
+  // IT constraints (imperative)
+  if (data.contraintesIT && data.contraintesIT.length > 0 && !data.contraintesIT.includes("aucune")) {
+    sections.push(`\nCONTRAINTES ENVIRONNEMENTALES (IMPÉRATIF — respecter dans TOUTES les recommandations) :`);
+    data.contraintesIT.forEach((c) => {
+      const conf = CONTRAINTE_LABELS[c];
+      if (conf && conf.impact) {
+        sections.push(`- ${conf.label} : ${conf.impact}`);
+      }
+    });
+    sections.push(`\nATTENTION : ne recommande AUCUN outil qui viole ces contraintes. Si une tâche ne peut pas être automatisée dans ces conditions, dis-le explicitement.`);
+  }
+
   if (data.priorities) sections.push(`\nMES PRIORITÉS D'AUTOMATISATION :\n${data.priorities}`);
-  if (data.constraints) sections.push(`\nCONTRAINTES :\n${data.constraints}`);
+  if (data.constraints) sections.push(`\nCONTRAINTES ADDITIONNELLES :\n${data.constraints}`);
   if (data.objectives) sections.push(`\nOBJECTIFS :\n${data.objectives}`);
 
   return sections.join("\n");
