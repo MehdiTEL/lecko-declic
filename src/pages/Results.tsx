@@ -7,6 +7,7 @@ import TaskCard from "@/components/TaskCard";
 import DeclicCTA from "@/components/DeclicCTA";
 import Footer from "@/components/Footer";
 import ConsultantContactForm from "@/components/ConsultantContactForm";
+import ResultsDashboard from "@/components/ResultsDashboard";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
 // DeclicPhase removed — phases no longer displayed in results page
@@ -466,6 +467,19 @@ export default function Results() {
           )}
         </div>
       </main>
+
+      {/* ═══════════ ZONE D — Tableau de bord ROI ═══════════ */}
+      <div className="max-w-4xl mx-auto px-4 pb-4">
+        <ResultsDashboard
+          result={result}
+          initialRate={roiHourlyRate}
+          initialPeople={roiNbPeople}
+          onParamsChange={(rate, people) => {
+            setRoiHourlyRate(rate);
+            setRoiNbPeople(people);
+          }}
+        />
+      </div>
 
       {/* ═══════════ ZONE C — Aller plus loin ═══════════ */}
       <div className="max-w-4xl mx-auto px-4 pb-12">
