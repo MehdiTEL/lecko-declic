@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User, Target, RefreshCw } from "lucide-react";
+import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User, RefreshCw, Sparkles } from "lucide-react";
 import Onboarding from "@/components/Onboarding";
 import { usePageContext } from "@/context/PageContext";
 import { getDemoScenario, DEMO_SCENARIOS } from "@/data/demoScenarios";
@@ -314,172 +314,108 @@ export default function Index() {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
-      {/* ── HERO — Gr33t style with gradient bg ──────────────────────────────── */}
-      <section className="relative px-4 py-24 md:py-32 overflow-hidden">
-        {/* Background decorative blobs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-blue-100/30 dark:bg-blue-900/10 blur-3xl" />
-          <div className="absolute bottom-0 -left-24 w-72 h-72 rounded-full bg-gr33t-100/20 dark:bg-gr33t-900/10 blur-3xl" />
-        </div>
+      {/* ── HERO — centré, orienté action ──────────────────────────────── */}
+      <section className="px-4 pt-12 pb-16 md:pt-16 md:pb-20">
+        <div className="max-w-3xl mx-auto text-center">
 
-        <div className="max-w-5xl mx-auto relative">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="mb-5"
-              >
-                <span className="section-label">Diagnostic IA par métier</span>
-              </motion.div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-5">
+            Diagnostic IA par métier
+          </p>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.05 }}
-                className="font-heading text-display text-foreground mb-6"
-              >
-                Automatisez intelligemment les tâches qui vous{" "}
-                <span className="underline-orange">freinent</span>.
-              </motion.h1>
+          <h1
+            className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4"
+            style={{ lineHeight: "1.15", letterSpacing: "-0.02em" }}
+          >
+            Identifiez ce que l'IA peut{" "}
+            <span className="underline-orange">automatiser</span>{" "}
+            dans votre quotidien.
+          </h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.12 }}
-                className="text-body-lg text-foreground-secondary mb-10 max-w-xl"
-              >
-                Entrez votre métier. Découvrez ce que l'IA peut automatiser.
-                Suivez le plan d'action.
-              </motion.p>
+          <p className="text-base sm:text-lg text-foreground-secondary mb-10 max-w-xl mx-auto" style={{ lineHeight: "1.65" }}>
+            Entrez votre métier. En 30 secondes, obtenez la liste de vos tâches
+            automatisables, le temps récupérable, et un plan d'action concret.
+          </p>
 
-              {/* Search box — Gr33t style: large, rounded, shadow */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.18 }}
-                className="flex flex-col sm:flex-row gap-3 mb-6"
-              >
-                <div className="relative flex-1">
-                  <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-light" strokeWidth={1.5} />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={metier}
-                    onChange={(e) => setMetier(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
-                    placeholder="Votre métier — ex : Chef de projet, Comptable..."
-                    className="w-full h-14 pl-11 pr-4 text-base bg-white dark:bg-card border border-border/60 rounded-2xl outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-foreground placeholder:text-foreground-light shadow-card"
-                  />
-                </div>
-                <button
-                  onClick={() => handleAnalyze()}
-                  disabled={!metier.trim()}
-                  className="shrink-0 h-14 px-8 font-semibold text-sm text-white rounded-2xl bg-primary hover:bg-primary/90 hover:shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
-                >
-                  Analyser
-                </button>
-              </motion.div>
-
-              {/* Job chips */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.25 }}
-                className="flex flex-wrap gap-2"
-              >
-                {FREE_JOB_LABELS.slice(0, 8).map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => handleAnalyze(s)}
-                    className="px-3 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-800 text-foreground-secondary hover:bg-primary/10 hover:text-primary transition-colors"
-                  >
-                    {s}
-                  </button>
-                ))}
-              </motion.div>
-
-              {/* Personalized diagnostic CTA */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.3 }}
-                className="mt-4 pt-4 border-t border-border/40"
-              >
-                <Link
-                  to={getApiKey() ? "/diagnostic" : "/configurer-api?redirect=diagnostic"}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline transition-colors"
-                >
-                  <Target size={15} strokeWidth={1.5} />
-                  Diagnostic personnalisé — basé sur votre quotidien réel
-                  <ArrowRight size={14} />
-                </Link>
-                <p className="text-xs text-foreground-muted mt-1">
-                  Diagnostic sur-mesure basé sur votre quotidien réel.{" "}
-                  <Link to="/configurer-api" className="text-primary hover:underline">
-                    Qu'est-ce qu'une clé API ?
-                  </Link>
-                </p>
-              </motion.div>
-            </div>
-
-            {/* Right — abstract illustration */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="hidden md:flex items-center justify-center"
-            >
-              <div className="relative w-80 h-72 rounded-3xl overflow-hidden bg-primary/[0.04] border border-primary/10">
-                <svg viewBox="0 0 320 280" className="w-full h-full" aria-hidden>
-                  <defs>
-                    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-                      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="hsl(221 83% 53% / 0.05)" strokeWidth="1"/>
-                    </pattern>
-                  </defs>
-                  <rect width="320" height="280" fill="url(#grid)" />
-
-                  {/* Workflow nodes */}
-                  <rect x="30" y="110" width="64" height="36" rx="12" fill="hsl(221 83% 53% / 0.12)" stroke="hsl(221 83% 53% / 0.25)" strokeWidth="1.5"/>
-                  <text x="62" y="132" textAnchor="middle" fontSize="10" fill="hsl(221 83% 53%)" fontFamily="Inter, sans-serif" fontWeight="600">Déclencheur</text>
-
-                  <rect x="128" y="80" width="64" height="36" rx="12" fill="hsl(38 92% 50% / 0.10)" stroke="hsl(38 92% 50% / 0.25)" strokeWidth="1.5"/>
-                  <text x="160" y="102" textAnchor="middle" fontSize="10" fill="hsl(32 95% 42%)" fontFamily="Inter, sans-serif" fontWeight="600">Traitement</text>
-
-                  <rect x="128" y="140" width="64" height="36" rx="12" fill="hsl(160 84% 39% / 0.08)" stroke="hsl(160 84% 39% / 0.25)" strokeWidth="1.5"/>
-                  <text x="160" y="162" textAnchor="middle" fontSize="10" fill="hsl(160 84% 39%)" fontFamily="Inter, sans-serif" fontWeight="600">Condition</text>
-
-                  <rect x="226" y="80" width="64" height="36" rx="12" fill="hsl(271 91% 55% / 0.08)" stroke="hsl(271 91% 55% / 0.2)" strokeWidth="1.5"/>
-                  <text x="258" y="102" textAnchor="middle" fontSize="10" fill="hsl(271 91% 55%)" fontFamily="Inter, sans-serif" fontWeight="600">IA / LLM</text>
-
-                  <rect x="226" y="140" width="64" height="36" rx="12" fill="hsl(221 83% 53% / 0.06)" stroke="hsl(221 83% 53% / 0.15)" strokeWidth="1.5"/>
-                  <text x="258" y="162" textAnchor="middle" fontSize="10" fill="hsl(221 83% 53%)" fontFamily="Inter, sans-serif" fontWeight="600">Notification</text>
-
-                  {/* Arrows */}
-                  <line x1="94" y1="128" x2="128" y2="104" stroke="hsl(221 83% 53% / 0.3)" strokeWidth="1.5" markerEnd="url(#arrow)"/>
-                  <line x1="94" y1="134" x2="128" y2="154" stroke="hsl(221 83% 53% / 0.3)" strokeWidth="1.5"/>
-                  <line x1="192" y1="98" x2="226" y2="98" stroke="hsl(38 92% 50% / 0.3)" strokeWidth="1.5"/>
-                  <line x1="192" y1="158" x2="226" y2="158" stroke="hsl(160 84% 39% / 0.3)" strokeWidth="1.5"/>
-
-                  <defs>
-                    <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                      <path d="M0,0 L0,6 L6,3 z" fill="hsl(221 83% 53% / 0.3)"/>
-                    </marker>
-                  </defs>
-
-                  {/* ROI badge */}
-                  <circle cx="256" cy="48" r="16" fill="hsl(38 92% 50% / 0.12)" stroke="hsl(38 92% 50% / 0.25)" strokeWidth="1.5"/>
-                  <text x="256" y="52" textAnchor="middle" fontSize="11" fill="hsl(32 95% 42%)" fontFamily="Inter, sans-serif" fontWeight="700">ROI</text>
-
-                  {/* Time saved */}
-                  <rect x="30" y="190" width="100" height="24" rx="12" fill="hsl(160 84% 39% / 0.08)" stroke="hsl(160 84% 39% / 0.2)" strokeWidth="1"/>
-                  <text x="80" y="206" textAnchor="middle" fontSize="9" fill="hsl(160 84% 39%)" fontFamily="Inter, sans-serif" fontWeight="600">~4h économisées/sem</text>
-                </svg>
+          {/* Search bar */}
+          <div className="max-w-xl mx-auto mb-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted pointer-events-none" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={metier}
+                  onChange={(e) => setMetier(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
+                  placeholder="Ex : Chef de projet, Comptable, RH..."
+                  className="w-full h-[52px] pl-11 pr-4 text-base bg-white dark:bg-card border border-border rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-foreground-muted shadow-sm"
+                />
               </div>
-            </motion.div>
+              <button
+                onClick={() => handleAnalyze()}
+                disabled={!metier.trim()}
+                className="shrink-0 h-[52px] px-7 font-semibold text-sm text-white rounded-xl bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Analyser
+              </button>
+            </div>
           </div>
+
+          {/* Job chips — compact, separated by dots */}
+          <div className="flex flex-wrap justify-center gap-x-1 gap-y-1 mb-8">
+            {FREE_JOB_LABELS.slice(0, 8).map((s, i) => (
+              <span key={s} className="inline-flex items-center">
+                <button
+                  onClick={() => handleAnalyze(s)}
+                  className="text-sm text-foreground-muted hover:text-primary transition-colors py-0.5 px-1"
+                >
+                  {s}
+                </button>
+                {i < 7 && <span className="text-foreground-muted/30 select-none">·</span>}
+              </span>
+            ))}
+          </div>
+
+          {/* CTA Diagnostic Personnalisé — card proéminente */}
+          <div className="max-w-lg mx-auto">
+            <button
+              onClick={() => {
+                const job = metier.trim() || "";
+                if (!getApiKey()) {
+                  navigate(`/configurer-api?metier=${encodeURIComponent(job)}&redirect=diagnostic`);
+                  return;
+                }
+                navigate(`/diagnostic?metier=${encodeURIComponent(job)}`);
+              }}
+              className="w-full flex items-center justify-between gap-4 p-4 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all text-left group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <Sparkles size={16} className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Diagnostic personnalisé</p>
+                  <p className="text-xs text-foreground-muted">Basé sur votre quotidien réel, vos outils, vos contraintes</p>
+                </div>
+              </div>
+              <ArrowRight size={16} className="text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
+            </button>
+          </div>
+
+          {/* Compteurs factuels */}
+          <div className="flex justify-center gap-8 mt-10 pt-8 border-t border-border">
+            {[
+              { value: "15", label: "métiers analysables" },
+              { value: "120+", label: "tâches dans la base" },
+              { value: "6", label: "phases DÉCLIC" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-xs text-foreground-muted">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+
         </div>
       </section>
 
@@ -568,14 +504,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── PRODUCT FACTS ──────────────────────────────────────────────────── */}
-      <section className="px-4 py-10 border-b border-border">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-sm text-foreground-muted">
-            15 métiers analysables · 120+ tâches dans la base · Méthodologie DÉCLIC en 6 phases
-          </p>
-        </div>
-      </section>
 
       {/* ── CONTACT ──────────────────────────────────────────────────────────── */}
       <section className="px-4 py-24 section-alt">
