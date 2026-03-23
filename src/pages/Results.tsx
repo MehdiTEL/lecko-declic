@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import ConsultantContactForm from "@/components/ConsultantContactForm";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
-import { DeclicPhase } from "@/types/declic";
+// DeclicPhase removed — phases no longer displayed in results page
 import { saveToHistory } from "@/lib/history";
 import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { findInLocalDatabase } from "@/data/jobDatabase";
@@ -82,33 +82,6 @@ export default function Results() {
     }
   }, [result, analysisId, isDemo, initAnalysisTracking]);
   const trackedTasks = getTasksForAnalysis(analysisId);
-
-  // ─── Scroll-based phase progression (must be before conditional returns) ──
-  const [visitedPhases, setVisitedPhases] = useState<Set<DeclicPhase>>(new Set([0, 1]));
-  useEffect(() => {
-    if (!result) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = parseInt(entry.target.id.replace("phase-", "")) as DeclicPhase;
-            if (!isNaN(id)) setVisitedPhases((prev) => new Set([...prev, id]));
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: "-80px 0px" },
-    );
-    for (let i = 1; i <= 6; i++) {
-      const el = document.getElementById(`phase-${i}`);
-      if (el) observer.observe(el);
-    }
-    return () => observer.disconnect();
-  }, [result]);
-
-  const currentDeclicPhase = (
-    [1, 2, 3, 4, 5] as DeclicPhase[]
-  ).find((p) => !visitedPhases.has(p)) ?? (6 as DeclicPhase);
-  const completedDeclicPhases = Array.from(visitedPhases) as DeclicPhase[];
 
   const minLoadMs = 5500;
 
@@ -351,8 +324,6 @@ export default function Results() {
       </div>
     );
   }
-
-  const PHASE_ICON_MAP = [ShieldCheck, Search, BarChart3, WrenchIcon, Play, Award];
 
   if (!result) return null;
 
