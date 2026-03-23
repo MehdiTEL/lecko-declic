@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User } from "lucide-react";
+import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User, Target } from "lucide-react";
 import Onboarding from "@/components/Onboarding";
 import { usePageContext } from "@/context/PageContext";
 import { getDemoScenario, DEMO_SCENARIOS } from "@/data/demoScenarios";
@@ -392,6 +392,26 @@ export default function Index() {
                     {s}
                   </button>
                 ))}
+              </motion.div>
+
+              {/* Personalized diagnostic CTA */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="mt-4 pt-4 border-t border-border/40"
+              >
+                <Link
+                  to={getApiKey() ? "/diagnostic" : "/?requireKey=1"}
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline transition-colors"
+                >
+                  <Target size={15} strokeWidth={1.5} />
+                  Diagnostic personnalisé — basé sur votre quotidien réel
+                  <ArrowRight size={14} />
+                </Link>
+                <p className="text-xs text-foreground-muted mt-1">
+                  Décrivez vos tâches, vos outils, vos frustrations. L'IA analyse votre contexte exact.
+                </p>
               </motion.div>
             </div>
 

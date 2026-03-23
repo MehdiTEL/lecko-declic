@@ -26,6 +26,8 @@ import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiPr
 import { findInLocalDatabase } from "@/data/jobDatabase";
 import { supabase } from "@/integrations/supabase/client";
 import { generatePremiumPdf } from "@/lib/pdfReport";
+import { analyzeJobPersonalized } from "@/lib/aiProvider";
+import type { DiagnosticFormData } from "@/types/diagnostic";
 import { usePageContext } from "@/context/PageContext";
 import { useProgress } from "@/context/ProgressContext";
 
@@ -48,6 +50,7 @@ export default function Results() {
   const cachedParam = searchParams.get("cached");
   const sourceParam = searchParams.get("source") as AnalysisSource | null;
   const isDemo = searchParams.get("demo") === "1";
+  const isPersonnalise = searchParams.get("mode") === "personnalise";
   const demoRoiRate = searchParams.get("roiRate");
   const demoRoiPeople = searchParams.get("roiPeople");
 
@@ -94,6 +97,11 @@ export default function Results() {
   const minLoadMs = 3000;
 
   useEffect(() => {
+    if (isPersonnalise) {
+      // Personalized mode: load form data from sessionStorage and run personalized analysis
+      runPersonalizedAnalysis();
+      return;
+    }
     if (cachedParam) {
       try {
         const parsed = JSON.parse(decodeURIComponent(atob(cachedParam))) as AnalysisResult;
@@ -152,6 +160,30 @@ export default function Results() {
     } catch {
       setError("Analyse introuvable ou lien expiré.");
       setErrorShowSettings(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function runPersonalizedAnalysis() {
+    const raw = sessionStorage.getItem("declic-diagnostic-form");
+    if (!raw) { navigate("/diagnostic"); return; }
+    try {
+      const formData: DiagnosticFormData = JSON.parse(raw);
+      setLoading(true);
+      const startTime = Date.now();
+      const responseText = await analyzeJobPersonalized(formData);
+      const parsed = JSON.parse(responseText) as AnalysisResult;
+      const elapsed = Date.now() - startTime;
+      if (elapsed < minLoadMs) await new Promise((r) => setTimeout(r, minLoadMs - elapsed));
+      setResult(parsed);
+      setAnalysisSource("api");
+      saveToHistory({ id: crypto.randomUUID(), metier: parsed.metier, date: new Date().toISOString(), result: parsed, source: "api" });
+      sessionStorage.removeItem("declic-diagnostic-form");
+    } catch (err: unknown) {
+      const e = err as Error & { showSettings?: boolean };
+      setError(e.message ?? "Erreur lors de l'analyse personnalisée.");
+      setErrorShowSettings(!!e.showSettings);
     } finally {
       setLoading(false);
     }

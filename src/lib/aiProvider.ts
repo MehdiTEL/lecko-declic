@@ -226,3 +226,73 @@ export async function analyzeJob(metier: string): Promise<string> {
   const data = await response.json();
   return data.choices?.[0]?.message?.content ?? "";
 }
+
+// ─── Personalized analysis (from diagnostic form) ───────────────────
+
+import { buildPersonalizedSystemPrompt, buildUserMessage } from "@/lib/diagnosticPrompt";
+import type { DiagnosticFormData } from "@/types/diagnostic";
+
+export async function analyzeJobPersonalized(formData: DiagnosticFormData): Promise<string> {
+  const provider = getProvider();
+  const apiKey = getApiKey();
+
+  if (!apiKey || !provider) {
+    throw Object.assign(new Error("Aucune clé API configurée."), { requireKey: true });
+  }
+
+  const systemPrompt = buildPersonalizedSystemPrompt();
+  const userMessage = buildUserMessage(formData);
+
+  if (provider === "anthropic") {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "Content-Type": "application/json",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 8000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userMessage }],
+      }),
+    });
+
+    if (!response.ok) {
+      let apiMessage: string | undefined;
+      try { const errBody = await response.json(); apiMessage = errBody?.error?.message; } catch { /* ignore */ }
+      const errInfo = getApiErrorMessage(response.status, "anthropic", apiMessage);
+      throw Object.assign(new Error(errInfo.message), { showSettings: errInfo.showSettings });
+    }
+
+    const data = await response.json();
+    return data.content?.[0]?.text ?? "";
+  }
+
+  // OpenAI
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "gpt-4o",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
+      ],
+      temperature: 0.7,
+      max_tokens: 6000,
+    }),
+  });
+
+  if (!response.ok) {
+    let apiMessage: string | undefined;
+    try { const errBody = await response.json(); apiMessage = errBody?.error?.message; } catch { /* ignore */ }
+    const errInfo = getApiErrorMessage(response.status, "openai", apiMessage);
+    throw Object.assign(new Error(errInfo.message), { showSettings: errInfo.showSettings });
+  }
+
+  const data2 = await response.json();
+  return data2.choices?.[0]?.message?.content ?? "";
+}
