@@ -20,7 +20,8 @@ import ChallengeCards from "@/components/ChallengeCards";
 import ActionPlan from "@/components/ActionPlan";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
-import { DeclicPhase } from "@/types/declic";
+import { DECLIC_PHASES, DeclicPhase, PhaseConfig } from "@/types/declic";
+import { Search, BarChart3, Wrench as WrenchIcon, Play, Award, ShieldCheck, Check } from "lucide-react";
 import { saveToHistory } from "@/lib/history";
 import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { findInLocalDatabase } from "@/data/jobDatabase";
@@ -337,6 +338,36 @@ export default function Results() {
     );
   }
 
+  // ─── Scroll-based phase progression ──────────────────────────
+  const [visitedPhases, setVisitedPhases] = useState<Set<DeclicPhase>>(new Set([0, 1]));
+
+  useEffect(() => {
+    if (!result) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = parseInt(entry.target.id.replace("phase-", "")) as DeclicPhase;
+            if (!isNaN(id)) setVisitedPhases((prev) => new Set([...prev, id]));
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "-80px 0px" },
+    );
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById(`phase-${i}`);
+      if (el) observer.observe(el);
+    }
+    return () => observer.disconnect();
+  }, [result]);
+
+  const currentDeclicPhase = (
+    [1, 2, 3, 4, 5] as DeclicPhase[]
+  ).find((p) => !visitedPhases.has(p)) ?? (5 as DeclicPhase);
+  const completedDeclicPhases = Array.from(visitedPhases) as DeclicPhase[];
+
+  const PHASE_ICON_MAP = [ShieldCheck, Search, BarChart3, WrenchIcon, Play, Award];
+
   if (!result) return null;
 
   const automatisables = countByCat("automatisable");
@@ -395,100 +426,114 @@ export default function Results() {
           </div>
         </div>
 
-        <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-          {/* Score + KPIs */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5 items-center">
-            <div className="md:col-span-1 flex flex-col items-center lecko-card p-6">
-              <p className="text-xs font-bold text-foreground-muted uppercase tracking-widest mb-3">Score global</p>
-              <ScoreCircle score={result.score_global} />
+        {/* Sticky DÉCLIC progress */}
+        <DeclicProgress
+          currentPhase={currentDeclicPhase}
+          completedPhases={completedDeclicPhases}
+          sticky
+          onPhaseClick={(phase) => {
+            document.getElementById(`phase-${phase}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        />
+
+        <main className="max-w-5xl mx-auto px-4 py-4 space-y-2">
+
+          {/* ═══ PHASE 1 — DÉTECTER ═══ */}
+          <div id="phase-1" className="scroll-mt-32 pt-8 pb-4">
+            <div className="flex items-center gap-4 pb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[1].color}15` }}>
+                <Check size={18} className="text-primary" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: DECLIC_PHASES[1].color }}>Phase 1 — {DECLIC_PHASES[1].label}</p>
+                <h2 className="text-lg font-bold text-foreground">{DECLIC_PHASES[1].question}</h2>
+              </div>
+              <span className="ml-auto text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300">Complétée</span>
             </div>
-            <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <KPICard value={result.taches.length} label="Tâches analysées" delay={0.1} />
-              <KPICard value={automatisables + partiels} label="Automatisables" delay={0.2} />
-              <KPICard
-                value={result.heures_economisees_semaine}
-                suffix="h"
-                label="Heures / semaine gagnées"
-                delay={0.3}
+            <div className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-5 items-center">
+                <div className="md:col-span-1 flex flex-col items-center lecko-card p-6">
+                  <p className="text-xs font-bold text-foreground-muted uppercase tracking-widest mb-3">Score global</p>
+                  <ScoreCircle score={result.score_global} />
+                </div>
+                <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <KPICard value={result.taches.length} label="Tâches analysées" delay={0.1} />
+                  <KPICard value={automatisables + partiels} label="Automatisables" delay={0.2} />
+                  <KPICard value={result.heures_economisees_semaine} suffix="h" label="Heures / semaine gagnées" delay={0.3} />
+                </div>
+              </div>
+              <p className="text-sm text-foreground-secondary">
+                Nous avons identifié <strong>{result.taches.length} tâches</strong> dans votre quotidien de <strong>{result.metier}</strong>, dont <strong>{automatisables + partiels}</strong> présentent un potentiel d'automatisation.
+              </p>
+            </div>
+          </div>
+
+          {/* ═══ PHASE 2 — ÉVALUER ═══ */}
+          <div id="phase-2" className="scroll-mt-32 pt-8 pb-4">
+            <div className="flex items-center gap-4 pb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[2].color}15` }}>
+                <BarChart3 size={18} style={{ color: DECLIC_PHASES[2].color }} />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: DECLIC_PHASES[2].color }}>Phase 2 — {DECLIC_PHASES[2].label}</p>
+                <h2 className="text-lg font-bold text-foreground">{DECLIC_PHASES[2].question}</h2>
+              </div>
+              <span className="ml-auto text-xs font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: `${DECLIC_PHASES[2].color}15`, color: DECLIC_PHASES[2].color }}>En cours</span>
+            </div>
+            <div className="space-y-5">
+              <p className="text-sm text-foreground-secondary">
+                Chaque tâche est scorée sur 5 critères : récurrence, énergie, scalabilité, fiabilité, pénibilité. Plus le score est élevé, plus l'automatisation est pertinente.
+              </p>
+              <BenchmarkBanner score={result.score_global} metier={result.metier} hoursPerWeek={result.heures_economisees_semaine} />
+              <RoiCalculator hoursPerWeek={result.heures_economisees_semaine} metier={result.metier} onParamsChange={handleRoiParams} />
+              <AccompagnementSplit tasks={result.taches} metier={result.metier} />
+              <WhereToStart
+                tasks={result.taches} metier={result.metier}
+                onFilterEasyWins={() => { setCatFilter("easy_wins"); setToolFilter("all"); setAccompFilter("all"); }}
+                onFilterAI={() => { setCatFilter("ai_needed"); setToolFilter("all"); setAccompFilter("all"); }}
+                onFilterAccompagnement={(level) => { setAccompFilter(level); setCatFilter("all"); setToolFilter("all"); }}
               />
             </div>
           </div>
 
-          {/* Benchmark */}
-          <BenchmarkBanner score={result.score_global} metier={result.metier} hoursPerWeek={result.heures_economisees_semaine} />
-
-          {/* ROI Calculator */}
-          <RoiCalculator
-            hoursPerWeek={result.heures_economisees_semaine}
-            metier={result.metier}
-            onParamsChange={handleRoiParams}
-          />
-
-          {/* DÉCLIC progress bar */}
-          <DeclicProgress
-            currentPhase={3}
-            completedPhases={[0, 1, 2]}
-          />
-
-          {/* Badges & challenges compact */}
-          {(badgeShelf.some(b => b.earned) || activeChallenges.length > 0) && (
-            <div className="lecko-card p-4 space-y-3">
-              {badgeShelf.some(b => b.earned) && (
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-foreground-muted mb-2">Badges</p>
-                  <BadgeShelf badges={badgeShelf} compact />
-                </div>
-              )}
-              {activeChallenges.filter(c => c.status === "active").length > 0 && (
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-foreground-muted mb-2">Défis en cours</p>
-                  <ChallengeCards challenges={activeChallenges.filter(c => c.status === "active").slice(0, 1)} />
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Accompagnement split */}
-          <AccompagnementSplit tasks={result.taches} metier={result.metier} />
-
-          {/* "Par où commencer?" */}
-          <WhereToStart
-            tasks={result.taches}
-            metier={result.metier}
-            onFilterEasyWins={() => { setCatFilter("easy_wins"); setToolFilter("all"); setAccompFilter("all"); }}
-            onFilterAI={() => { setCatFilter("ai_needed"); setToolFilter("all"); setAccompFilter("all"); }}
-            onFilterAccompagnement={(level) => { setAccompFilter(level); setCatFilter("all"); setToolFilter("all"); }}
-          />
-
-          {/* Action Plan timeline */}
-          <ActionPlan tasks={result.taches} metier={result.metier} />
-
-          {/* Free mode upsell banner */}
-          {analysisSource === "local" && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="lecko-card p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 border-lecko-orange/30 bg-lecko-orange/5"
-            >
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-foreground mb-0.5">
-                  📊 Cette analyse est basée sur des données génériques
-                </p>
-                <p className="text-xs text-foreground-secondary">
-                  Pour une analyse sur-mesure adaptée à votre contexte spécifique, utilisez le mode API avec votre clé OpenAI ou Anthropic.
-                </p>
+          {/* ═══ PHASE 3 — CONCEVOIR ═══ */}
+          <div id="phase-3" className="scroll-mt-32 pt-8 pb-4">
+            <div className="flex items-center gap-4 pb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[3].color}15` }}>
+                <WrenchIcon size={18} style={{ color: DECLIC_PHASES[3].color }} />
               </div>
-              <Link
-                to="/parametres"
-                className="shrink-0 px-4 py-2 rounded-full text-xs font-bold bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 transition-colors whitespace-nowrap"
-              >
-                Passer au mode API →
-              </Link>
-            </motion.div>
-          )}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: DECLIC_PHASES[3].color }}>Phase 3 — {DECLIC_PHASES[3].label}</p>
+                <h2 className="text-lg font-bold text-foreground">{DECLIC_PHASES[3].question}</h2>
+              </div>
+            </div>
+            <div className="space-y-5">
+              <p className="text-sm text-foreground-secondary">
+                Pour chaque tâche, concevez le workflow avant de le construire. Le Copilot vous guide dans les 5 cases.
+              </p>
 
-          {/* Filters */}
+              {/* Compact workflow sketch */}
+              <div className="lecko-card p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-foreground-muted mb-2">Le croquis DÉCLIC</p>
+                <div className="grid grid-cols-5 gap-1.5 text-center">
+                  {["Déclencheur", "Entrées", "Règles", "Sorties", "Exceptions"].map((label) => (
+                    <div key={label} className="p-2 rounded-lg border border-border">
+                      <p className="text-[9px] font-bold uppercase" style={{ color: DECLIC_PHASES[3].color }}>{label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Copilot CTA */}
+              <div className="lecko-card p-4 flex items-center gap-4" style={{ borderLeft: "3px solid hsl(var(--primary))" }}>
+                <Sparkles size={20} className="text-primary shrink-0" />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">Le Copilot vous guide étape par étape</p>
+                  <p className="text-xs text-foreground-secondary mt-0.5">Cliquez sur une tâche ci-dessous puis "Démarrer avec le Copilot".</p>
+                </div>
+              </div>
+
+              {/* Filters */}
           <div>
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -620,6 +665,112 @@ export default function Results() {
             )}
           </div>
 
+            </div>
+          </div>
+
+          {/* ═══ PHASE 4 — LANCER ═══ */}
+          <div id="phase-4" className="scroll-mt-32 pt-8 pb-4" style={{ opacity: visitedPhases.has(4) ? 1 : 0.7 }}>
+            <div className="flex items-center gap-4 pb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[4].color}15` }}>
+                <Play size={18} style={{ color: DECLIC_PHASES[4].color }} />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: DECLIC_PHASES[4].color }}>Phase 4 — {DECLIC_PHASES[4].label}</p>
+                <h2 className="text-lg font-bold text-foreground">{DECLIC_PHASES[4].question}</h2>
+              </div>
+            </div>
+            <div className="space-y-5">
+              <p className="text-sm text-foreground-secondary">
+                Votre workflow est conçu. Testez, sécurisez, puis déployez progressivement.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="lecko-card p-4">
+                  <p className="text-sm font-semibold text-foreground mb-1">Crash-test</p>
+                  <p className="text-xs text-foreground-secondary leading-relaxed">10 cas : normaux, incomplets, doublons. Si 8/10 passent, déployez.</p>
+                </div>
+                <div className="lecko-card p-4">
+                  <p className="text-sm font-semibold text-foreground mb-1">Filet de sécurité</p>
+                  <p className="text-xs text-foreground-secondary leading-relaxed">Logs, alerte en cas d'échec, plan B si ça plante.</p>
+                </div>
+                <div className="lecko-card p-4">
+                  <p className="text-sm font-semibold text-foreground mb-1">Déploiement progressif</p>
+                  <p className="text-xs text-foreground-secondary leading-relaxed">1 semaine. Observer. Ajuster. Élargir.</p>
+                </div>
+              </div>
+              <ActionPlan tasks={result.taches} metier={result.metier} />
+              <div className="flex flex-wrap gap-3">
+                <button onClick={handleExportPDF} className="flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md transition-colors">
+                  <Download size={15} /> Télécharger le rapport
+                </button>
+                <button onClick={handleShare} className="flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 hover:shadow-md transition-colors">
+                  <Share2 size={15} /> Partager le diagnostic
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ═══ PHASE 5 — CONSOLIDER ═══ */}
+          <div id="phase-5" className="scroll-mt-32 pt-8 pb-4" style={{ opacity: visitedPhases.has(5) ? 1 : 0.7 }}>
+            <div className="flex items-center gap-4 pb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[5].color}15` }}>
+                <Award size={18} style={{ color: DECLIC_PHASES[5].color }} />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: DECLIC_PHASES[5].color }}>Phase 5 — {DECLIC_PHASES[5].label}</p>
+                <h2 className="text-lg font-bold text-foreground">{DECLIC_PHASES[5].question}</h2>
+              </div>
+            </div>
+            <div className="space-y-5">
+              <p className="text-sm text-foreground-secondary">
+                Le vrai gain est dans la durée. Mesurez l'impact de vos automatisations.
+              </p>
+              <div className="lecko-card p-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-foreground-muted mb-3">Impact projeté</p>
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-2xl font-bold text-primary">{Math.round(result.heures_economisees_semaine * 4.33)}h</p>
+                    <p className="text-xs text-foreground-muted">par mois</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-primary">{Math.round(result.heures_economisees_semaine * 26)}h</p>
+                    <p className="text-xs text-foreground-muted">sur 6 mois</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-lecko-orange">{Math.round(result.heures_economisees_semaine * 47)}h</p>
+                    <p className="text-xs text-foreground-muted">par an</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Badges & challenges */}
+              {(badgeShelf.some(b => b.earned) || activeChallenges.length > 0) && (
+                <div className="lecko-card p-4 space-y-3">
+                  {badgeShelf.some(b => b.earned) && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground-muted mb-2">Badges</p>
+                      <BadgeShelf badges={badgeShelf} compact />
+                    </div>
+                  )}
+                  {activeChallenges.filter(c => c.status === "active").length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground-muted mb-2">Défis en cours</p>
+                      <ChallengeCards challenges={activeChallenges.filter(c => c.status === "active").slice(0, 2)} />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-3">
+                <Link to="/" className="flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <RotateCcw size={15} /> Analyser un autre métier
+                </Link>
+                <Link to="/equipe" className="flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm border-2 border-border text-foreground-secondary hover:border-primary hover:text-primary transition-colors">
+                  <Users size={15} /> Mode équipe
+                </Link>
+              </div>
+            </div>
+          </div>
+
           {/* DÉCLIC CTA */}
           <DeclicCTA
             score={result.score_global}
@@ -628,43 +779,6 @@ export default function Results() {
             onVisible={handleCtaVisible}
           />
         </main>
-      </div>
-
-      {/* Actions */}
-      <div className="border-t border-border bg-card px-4 py-5">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row flex-wrap gap-3">
-          <button
-            onClick={handleExportPDF}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md transition-colors"
-          >
-            <Download size={15} />
-            Exporter en PDF
-          </button>
-          <button
-            onClick={handleShare}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm bg-lecko-orange text-primary-foreground hover:bg-lecko-orange/90 hover:shadow-md transition-colors"
-          >
-            <Share2 size={15} />
-            Partager les résultats
-          </button>
-          <Link
-            to="/"
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground hover:shadow-md transition-colors"
-          >
-            <RotateCcw size={15} />
-            Analyser un autre métier
-          </Link>
-        </div>
-        {/* Team upsell */}
-        <div className="max-w-5xl mx-auto mt-3">
-          <Link
-            to="/equipe"
-            className="inline-flex items-center gap-2 text-xs text-foreground-muted hover:text-primary transition-colors"
-          >
-            <Users size={12} />
-            Vous gérez une équipe ? Essayez le mode équipe →
-          </Link>
-        </div>
       </div>
 
       <Footer />

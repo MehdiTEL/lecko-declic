@@ -401,11 +401,12 @@ export default function Methode() {
               Analyser mon métier
               <ArrowRight size={15} />
             </Link>
-            <button
-              onClick={() => openChat()}
+            <Link
+              to="/diagnostic"
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-200">
-              Parler au Copilot
-            </button>
+              Diagnostic personnalisé
+              <ArrowRight size={15} />
+            </Link>
           </div>
         </section>
       </div>
