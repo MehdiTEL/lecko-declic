@@ -3,171 +3,214 @@ export const PREMADE_GUIDES: Record<string, string> = {
 
 ### Prérequis
 - Un compte N8N Cloud (gratuit jusqu'à 5 workflows actifs) : **https://n8n.io**
-- Accès au service source (Gmail, Notion, Airtable, etc.)
-- ~20 minutes de mise en place
+- Ou N8N self-hosted (Docker recommandé)
+- Accès aux services à connecter (Gmail, Slack, CRM, etc.)
+- Temps estimé : 10-15 minutes pour un premier workflow
 
-### Structure type d'un workflow N8N
+### Conception DÉCLIC
 
-#### Nœud 1 : Trigger
-- **Type** : Trigger (déclencheur)
-- **Options** : Schedule (planification), Webhook (événement externe), Email Trigger
-- **Configuration** : Définissez la fréquence ou l'URL du webhook
+#### Étape 1 — Le déclencheur
+Le premier noeud de tout workflow N8N est un Trigger :
+- **Webhook** : reçoit un appel HTTP externe
+- **Cron** : planification horaire/journalière
+- **Email Trigger** : nouveau mail dans une boîte
+- **Formulaire** : soumission Google Forms, Typeform
 
-#### Nœud 2 : Traitement des données
-- **Type** : Function / Code
-- **Configuration** : Transformez et filtrez les données reçues du trigger
-- **Expression** : \`{{$json["champ_source"]}}\`
+#### Étape 2 — Pré-traitement des données
+Utilisez les noeuds **Set** et **IF** pour structurer les données avant traitement.
+Le noeud Set permet de renommer des champs, formater des dates, nettoyer du texte.
 
-#### Nœud 3 : Action finale
-- **Type** : Action (Gmail, Slack, Google Sheets, Notion, etc.)
-- **Configuration** : Mappez les champs de sortie
+#### Étape 3 — Décisions et branches
+Le noeud **IF** crée 2 branches (true/false). Le noeud **Switch** permet plusieurs branches.
+Toujours prévoir une branche "cas par défaut" pour les données inattendues.
 
-### Temps de mise en place estimé
-20–45 minutes selon la complexité
+#### Étape 4 — Actions
+N8N propose 400+ intégrations natives : Gmail, Slack, Notion, Airtable, HubSpot, etc.
+Chaque noeud a ses paramètres spécifiques — le Copilot peut vous guider sur chacun.
 
----
+#### Étape 5 — Filet de sécurité
+- Activez les **Executions** dans Settings pour garder l'historique
+- Ajoutez un noeud **Error Trigger** qui envoie une alerte en cas d'échec
+- Testez avec le bouton "Execute Workflow" avant d'activer le trigger
 
-**Pour un workflow JSON personnalisé prêt à importer**, configurez votre clé API dans les paramètres. Le coach génèrera le JSON exact pour votre cas d'usage.`,
+### Temps de mise en place
+Premier workflow simple : 30 minutes. Workflow avec 5+ noeuds : 2-4 heures.
+
+Pour des configurations avancées ou un JSON importable sur-mesure, configurez votre clé API dans les paramètres pour accéder au Copilot interactif.`,
 
   "Agent IA": `## Déployer un Agent IA
 
 ### Prérequis
-- Une clé API OpenAI ou Anthropic (Claude)
-- Un compte Make ou N8N pour orchestrer les appels
-- ~30 minutes de mise en place
+- Clé API Claude (Anthropic) ou OpenAI
+- Un orchestrateur : N8N, LangChain, ou CrewAI
+- Connaissance de base des prompts structurés
 
-### Architecture type d'un Agent IA
+### Conception DÉCLIC
 
-#### Étape 1 : Définir le system prompt
-Rédigez les instructions précises de votre agent : rôle, contraintes, format de sortie attendu.
+#### Étape 1 — Le déclencheur
+L'agent est déclenché par un événement précis : email reçu, formulaire soumis, planification.
+Ne créez pas un agent "toujours actif" — c'est coûteux et difficile à debugger.
 
-#### Étape 2 : Connecter la source de données
-L'agent reçoit les données à traiter (email, formulaire, document) via un trigger.
+#### Étape 2 — Pré-traitement des données
+Avant d'envoyer au LLM : nettoyez le texte, extrayez les champs utiles, supprimez le bruit.
+Un bon prompt commence par des données propres.
 
-#### Étape 3 : Appel API IA
-- **OpenAI** : POST https://api.openai.com/v1/chat/completions
-- **Anthropic** : POST https://api.anthropic.com/v1/messages
-- Modèle recommandé : GPT-4o ou Claude 3.5 Sonnet
+#### Étape 3 — Décisions et branches
+Demandez au LLM de répondre en JSON avec un score de confiance (0.0 à 1.0).
+Si confiance > 0.7 : action automatique. Sinon : validation humaine.
 
-#### Étape 4 : Traitement de la réponse
-Parsez la réponse JSON et déclenchez l'action suivante (envoi email, mise à jour BDD, etc.)
+#### Étape 4 — Actions
+L'agent exécute : créer un ticket, envoyer un email, mettre à jour un CRM.
+Utilisez des catégories fermées ("positif/neutre/négatif") plutôt que du texte libre.
 
-### Temps de mise en place estimé
-30–60 minutes
+#### Étape 5 — Filet de sécurité
+- Toujours un brouillon avant envoi pour les messages sensibles
+- Logs de chaque appel LLM (prompt + réponse)
+- Limite de coût par jour (configurable dans les paramètres API)
 
----
+### Temps de mise en place
+Agent simple (1 tâche) : 2-4 heures. Agent multi-tâches : 1-2 jours.
 
-**Pour un guide complet avec le code exact**, configurez votre clé API dans les paramètres.`,
+Pour un guide complet avec le code exact, configurez votre clé API dans les paramètres.`,
 
   "Automatisation No-Code": `## Automatisation No-Code (Make / Zapier)
 
 ### Prérequis
-- Un compte Make (gratuit jusqu'à 1 000 opérations/mois) : **https://make.com**
-- Ou un compte Zapier (gratuit jusqu'à 100 tâches/mois) : **https://zapier.com**
+- Un compte Make (gratuit : 1000 opérations/mois) ou Zapier (gratuit : 100 tâches/mois)
 - Accès aux applications à connecter
+- Aucune compétence technique requise
 
-### Structure type Make
+### Conception DÉCLIC
 
-#### Module 1 : Watch (Déclencheur)
-Surveille un événement dans une application source (nouvel email, nouveau formulaire, etc.)
+#### Étape 1 — Le déclencheur
+Dans Make : c'est le module **Watch** (ex: Watch Emails, Watch New Rows).
+Dans Zapier : c'est le **Trigger** (ex: New Email, New Form Response).
 
-#### Module 2 : Filtre (optionnel)
-Condition pour ne traiter que certains éléments.
+#### Étape 2 — Pré-traitement des données
+Make : utilisez les modules **Set Variable** et **Text Parser**.
+Zapier : utilisez les **Formatter** et **Filter** steps.
 
-#### Module 3 : Action
-Crée, met à jour ou envoie des données vers l'application cible.
+#### Étape 3 — Décisions et branches
+Make : le module **Router** crée des branches avec des filtres.
+Zapier : les **Paths** permettent des branches conditionnelles.
 
-### Conseils
-- Commencez par cartographier votre process sur papier avant de l'automatiser
-- Testez avec des données réelles avant de mettre en production
-- Activez les notifications d'erreur par email
+#### Étape 4 — Actions
+Make et Zapier proposent 1000+ intégrations. Les plus courantes :
+Gmail, Slack, Google Sheets, Notion, HubSpot, Trello, Airtable.
 
-### Temps de mise en place estimé
-15–30 minutes
+#### Étape 5 — Filet de sécurité
+- Make : activez les logs dans Scenario Settings
+- Zapier : les Task History garde la trace de chaque exécution
+- Testez manuellement avant de mettre en automatique
 
----
+### Temps de mise en place
+Zap/Scénario simple (2-3 étapes) : 15 minutes. Scénario complexe : 1-2 heures.
 
-**Pour un scénario Make/JSON personnalisé**, configurez votre clé API dans les paramètres.`,
+Pour un scénario personnalisé, configurez votre clé API dans les paramètres.`,
 
-  "Copilot / Assistant IA": `## Intégrer Copilot / Assistant IA dans votre quotidien
+  "Copilot / Assistant IA": `## Intégrer un Assistant IA dans votre quotidien
 
 ### Prérequis
-- Licence Microsoft 365 Copilot OU accès à Claude.ai / ChatGPT
-- ~15 minutes pour configurer vos prompts types
+- Accès à un assistant IA : Microsoft Copilot (M365), Claude, ou ChatGPT
+- Connaissance des tâches à optimiser
 
-### Meilleures pratiques
+### Conception DÉCLIC
 
-#### 1. Créer une bibliothèque de prompts
-Rédigez et sauvegardez vos prompts les plus utilisés. Un bon prompt contient :
-- Le rôle attendu : "Tu es un expert en..."
-- Le contexte : "Voici le document / la situation..."
-- La tâche précise : "Génère / Résume / Rédige..."
-- Le format souhaité : "En bullet points / En tableau / En email..."
+#### Étape 1 — Le déclencheur
+L'assistant est sollicité à un moment précis de votre workflow :
+avant une réunion, pendant la rédaction, après réception d'un email.
 
-#### 2. Intégrer dans votre workflow
-- **Emails** : Utilisez Copilot dans Outlook pour rédiger des réponses
-- **Réunions** : Teams Copilot pour les comptes-rendus automatiques
-- **Documents** : Word Copilot pour la rédaction et la mise en forme
+#### Étape 2 — Pré-traitement des données
+Préparez un prompt structuré avec le contexte nécessaire.
+Un bon prompt contient : le rôle, le contexte, la tâche, le format de sortie attendu.
 
-#### 3. Mesurer le gain de temps
-Notez le temps avant/après sur 1 semaine pour quantifier le ROI.
+#### Étape 3 — Décisions et branches
+Le résultat de l'IA est un brouillon. Vous décidez :
+- Utiliser tel quel (confiance haute)
+- Ajuster et envoyer (confiance moyenne)
+- Refaire avec un meilleur prompt (confiance basse)
 
-### Temps de mise en place estimé
-15–30 minutes par type de tâche
+#### Étape 4 — Actions
+Cas d'usage les plus rentables :
+- Rédaction d'emails / CR (gain : 50-70% du temps)
+- Analyse de documents (gain : 60-80%)
+- Traduction et adaptation (gain : 70-90%)
+- Recherche et synthèse (gain : 40-60%)
 
----
+#### Étape 5 — Filet de sécurité
+- Ne jamais envoyer un contenu IA sans relecture pour les communications externes
+- Vérifier les chiffres et les faits cités
+- Ne pas partager de données sensibles dans les LLM publics
 
-**Pour des prompts personnalisés à votre métier**, configurez votre clé API dans les paramètres.`,
+### Temps de mise en place
+Premiers gains : immédiat. Optimisation des prompts : quelques jours.
+
+Pour des prompts personnalisés à votre métier, configurez votre clé API dans les paramètres.`,
 
   "Script personnalisé": `## Automatiser avec un Script Python/JS
 
 ### Prérequis
-- Python 3.8+ installé (https://python.org) OU Node.js 18+ (https://nodejs.org)
+- Python 3.9+ ou Node.js 18+
 - Un éditeur de code (VS Code recommandé)
-- ~1 heure pour le premier script
+- Les bibliothèques : requests, pandas (Python) ou axios, node-fetch (JS)
 
-### Structure type d'un script Python d'automatisation
+### Conception DÉCLIC
 
+#### Étape 1 — Le déclencheur
+- **Cron job** : planification système (crontab Linux, Task Scheduler Windows)
+- **Webhook** : endpoint HTTP qui reçoit les appels
+- **Surveillance fichier** : watchdog (Python) ou chokidar (Node.js)
+
+#### Étape 2 — Pré-traitement des données
 \`\`\`python
-import requests
-import json
-from datetime import datetime
+import pandas as pd
 
-# Configuration
-API_KEY = "votre_clé_api"
-SOURCE_URL = "https://api.source.com/data"
-OUTPUT_FILE = "output.json"
-
-def fetch_data():
-    """Récupère les données depuis la source"""
-    headers = {"Authorization": f"Bearer {API_KEY}"}
-    response = requests.get(SOURCE_URL, headers=headers)
-    response.raise_for_status()
-    return response.json()
-
-def process_data(data):
-    """Traite et transforme les données"""
-    # Votre logique de traitement ici
-    return data
-
-def save_output(data):
-    """Sauvegarde les résultats"""
-    with open(OUTPUT_FILE, "w") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
-    print(f"OK — {len(data)} éléments traités — {datetime.now()}")
-
-if __name__ == "__main__":
-    data = fetch_data()
-    processed = process_data(data)
-    save_output(processed)
+# Charger et nettoyer les données
+data = pd.read_csv("input.csv")
+data = data.dropna(subset=["email"])
+data["email"] = data["email"].str.strip().str.lower()
 \`\`\`
 
-### Temps de mise en place estimé
-1–3 heures selon la complexité
+#### Étape 3 — Décisions et branches
+\`\`\`python
+for row in data.itertuples():
+    if row.score >= 3:
+        process_high_priority(row)
+    elif row.score >= 1:
+        process_normal(row)
+    else:
+        log_skipped(row)
+\`\`\`
 
----
+#### Étape 4 — Actions
+\`\`\`python
+import requests
 
-**Pour un script complet adapté à votre cas**, configurez votre clé API dans les paramètres.`,
+def send_notification(message):
+    requests.post(SLACK_WEBHOOK, json={"text": message})
+
+def update_crm(contact_id, data):
+    requests.patch(f"{CRM_API}/contacts/{contact_id}", json=data)
+\`\`\`
+
+#### Étape 5 — Filet de sécurité
+\`\`\`python
+import logging
+
+logging.basicConfig(filename="automation.log", level=logging.INFO)
+
+try:
+    main()
+    print(f"{len(data)} éléments traités — OK")
+except Exception as e:
+    logging.error(f"Erreur : {e}")
+    send_alert(f"Automatisation en échec : {e}")
+\`\`\`
+
+### Temps de mise en place
+Script simple : 1-2 heures. Script avec API et gestion d'erreurs : 4-8 heures.
+
+Pour un script complet adapté à votre cas, configurez votre clé API dans les paramètres.`,
 };
 
 export const FREE_GUIDE_LIMIT = 3;
