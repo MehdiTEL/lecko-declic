@@ -62,12 +62,25 @@ export default function Navbar() {
             )}
           </button>
 
+          {/* Theme toggle — styled as the DÉCLIC orange dot */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-muted hover:text-foreground"
+            className="relative w-10 h-5 rounded-full transition-colors duration-300 flex items-center"
+            style={{ backgroundColor: theme === "light" ? "hsl(var(--muted))" : "hsl(221 83% 30%)" }}
             aria-label="Changer de thème"
           >
-            {theme === "light" ? <Moon size={17} strokeWidth={1.5} /> : <Sun size={17} strokeWidth={1.5} />}
+            <div
+              className="absolute w-4 h-4 rounded-full shadow-sm transition-all duration-300 flex items-center justify-center"
+              style={{
+                backgroundColor: "#F59E0B",
+                left: theme === "light" ? "2px" : "calc(100% - 18px)",
+              }}
+            >
+              {theme === "light"
+                ? <Sun size={10} className="text-white" strokeWidth={2.5} />
+                : <Moon size={10} className="text-white" strokeWidth={2.5} />
+              }
+            </div>
           </button>
         </nav>
 
@@ -85,10 +98,22 @@ export default function Navbar() {
           </button>
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground-muted"
+            className="relative w-10 h-5 rounded-full transition-colors duration-300 flex items-center"
+            style={{ backgroundColor: theme === "light" ? "hsl(var(--muted))" : "hsl(221 83% 30%)" }}
             aria-label="Changer de thème"
           >
-            {theme === "light" ? <Moon size={18} strokeWidth={1.5} /> : <Sun size={18} strokeWidth={1.5} />}
+            <div
+              className="absolute w-4 h-4 rounded-full shadow-sm transition-all duration-300 flex items-center justify-center"
+              style={{
+                backgroundColor: "#F59E0B",
+                left: theme === "light" ? "2px" : "calc(100% - 18px)",
+              }}
+            >
+              {theme === "light"
+                ? <Sun size={10} className="text-white" strokeWidth={2.5} />
+                : <Moon size={10} className="text-white" strokeWidth={2.5} />
+              }
+            </div>
           </button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
