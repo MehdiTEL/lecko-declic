@@ -26,9 +26,10 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 mb-12">
           {/* Brand */}
           <div className="md:max-w-xs">
-            <p className="font-heading text-xl font-bold text-white mb-3 tracking-tight">
-              DÉCLIC
-            </p>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="font-heading text-xl font-bold text-white tracking-tight">DÉCLIC</span>
+              <span className="text-[10px] text-slate-500 font-medium">by Lecko</span>
+            </div>
             <p className="text-sm leading-relaxed text-slate-400">
               Plateforme d'automatisation IA par métier. Analysez, priorisez, et passez à l'action.
             </p>

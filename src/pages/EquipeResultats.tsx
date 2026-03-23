@@ -163,7 +163,7 @@ export default function EquipeResultats() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <div className="lecko-deco-square" aria-hidden />
+      <div className="declic-deco-square" aria-hidden />
 
       <div ref={reportRef}>
         {/* ── Header ── */}

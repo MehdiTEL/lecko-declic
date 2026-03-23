@@ -313,3 +313,23 @@
   from { stroke-dashoffset: 200; }
   to { stroke-dashoffset: 0; }
 }
+
+/* ── Loading bar animation ── */
+@keyframes loading-bar {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+.animate-loading-bar {
+  animation: loading-bar 3s ease-in-out infinite;
+}
+
+/* ── DÉCLIC decorative elements ── */
+.declic-dot {
+  @apply inline-block w-1.5 h-1.5 rounded-full;
+  background-color: hsl(var(--lecko-orange));
+}
+.declic-dot-lg {
+  @apply inline-block w-2.5 h-2.5 rounded-full;
+  background-color: hsl(var(--lecko-orange));
+}

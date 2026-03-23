@@ -110,7 +110,7 @@ export default function Methode() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <div className="lecko-deco-square" aria-hidden />
+      <div className="declic-deco-square" aria-hidden />
 
       {/* Hero */}
       <section className="relative px-4 py-20 md:py-24 overflow-hidden"

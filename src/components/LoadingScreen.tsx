@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import DeclicLogo from "@/components/DeclicLogo";
 
 const STEPS = [
   "Analyse du métier en cours...",
@@ -35,7 +36,7 @@ export default function LoadingScreen() {
       <div className="max-w-md w-full text-center">
         {/* Logo + Spinner */}
         <div className="flex flex-col items-center justify-center mb-8">
-          <span className="font-heading text-2xl font-bold text-primary mb-6 tracking-tight">DÉCLIC</span>
+          <DeclicLogo size="lg" className="mb-6" />
           <div className="relative w-20 h-20">
             <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
               <circle

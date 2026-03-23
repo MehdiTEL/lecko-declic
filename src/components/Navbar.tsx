@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { useChatContext } from "@/context/ChatContext";
 import { useProgress } from "@/context/ProgressContext";
+import DeclicLogo from "@/components/DeclicLogo";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -31,9 +32,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo DÉCLIC */}
         <Link to="/" className="flex items-center gap-2">
-          <span className="font-heading text-xl font-bold text-primary tracking-tight">
-            DÉCLIC
-          </span>
+          <DeclicLogo size="sm" />
           {location.search.includes("demo=1") && (
             <span className="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full font-bold">
               DÉMO

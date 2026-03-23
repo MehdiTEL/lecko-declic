@@ -379,7 +379,7 @@ export default function Results() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <div className="lecko-deco-square" aria-hidden />
+      <div className="declic-deco-square" aria-hidden />
 
       {/* Demo banner */}
       {isDemo && (

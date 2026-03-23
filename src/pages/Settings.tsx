@@ -90,7 +90,7 @@ export default function Settings() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <div className="lecko-deco-square" aria-hidden />
+      <div className="declic-deco-square" aria-hidden />
 
       <main className="max-w-2xl mx-auto w-full px-4 py-10 space-y-6 flex-1">
         <h1 className="text-2xl font-bold font-heading text-foreground">Paramètres</h1>

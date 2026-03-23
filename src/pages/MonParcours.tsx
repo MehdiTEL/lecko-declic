@@ -54,7 +54,7 @@ export default function MonParcours() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <div className="lecko-deco-square" aria-hidden />
+      <div className="declic-deco-square" aria-hidden />
 
       <main className="max-w-4xl mx-auto px-4 py-10 flex-1 w-full">
         <motion.div
