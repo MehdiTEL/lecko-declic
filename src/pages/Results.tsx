@@ -110,7 +110,7 @@ export default function Results() {
   ).find((p) => !visitedPhases.has(p)) ?? (6 as DeclicPhase);
   const completedDeclicPhases = Array.from(visitedPhases) as DeclicPhase[];
 
-  const minLoadMs = 3000;
+  const minLoadMs = 5500;
 
   useEffect(() => {
     if (isPersonnalise) {
@@ -146,7 +146,7 @@ export default function Results() {
             });
           }
           // Small delay for visual polish
-          setTimeout(() => setLoading(false), 900);
+          setTimeout(() => setLoading(false), 5500);
           return;
         }
       }
