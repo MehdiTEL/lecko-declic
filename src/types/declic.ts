@@ -1,9 +1,10 @@
-// DÉCLIC Methodology constants
+// DÉCLIC Methodology constants — V2 with full acronym (D-É-C-L-I-C)
 
-export type DeclicPhase = 0 | 1 | 2 | 3 | 4 | 5;
+export type DeclicPhase = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface PhaseConfig {
   id: DeclicPhase;
+  letter: string;
   icon: string;
   label: string;
   shortLabel: string;
@@ -18,7 +19,8 @@ export interface PhaseConfig {
 export const DECLIC_PHASES: PhaseConfig[] = [
   {
     id: 0,
-    icon: "🛡️",
+    letter: "",
+    icon: "ShieldCheck",
     label: "Prérequis",
     shortLabel: "Prérequis",
     color: "#6B7280",
@@ -30,7 +32,8 @@ export const DECLIC_PHASES: PhaseConfig[] = [
   },
   {
     id: 1,
-    icon: "🔍",
+    letter: "D",
+    icon: "Search",
     label: "Détecter",
     shortLabel: "Détecter",
     color: "#F59E0B",
@@ -42,7 +45,8 @@ export const DECLIC_PHASES: PhaseConfig[] = [
   },
   {
     id: 2,
-    icon: "⚖️",
+    letter: "É",
+    icon: "BarChart3",
     label: "Évaluer",
     shortLabel: "Évaluer",
     color: "#2563EB",
@@ -50,11 +54,12 @@ export const DECLIC_PHASES: PhaseConfig[] = [
     borderClass: "border-lecko-blue",
     textClass: "text-lecko-blue",
     question: "Ça vaut le coup ?",
-    description: "Scorer chaque tâche sur 5 critères pour prioriser les automatisations.",
+    description: "Scorer chaque tâche sur les critères DÉCLIC pour prioriser les automatisations.",
   },
   {
     id: 3,
-    icon: "🔧",
+    letter: "C",
+    icon: "Wrench",
     label: "Concevoir",
     shortLabel: "Concevoir",
     color: "#7C3AED",
@@ -66,19 +71,34 @@ export const DECLIC_PHASES: PhaseConfig[] = [
   },
   {
     id: 4,
-    icon: "🚀",
+    letter: "L",
+    icon: "Play",
     label: "Lancer",
     shortLabel: "Lancer",
     color: "#10B981",
     bgClass: "bg-emerald-500",
     borderClass: "border-emerald-500",
     textClass: "text-emerald-500 dark:text-emerald-400",
-    question: "On teste et on ajuste",
+    question: "On teste et on déploie",
     description: "Crash-test sur 10 cas réels, filet de sécurité, déploiement progressif.",
   },
   {
     id: 5,
-    icon: "🏆",
+    letter: "I",
+    icon: "RefreshCw",
+    label: "Itérer",
+    shortLabel: "Itérer",
+    color: "#0EA5E9",
+    bgClass: "bg-sky-500",
+    borderClass: "border-sky-500",
+    textClass: "text-sky-500 dark:text-sky-400",
+    question: "On ajuste et on améliore",
+    description: "Observer les premiers résultats, collecter les retours, ajuster les règles et les prompts. L'automatisation parfaite du premier coup n'existe pas.",
+  },
+  {
+    id: 6,
+    letter: "C",
+    icon: "Award",
     label: "Consolider",
     shortLabel: "Consolider",
     color: "#D97706",
@@ -86,6 +106,6 @@ export const DECLIC_PHASES: PhaseConfig[] = [
     borderClass: "border-amber-600",
     textClass: "text-amber-600 dark:text-amber-400",
     question: "On ancre les gains",
-    description: "Mesurer l'impact, documenter, et lancer le cycle suivant.",
+    description: "Mesurer l'impact réel, documenter, former les collègues, et lancer le cycle suivant.",
   },
 ];

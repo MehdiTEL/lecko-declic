@@ -21,7 +21,7 @@ import ActionPlan from "@/components/ActionPlan";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
 import { DECLIC_PHASES, DeclicPhase, PhaseConfig } from "@/types/declic";
-import { Search, BarChart3, Wrench as WrenchIcon, Play, Award, ShieldCheck, Check } from "lucide-react";
+import { Search, BarChart3, Wrench as WrenchIcon, Play, Award, ShieldCheck, Check, RefreshCw } from "lucide-react";
 import { saveToHistory } from "@/lib/history";
 import { getApiKey, getProvider, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { findInLocalDatabase } from "@/data/jobDatabase";
@@ -354,7 +354,7 @@ export default function Results() {
       },
       { threshold: 0.2, rootMargin: "-80px 0px" },
     );
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 6; i++) {
       const el = document.getElementById(`phase-${i}`);
       if (el) observer.observe(el);
     }
@@ -363,7 +363,7 @@ export default function Results() {
 
   const currentDeclicPhase = (
     [1, 2, 3, 4, 5] as DeclicPhase[]
-  ).find((p) => !visitedPhases.has(p)) ?? (5 as DeclicPhase);
+  ).find((p) => !visitedPhases.has(p)) ?? (6 as DeclicPhase);
   const completedDeclicPhases = Array.from(visitedPhases) as DeclicPhase[];
 
   const PHASE_ICON_MAP = [ShieldCheck, Search, BarChart3, WrenchIcon, Play, Award];
@@ -709,15 +709,47 @@ export default function Results() {
             </div>
           </div>
 
-          {/* ═══ PHASE 5 — CONSOLIDER ═══ */}
+          {/* ═══ PHASE 5 — ITÉRER ═══ */}
           <div id="phase-5" className="scroll-mt-32 pt-8 pb-4" style={{ opacity: visitedPhases.has(5) ? 1 : 0.7 }}>
             <div className="flex items-center gap-4 pb-4">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[5].color}15` }}>
-                <Award size={18} style={{ color: DECLIC_PHASES[5].color }} />
+                <RefreshCw size={18} style={{ color: DECLIC_PHASES[5].color }} />
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: DECLIC_PHASES[5].color }}>Phase 5 — {DECLIC_PHASES[5].label}</p>
                 <h2 className="text-lg font-bold text-foreground">{DECLIC_PHASES[5].question}</h2>
+              </div>
+            </div>
+            <div className="space-y-5">
+              <p className="text-sm text-foreground-secondary">
+                Observez les résultats, collectez les retours, ajustez. L'automatisation parfaite du premier coup n'existe pas.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="lecko-card p-4">
+                  <p className="text-sm font-semibold text-foreground mb-1">Collectez les retours</p>
+                  <p className="text-xs text-foreground-secondary leading-relaxed">Qu'est-ce qui marche ? Qu'est-ce qui ne marche pas ? Un formulaire ou canal Slack suffit.</p>
+                </div>
+                <div className="lecko-card p-4">
+                  <p className="text-sm font-semibold text-foreground mb-1">Ajustez les règles</p>
+                  <p className="text-xs text-foreground-secondary leading-relaxed">Affinez les prompts, ajoutez des conditions, vérifiez les logs.</p>
+                </div>
+                <div className="lecko-card p-4">
+                  <p className="text-sm font-semibold text-foreground mb-1">Mesurez l'amélioration</p>
+                  <p className="text-xs text-foreground-secondary leading-relaxed">Comparez avant/après. 80% de résultat vaut mieux que 100% jamais livré.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ═══ PHASE 6 — CONSOLIDER ═══ */}
+          <div id="phase-6" className="scroll-mt-32 pt-8 pb-4" style={{ opacity: visitedPhases.has(6) ? 1 : 0.7 }}>
+            <div className="flex items-center gap-4 pb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${DECLIC_PHASES[6].color}15` }}>
+                <Award size={18} style={{ color: DECLIC_PHASES[6].color }} />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: DECLIC_PHASES[6].color }}>Phase 6 — {DECLIC_PHASES[6].label}</p>
+                <h2 className="text-lg font-bold text-foreground">{DECLIC_PHASES[6].question}</h2>
               </div>
             </div>
             <div className="space-y-5">

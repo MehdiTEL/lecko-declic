@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User, Target } from "lucide-react";
+import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User, Target, RefreshCw } from "lucide-react";
 import Onboarding from "@/components/Onboarding";
 import { usePageContext } from "@/context/PageContext";
 import { getDemoScenario, DEMO_SCENARIOS } from "@/data/demoScenarios";
@@ -43,6 +43,13 @@ const DECLIC_PHASES = [
   },
   {
     num: "05",
+    icon: RefreshCw,
+    color: "hsl(199 89% 48%)",
+    label: "Itérer",
+    desc: "Ajustez après les premiers retours.",
+  },
+  {
+    num: "06",
     icon: Award,
     color: "hsl(32 95% 42%)",
     label: "Consolider",
@@ -505,7 +512,7 @@ export default function Index() {
           <div className="text-center mb-14">
             <span className="section-label mb-4 inline-block">Méthode</span>
             <h2 className="font-heading text-heading-lg md:text-heading-xl text-foreground mb-5">
-              Une approche en 5 phases pour automatiser{" "}
+              Une approche en 6 phases pour automatiser{" "}
               <span className="underline-orange">durablement</span>
             </h2>
             <p className="text-body-lg text-foreground-secondary mx-auto max-w-xl">
@@ -514,7 +521,7 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-10">
             {DECLIC_PHASES.map((phase, idx) => {
               const Icon = phase.icon;
               return (
@@ -565,7 +572,7 @@ export default function Index() {
       <section className="px-4 py-10 border-b border-border">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-sm text-foreground-muted">
-            15 métiers analysables · 120+ tâches dans la base · Méthodologie DÉCLIC en 5 phases
+            15 métiers analysables · 120+ tâches dans la base · Méthodologie DÉCLIC en 6 phases
           </p>
         </div>
       </section>

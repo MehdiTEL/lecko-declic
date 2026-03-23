@@ -60,6 +60,11 @@ export interface AnalysisTask {
   complexite?: ComplexiteMiseEnPlace;
   temps_mise_en_place_jours?: number;
   prerequis?: string[];
+  // ─── Champs conduite du changement (optionnels) ──────────────────────
+  perimetre_impact?: "moi_seul" | "mon_equipe" | "multi_services" | "externe";
+  niveau_changement?: "transparent" | "leger" | "moyen" | "fort";
+  risque_adoption?: "faible" | "moyen" | "eleve";
+  actions_conduite_changement?: string;
 }
 
 export interface AnalysisResult {
@@ -156,4 +161,26 @@ export const ECOSYSTEM_LABELS: Record<ToolEcosystem, string> = {
   Python_Script: "Script Python",
   RPA: "RPA (UiPath / PA Desktop)",
   Natif_SaaS: "Fonctionnalité native",
+};
+
+// ─── Organizational dimension configs ──────────────────────────────
+
+export const PERIMETRE_IMPACT_CONFIG: Record<string, { label: string; icon: string; color: string }> = {
+  moi_seul: { label: "Moi seul", icon: "User", color: "#10B981" },
+  mon_equipe: { label: "Mon équipe", icon: "Users", color: "#2563EB" },
+  multi_services: { label: "Plusieurs services", icon: "Building2", color: "#F59E0B" },
+  externe: { label: "Parties externes", icon: "Globe", color: "#EF4444" },
+};
+
+export const NIVEAU_CHANGEMENT_CONFIG: Record<string, { label: string; detail: string; color: string }> = {
+  transparent: { label: "Transparent", detail: "Personne ne remarque le changement", color: "#10B981" },
+  leger: { label: "Léger", detail: "Nouvel outil, même processus", color: "#2563EB" },
+  moyen: { label: "Moyen", detail: "Le processus change — formation nécessaire", color: "#F59E0B" },
+  fort: { label: "Fort", detail: "Les rôles changent — conduite du changement", color: "#EF4444" },
+};
+
+export const RISQUE_ADOPTION_CONFIG: Record<string, { label: string; detail: string; color: string }> = {
+  faible: { label: "Faible", detail: "Adoption naturelle", color: "#10B981" },
+  moyen: { label: "Moyen", detail: "Formation nécessaire", color: "#F59E0B" },
+  eleve: { label: "Élevé", detail: "Résistance probable", color: "#EF4444" },
 };

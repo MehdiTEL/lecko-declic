@@ -1,5 +1,5 @@
 import { DECLIC_PHASES, DeclicPhase } from "@/types/declic";
-import { Search, BarChart3, Wrench, Play, Award, ShieldCheck, Check } from "lucide-react";
+import { Search, BarChart3, Wrench, Play, Award, ShieldCheck, Check, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,7 @@ interface DeclicProgressProps {
   sticky?: boolean;
 }
 
-const PHASE_ICONS = [ShieldCheck, Search, BarChart3, Wrench, Play, Award];
+const PHASE_ICONS = [ShieldCheck, Search, BarChart3, Wrench, Play, RefreshCw, Award];
 
 export default function DeclicProgress({ currentPhase, completedPhases, onPhaseClick, sticky }: DeclicProgressProps) {
   const [tooltip, setTooltip] = useState<number | null>(null);

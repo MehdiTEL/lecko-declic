@@ -129,7 +129,7 @@ export default function Methode() {
             className="text-4xl md:text-5xl font-bold font-heading text-foreground mb-5"
             style={{ lineHeight: "1.12", letterSpacing: "-0.02em" }}>
             La méthode <span className="underline-orange">DÉCLIC</span> —
-            5 phases pour automatiser intelligemment
+            6 phases pour automatiser intelligemment
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.12 }}
             className="text-lg text-foreground-secondary mb-12 max-w-2xl mx-auto" style={{ lineHeight: "1.65" }}>

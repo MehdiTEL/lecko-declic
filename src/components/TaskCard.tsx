@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info, Sparkles, Users, Wrench } from "lucide-react";
-import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass, ACCOMPAGNEMENT_CONFIG, COMPLEXITE_CONFIG, ECOSYSTEM_LABELS } from "@/types/analysis";
+import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass, ACCOMPAGNEMENT_CONFIG, COMPLEXITE_CONFIG, ECOSYSTEM_LABELS, PERIMETRE_IMPACT_CONFIG, NIVEAU_CHANGEMENT_CONFIG, RISQUE_ADOPTION_CONFIG } from "@/types/analysis";
 import type { AccompagnementLevel, ComplexiteMiseEnPlace, ToolEcosystem } from "@/types/analysis";
 import type { TaskStatus } from "@/types/gamification";
 import { useChatContext } from "@/context/ChatContext";
@@ -404,6 +404,38 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
                       </div>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* Organizational impact */}
+              {(task.perimetre_impact || task.niveau_changement || task.risque_adoption) && (
+                <div className="rounded-xl border border-border p-3 space-y-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-foreground-muted">Impact organisationnel</p>
+                  <div className="flex flex-wrap gap-3">
+                    {task.perimetre_impact && PERIMETRE_IMPACT_CONFIG[task.perimetre_impact] && (
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: PERIMETRE_IMPACT_CONFIG[task.perimetre_impact].color }} />
+                        <span className="text-foreground-secondary">{PERIMETRE_IMPACT_CONFIG[task.perimetre_impact].label}</span>
+                      </div>
+                    )}
+                    {task.niveau_changement && NIVEAU_CHANGEMENT_CONFIG[task.niveau_changement] && (
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: NIVEAU_CHANGEMENT_CONFIG[task.niveau_changement].color }} />
+                        <span className="text-foreground-secondary">Changement {NIVEAU_CHANGEMENT_CONFIG[task.niveau_changement].label.toLowerCase()}</span>
+                      </div>
+                    )}
+                    {task.risque_adoption && RISQUE_ADOPTION_CONFIG[task.risque_adoption] && (
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: RISQUE_ADOPTION_CONFIG[task.risque_adoption].color }} />
+                        <span className="text-foreground-secondary">Adoption : risque {RISQUE_ADOPTION_CONFIG[task.risque_adoption].label.toLowerCase()}</span>
+                      </div>
+                    )}
+                  </div>
+                  {task.actions_conduite_changement && (
+                    <p className="text-xs text-foreground-secondary leading-relaxed pl-3 border-l-2" style={{ borderColor: "hsl(var(--primary))" }}>
+                      {task.actions_conduite_changement}
+                    </p>
+                  )}
                 </div>
               )}
 
