@@ -36,10 +36,10 @@ export default function History() {
           transition={{ duration: 0.4 }}
         >
           <h1 className="text-3xl font-bold font-heading text-foreground mb-2">
-            Historique de vos <span className="text-lecko-orange">analyses</span>
+            Mes <span className="text-lecko-orange">diagnostics</span>
           </h1>
           <p className="text-foreground-secondary text-sm mb-8">
-            Retrouvez toutes vos analyses précédentes.
+            Retrouvez tous vos diagnostics précédents.
           </p>
         </motion.div>
 
