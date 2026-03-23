@@ -389,6 +389,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès ChatGPT ou Claude", "Licence Canva Pro"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Planification et publication",
@@ -404,6 +406,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Buffer ou Hootsuite", "Accès aux comptes réseaux sociaux"],
+        perimetre_impact: "externe",
+        niveau_changement: "transparent",
       },
       {
         nom: "Veille et monitoring de marque",
@@ -419,6 +423,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 1,
         prerequis: ["Licence Mention ou Brand24", "Liste des mots-clés et marques à surveiller"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "transparent",
       },
       {
         nom: "Modération des commentaires",
@@ -434,6 +440,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Instance N8N", "Accès API réseaux sociaux", "Accès API ChatGPT"],
+        perimetre_impact: "externe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Reporting des performances",
@@ -449,6 +457,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 2,
         prerequis: ["Licence Make", "Google Data Studio", "Accès API des réseaux sociaux"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Curation de contenu",
@@ -464,6 +474,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 2,
         prerequis: ["Feedly Pro", "Instance N8N", "Configuration des critères de scoring"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "moyen",
       },
       {
         nom: "Animation de communauté",
@@ -479,6 +491,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Licence Kolsquare ou équivalent", "Stratégie de communauté définie"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Traduction et adaptation multilingue",
@@ -494,6 +508,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence DeepL Pro", "Accès Claude ou ChatGPT"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
     ],
   },
@@ -1041,6 +1057,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 2,
         prerequis: ["Licence Copilot M365", "Beautiful.ai (optionnel)", "Templates de présentation existants"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
       {
         nom: "Suivi des actions et relances",
@@ -1056,6 +1074,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Instance N8N", "Notion (plan Team)", "Liste des actions à suivre structurée"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "moyen",
       },
       {
         nom: "Gestion documentaire",
@@ -1071,6 +1091,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 2,
         prerequis: ["SharePoint Online", "Power Automate", "Copilot M365", "Conventions de nommage définies"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "transparent",
       },
       {
         nom: "Gestion des notes de frais",
@@ -1086,6 +1108,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Expensya ou Spendesk"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Interface et représentation",
@@ -1101,6 +1125,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Système d'accueil digitalisé (Envoy)", "Protocole d'accueil défini"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
     ],
   },
@@ -1124,6 +1150,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Accès ChatGPT Plus ou Claude", "Power BI Pro", "Données clients accessibles et structurées"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Rédaction de livrables et rapports",
@@ -1139,6 +1167,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès Claude ou ChatGPT", "Copilot M365 (optionnel)", "Templates de livrables"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Recherche documentaire et benchmark",
@@ -1154,6 +1184,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Perplexity Pro", "Critères de benchmark définis"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Préparation des présentations clients",
@@ -1169,6 +1201,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Copilot M365 ou Beautiful.ai ou Gamma.app"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Gestion administrative des missions",
@@ -1184,6 +1218,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Harvest ou Toggl Track", "Instance N8N", "Templates de facturation"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "moyen",
       },
       {
         nom: "Animation d'ateliers et workshops",
@@ -1199,6 +1235,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Licence Miro", "Templates d'ateliers", "Compétences en facilitation"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Développement commercial",
@@ -1214,6 +1252,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 4,
         prerequis: ["Accès ChatGPT", "Licence HubSpot CRM", "Templates de propositions commerciales"],
+        perimetre_impact: "externe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Gestion de la relation client",
@@ -1229,6 +1269,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 10,
         prerequis: ["Méthodologie de gestion de la relation client", "CRM configuré"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
     ],
   },
@@ -1252,6 +1294,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 4,
         prerequis: ["Licence Harvey AI ou Lexis+ AI", "Accès aux bases de jurisprudence", "Validation par un juriste senior"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "moyen",
       },
       {
         nom: "Rédaction et révision de contrats",
@@ -1267,6 +1311,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Licence Harvey AI ou Ironclad AI", "Base de contrats types", "Clausier de référence"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "moyen",
       },
       {
         nom: "Due diligence",
@@ -1282,6 +1328,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 15,
         prerequis: ["Licence Harvey AI", "Accès sécurisé aux documents M&A", "Protocole de confidentialité", "Validation senior"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "fort",
       },
       {
         nom: "Rédaction de courriers et notes",
@@ -1297,6 +1345,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès Claude ou ChatGPT", "Templates de notes et courriers juridiques"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Gestion du contentieux",
@@ -1312,6 +1362,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 4,
         prerequis: ["Instance N8N", "Notion (plan Team)", "Registre des contentieux structuré"],
+        perimetre_impact: "externe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Formation juridique interne",
@@ -1327,6 +1379,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 1,
         prerequis: ["Plateforme LMS", "Accès ChatGPT", "Contenus juridiques à vulgariser"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
       {
         nom: "Conseil stratégique",
@@ -1342,6 +1396,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 10,
         prerequis: ["Expertise juridique senior", "Accès aux bases de jurisprudence"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
     ],
   },
@@ -1365,6 +1421,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Dovetail ou Maze AI", "Données de feedback structurées", "Taxonomie de thèmes définie"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Rédaction des user stories et spécifications",
@@ -1380,6 +1438,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès ChatGPT ou Copilot", "Linear AI (optionnel)", "Format de user stories défini"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "leger",
       },
       {
         nom: "Priorisation du backlog",
@@ -1395,6 +1455,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Productboard", "Critères de priorisation définis", "Données utilisateurs connectées"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Analyse des métriques produit",
@@ -1410,6 +1472,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Amplitude ou Mixpanel", "Copilot M365", "KPIs produit définis"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "leger",
       },
       {
         nom: "Rédaction de la roadmap et communications",
@@ -1425,6 +1489,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès Claude", "Notion AI (optionnel)", "Templates de communication roadmap"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
       {
         nom: "Benchmark et veille concurrentielle",
@@ -1440,6 +1506,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Perplexity ou Claude", "Liste des concurrents à surveiller"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Facilitation des rituels agile",
@@ -1455,6 +1523,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Licence Parabol ou équivalent", "Compétences en facilitation agile"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "leger",
       },
       {
         nom: "Gestion des parties prenantes",
@@ -1470,6 +1540,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 10,
         prerequis: ["Framework de gestion des parties prenantes", "Outils de communication interne"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
     ],
   },
@@ -1493,6 +1565,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès ChatGPT ou Claude", "Licence Surfer SEO (optionnel)"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Gestion des campagnes email",
@@ -1508,6 +1582,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 1,
         prerequis: ["Licence HubSpot Marketing ou Klaviyo", "Base contacts segmentée", "Templates d'emails"],
+        perimetre_impact: "externe",
+        niveau_changement: "transparent",
       },
       {
         nom: "Analyse des performances marketing",
@@ -1523,6 +1599,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Instance N8N", "Google Looker Studio", "Accès API des plateformes marketing"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Gestion des réseaux sociaux",
@@ -1538,6 +1616,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Buffer ou Hootsuite", "Accès ChatGPT", "Accès aux comptes réseaux sociaux"],
+        perimetre_impact: "externe",
+        niveau_changement: "transparent",
       },
       {
         nom: "SEO et optimisation du site",
@@ -1553,6 +1633,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Semrush ou Ahrefs", "Surfer SEO", "Accès Google Search Console"],
+        perimetre_impact: "externe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Gestion des campagnes publicitaires",
@@ -1568,6 +1650,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 2,
         prerequis: ["Comptes Google Ads et Meta Ads", "Accès ChatGPT", "Budget publicitaire défini"],
+        perimetre_impact: "externe",
+        niveau_changement: "transparent",
       },
       {
         nom: "Veille marketing et concurrentielle",
@@ -1583,6 +1667,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Perplexity", "Liste des sujets de veille définie"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Stratégie et planification marketing",
@@ -1598,6 +1684,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 10,
         prerequis: ["Données historiques de performance marketing", "Accès aux outils d'analyse"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
       {
         nom: "Gestion des prestataires et agences",
@@ -1613,6 +1701,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Licence Asana ou Monday", "Processus de briefing formalisé"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
     ],
   },
@@ -1636,6 +1726,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 4,
         prerequis: ["Python + pandas", "dbt (optionnel)", "Accès aux sources de données brutes"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "moyen",
       },
       {
         nom: "Création de dashboards et rapports",
@@ -1651,6 +1743,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Power BI Pro ou Tableau", "Metabase (optionnel)", "Modèle de données structuré"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "moyen",
       },
       {
         nom: "Extraction et requêtes SQL",
@@ -1666,6 +1760,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["GitHub Copilot ou ChatGPT", "Defog.ai (optionnel)", "Accès aux bases de données"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "transparent",
       },
       {
         nom: "Rédaction de commentaires et rapports d'analyse",
@@ -1681,6 +1777,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès Claude ou ChatGPT", "Données d'analyse structurées"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
       {
         nom: "Pipelines de données automatisés",
@@ -1696,6 +1794,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 15,
         prerequis: ["Airbyte ou Fivetran", "dbt", "Accès aux bases de données sources", "Architecture data définie"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "fort",
       },
       {
         nom: "Tests de qualité des données",
@@ -1711,6 +1811,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["dbt ou Great Expectations", "Pipeline de données existant", "Règles de qualité définies"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "moyen",
       },
       {
         nom: "Formation des utilisateurs",
@@ -1726,6 +1828,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 1,
         prerequis: ["Notion AI", "Synthesia (optionnel)", "Contenus de formation existants"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
       {
         nom: "Analyse exploratoire et modélisation",
@@ -1741,6 +1845,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 10,
         prerequis: ["Licence DataRobot ou H2O.ai", "ChatGPT Plus", "Données nettoyées et structurées", "Expertise en data science"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "fort",
       },
     ],
   },
@@ -1764,6 +1870,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Figma (plan professionnel avec AI) ou Uizard", "Midjourney (optionnel)"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "transparent",
       },
       {
         nom: "Création de contenu visuel",
@@ -1779,6 +1887,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Midjourney ou DALL-E 3 ou Adobe Firefly"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Recherche utilisateur quantitative",
@@ -1794,6 +1904,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Hotjar ou Fullstory", "Code de tracking installé sur le site/app"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Rédaction de documentation design",
@@ -1809,6 +1921,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 4,
         prerequis: ["Notion AI", "Figma (plan professionnel)", "Design system existant"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "leger",
       },
       {
         nom: "Tests utilisateurs",
@@ -1824,6 +1938,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Maze ou UserTesting", "Prototypes Figma interactifs", "Scénarios de test définis"],
+        perimetre_impact: "externe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Développement et intégration CSS",
@@ -1839,6 +1955,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 1,
         prerequis: ["Licence Locofy ou Builder.io", "Maquettes Figma structurées avec Auto Layout"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Présentation aux parties prenantes",
@@ -1854,6 +1972,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Gamma.app ou Beautiful.ai"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
       {
         nom: "Recherche qualitative et interviews",
@@ -1869,6 +1989,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Licence Dovetail AI", "Protocole d'interview défini", "Compétences en recherche utilisateur"],
+        perimetre_impact: "externe",
+        niveau_changement: "moyen",
       },
     ],
   },
@@ -1892,6 +2014,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Accès ChatGPT ou Claude", "Charte éditoriale et ton de marque définis"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Gestion des réseaux sociaux",
@@ -1907,6 +2031,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 0.5,
         prerequis: ["Licence Hootsuite ou Buffer", "Accès aux comptes réseaux sociaux"],
+        perimetre_impact: "externe",
+        niveau_changement: "transparent",
       },
       {
         nom: "Revue de presse et veille médias",
@@ -1922,6 +2048,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 1,
         prerequis: ["Licence Mention ou Meltwater", "Mots-clés et sources à surveiller définis"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "transparent",
       },
       {
         nom: "Relations presse",
@@ -1937,6 +2065,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Licence Cision ou Prowly", "Base de contacts journalistes", "Templates de communiqués"],
+        perimetre_impact: "externe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Création de supports visuels",
@@ -1952,6 +2082,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 2,
         prerequis: ["Licence Canva Pro", "Adobe Firefly (optionnel)", "Charte graphique de marque"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "leger",
       },
       {
         nom: "Reporting communication",
@@ -1967,6 +2099,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Instance N8N", "Google Looker Studio", "Accès API des canaux de communication"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "moyen",
       },
       {
         nom: "Organisation d'événements",
@@ -1982,6 +2116,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 3,
         prerequis: ["Eventbrite ou équivalent", "Airtable", "Licence Make"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "moyen",
       },
       {
         nom: "Gestion de crise",
@@ -1997,6 +2133,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 10,
         prerequis: ["Plan de gestion de crise défini", "Processus de validation accéléré"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
     ],
   },
@@ -2020,6 +2158,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 15,
         prerequis: ["BlackLine ou Sage", "Power Automate", "Accès admin au SI comptable", "Processus de clôture formalisé"],
+        perimetre_impact: "mon_equipe",
+        niveau_changement: "fort",
       },
       {
         nom: "Reporting financier",
@@ -2035,6 +2175,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "faible" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 1,
         prerequis: ["Power BI connecté aux données financières", "Licence Copilot M365"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "transparent",
       },
       {
         nom: "Prévisions et budgétisation",
@@ -2050,6 +2192,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 20,
         prerequis: ["Licence Anaplan ou Workday Adaptive Planning", "Accès aux données financières historiques", "Modèles budgétaires existants"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "fort",
       },
       {
         nom: "Analyse des risques financiers",
@@ -2065,6 +2209,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Accès Bloomberg ou Refinitiv", "Accès Claude", "Paramètres de risque définis"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "moyen",
       },
       {
         nom: "Gestion de trésorerie",
@@ -2080,6 +2226,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 5,
         prerequis: ["Licence Kyriba ou Agicap", "Connexions bancaires", "Processus de trésorerie formalisé"],
+        perimetre_impact: "moi_seul",
+        niveau_changement: "moyen",
       },
       {
         nom: "Conformité réglementaire",
@@ -2095,6 +2243,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "moyenne" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 4,
         prerequis: ["Instance N8N", "Sources réglementaires identifiées", "Calendrier des obligations fiscales"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "moyen",
       },
       {
         nom: "Relations avec les banques et investisseurs",
@@ -2110,6 +2260,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 10,
         prerequis: ["Dossiers de présentation structurés", "Outils de modélisation financière"],
+        perimetre_impact: "externe",
+        niveau_changement: "leger",
       },
       {
         nom: "Décisions stratégiques financières",
@@ -2125,6 +2277,8 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         complexite: "elevee" as ComplexiteMiseEnPlace,
         temps_mise_en_place_jours: 15,
         prerequis: ["Modèles de scénarios financiers", "Expertise en finance d'entreprise"],
+        perimetre_impact: "multi_services",
+        niveau_changement: "leger",
       },
     ],
   },
