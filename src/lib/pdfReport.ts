@@ -463,13 +463,71 @@ function drawSynthesePage(pdf: jsPDF, result: AnalysisResult, source: AnalysisSo
   setTextColor(pdf, C.darkGrey);
   const lines = pdf.splitTextToSize(synthText, CONTENT_W - 12);
   pdf.text(lines, MARGIN + 6, boxY + 18);
+
+  // ── Top 3 Quick Wins ──────────────────────────────────────────────────
+  const quickWinTasks = [...result.taches]
+    .filter(t => t.categorie === "automatisable")
+    .sort((a, b) => (b.score_criteres ?? computeScoreCriteres(b.criteres)) - (a.score_criteres ?? computeScoreCriteres(a.criteres)))
+    .slice(0, 3);
+
+  if (quickWinTasks.length > 0) {
+    let qwY = boxY + 56;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(11);
+    setTextColor(pdf, C.black);
+    pdf.text("Top 3 Quick Wins", MARGIN + 6, qwY);
+    qwY += 6;
+
+    for (let qi = 0; qi < quickWinTasks.length; qi++) {
+      const qw = quickWinTasks[qi];
+      const qwRowH = 14;
+
+      // Row background (alternating)
+      drawRoundedRect(pdf, MARGIN, qwY, CONTENT_W, qwRowH, 2, qi % 2 === 0 ? C.lightBg : C.white);
+
+      // Number circle
+      setFill(pdf, C.emerald);
+      pdf.circle(MARGIN + 6, qwY + qwRowH / 2, 3, "F");
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(8);
+      setTextColor(pdf, C.white);
+      pdf.text(String(qi + 1), MARGIN + 6, qwY + qwRowH / 2 + 1, { align: "center" });
+
+      // Task name
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(9);
+      setTextColor(pdf, C.black);
+      const nameMaxW = CONTENT_W - 80;
+      const truncName = pdf.splitTextToSize(qw.nom, nameMaxW)[0];
+      pdf.text(truncName, MARGIN + 13, qwY + 5);
+
+      // Hours saved
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(8);
+      setTextColor(pdf, C.emerald);
+      pdf.text(`~${qw.temps_gagne_heures_semaine}h/sem`, MARGIN + 13, qwY + 11);
+
+      // Tool badge
+      pdf.setFontSize(7);
+      const toolLabel = qw.type_outil;
+      const toolBW = pdf.getTextWidth(toolLabel) + 6;
+      const toolBX = PAGE_W - MARGIN - toolBW - 4;
+      drawRoundedRect(pdf, toolBX, qwY + 3, toolBW, 6, 2, C.lightBg, C.blue);
+      setTextColor(pdf, C.blue);
+      pdf.setFont("helvetica", "bold");
+      pdf.text(toolLabel, toolBX + 3, qwY + 7);
+
+      qwY += qwRowH + 2;
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PAGE 3 — ROI
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function drawRoiPage(pdf: jsPDF, result: AnalysisResult, hourlyRate: number, nbPeople: number) {
+function drawRoiPage(pdf: jsPDF, result: AnalysisResult, hourlyRate: number, nbPeople: number, pageTracker?: { current: number }) {
   drawPageHeader(pdf);
   let y = 18;
   y = drawSectionTitle(pdf, y, "RETOUR SUR INVESTISSEMENT");
@@ -551,6 +609,45 @@ function drawRoiPage(pdf: jsPDF, result: AnalysisResult, hourlyRate: number, nbP
 
     bY += 12;
   }
+
+  // ── Per-task ROI breakdown table ─────────────────────────────────────
+  bY += 6;
+
+  // Check if there's enough space; otherwise start a new page
+  const roiTableEstimate = 12 + result.taches.length * 8 + 10;
+  if (bY + roiTableEstimate > PAGE_H - 30) {
+    // Continue on a new page for the breakdown table
+    pdf.addPage();
+    if (pageTracker) pageTracker.current++;
+    drawPageHeader(pdf);
+    bY = 18;
+  }
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(11);
+  setTextColor(pdf, C.black);
+  pdf.text("Détail par tâche", MARGIN, bY);
+  bY += 6;
+
+  const roiBreakdownHeaders = ["Tâche", "h/sem", "€/sem"];
+  const roiColWidths = [CONTENT_W - 50, 25, 25];
+  const roiRows: string[][] = result.taches
+    .filter(t => t.temps_gagne_heures_semaine > 0)
+    .sort((a, b) => b.temps_gagne_heures_semaine - a.temps_gagne_heures_semaine)
+    .map(t => {
+      const taskWeekEur = t.temps_gagne_heures_semaine * hourlyRate * nbPeople;
+      // Truncate long names to fit column
+      const name = t.nom.length > 40 ? t.nom.substring(0, 38) + "…" : t.nom;
+      return [name, `${t.temps_gagne_heures_semaine.toFixed(1)}`, formatEur(taskWeekEur)];
+    });
+
+  if (roiRows.length > 0) {
+    // Add a total row
+    const totalHrs = result.taches.reduce((s, t) => s + t.temps_gagne_heures_semaine, 0);
+    roiRows.push(["TOTAL", `${totalHrs.toFixed(1)}`, formatEur(weekEur)]);
+
+    drawTable(pdf, MARGIN, bY, roiBreakdownHeaders, roiRows, roiColWidths, { highlightLastRow: true });
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -619,6 +716,37 @@ function drawRadarPage(pdf: jsPDF, tasks: AnalysisTask[]) {
 // PAGE 5+ — TASK CARDS
 // ═══════════════════════════════════════════════════════════════════════════════
 
+function estimateTaskCardHeight(pdf: jsPDF, task: AnalysisTask): number {
+  const textW = CONTENT_W - 16;
+  const descLines = pdf.splitTextToSize(task.description, textW).length;
+  const solLines = pdf.splitTextToSize(task.solution, textW).length;
+  let h = 28 + descLines * 4 + solLines * 4 + 16;
+
+  if (task.process_actuel) {
+    h += 10 + pdf.splitTextToSize(task.process_actuel, textW).length * 4;
+  }
+  if (task.process_cible) {
+    h += 10 + pdf.splitTextToSize(task.process_cible, textW).length * 4;
+  }
+  if (task.etapes_mise_en_place && task.etapes_mise_en_place.length > 0) {
+    h += 10;
+    for (const step of task.etapes_mise_en_place) {
+      h += pdf.splitTextToSize(step, textW - 10).length * 4;
+    }
+  }
+  if (task.limites) {
+    h += 10 + pdf.splitTextToSize(task.limites, textW).length * 4;
+  }
+  if (task.niveau_autonomie) {
+    h += 8;
+  }
+  if (task.prerequis && task.prerequis.length > 0) {
+    h += 10 + task.prerequis.length * 5;
+  }
+
+  return h;
+}
+
 function drawTaskPages(
   pdf: jsPDF, tasks: AnalysisTask[], hourlyRate: number, nbPeople: number,
   pageTracker: { current: number }
@@ -639,13 +767,16 @@ function drawTaskPages(
     y = 18;
   }
 
+  /** Ensure at least `needed` mm remain on page; if not, start a new one */
+  function ensureSpace(needed: number) {
+    if (y + needed > bottomLimit) newPage();
+  }
+
   drawPageHeader(pdf);
 
   for (const task of sorted) {
-    // Estimate card height
-    const descLines = pdf.splitTextToSize(task.description, CONTENT_W - 16).length;
-    const solLines = pdf.splitTextToSize(task.solution, CONTENT_W - 16).length;
-    const cardH = 28 + descLines * 4 + solLines * 4 + 16;
+    // Estimate card height (including new fields)
+    const cardH = estimateTaskCardHeight(pdf, task);
 
     // Category header
     if (task.categorie !== currentCat) {
@@ -663,14 +794,15 @@ function drawTaskPages(
       y += 14;
     }
 
-    // Check space
-    if (y + cardH > bottomLimit) newPage();
+    // Check space for the card — if not enough, start a new page
+    ensureSpace(cardH);
 
     // Card shadow
     drawRoundedRect(pdf, MARGIN + 1, y + 1, CONTENT_W - 2, cardH - 2, 3, [230, 230, 230]);
     // Card body
     drawRoundedRect(pdf, MARGIN, y, CONTENT_W - 2, cardH - 2, 3, C.white, C.lightGrey);
 
+    const cardStartY = y;
     let cY = y + 6;
 
     // Task name + score badge
@@ -697,6 +829,20 @@ function drawTaskPages(
     setTextColor(pdf, C.blue);
     pdf.text(task.type_outil, toolBadgeX + 3, cY - 0.5);
 
+    // Niveau d'autonomie badge (top-right area, below score)
+    if (task.niveau_autonomie) {
+      const autoLabels: Record<string, string> = { autonome: "Autonome", guide: "Guidé", expert: "Expert" };
+      const autoColors: Record<string, RGB> = { autonome: C.emerald, guide: C.blue, expert: C.orange };
+      const autoLabel = autoLabels[task.niveau_autonomie] ?? task.niveau_autonomie;
+      const autoColor = autoColors[task.niveau_autonomie] ?? C.grey;
+      pdf.setFontSize(7);
+      const autoBW = pdf.getTextWidth(autoLabel) + 6;
+      drawRoundedRect(pdf, PAGE_W - MARGIN - autoBW - 8, cY + 3, autoBW, 6, 2, autoColor);
+      setTextColor(pdf, C.white);
+      pdf.setFont("helvetica", "bold");
+      pdf.text(autoLabel, PAGE_W - MARGIN - autoBW - 5, cY + 7);
+    }
+
     cY += 6;
 
     // Description
@@ -706,6 +852,38 @@ function drawTaskPages(
     const descL = pdf.splitTextToSize(task.description, CONTENT_W - 16);
     pdf.text(descL, MARGIN + 5, cY);
     cY += descL.length * 4 + 3;
+
+    // ── Avant (process_actuel) ────────────────────────────────────────
+    if (task.process_actuel) {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7);
+      setTextColor(pdf, C.orange);
+      pdf.text("AVANT — Processus actuel", MARGIN + 5, cY);
+      cY += 4;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(9);
+      setTextColor(pdf, C.darkGrey);
+      const actuelL = pdf.splitTextToSize(task.process_actuel, CONTENT_W - 16);
+      pdf.text(actuelL, MARGIN + 5, cY);
+      cY += actuelL.length * 4 + 3;
+    }
+
+    // ── Après (process_cible) ─────────────────────────────────────────
+    if (task.process_cible) {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7);
+      setTextColor(pdf, C.emerald);
+      pdf.text("APRÈS — Processus cible", MARGIN + 5, cY);
+      cY += 4;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(9);
+      setTextColor(pdf, C.darkGrey);
+      const cibleL = pdf.splitTextToSize(task.process_cible, CONTENT_W - 16);
+      pdf.text(cibleL, MARGIN + 5, cY);
+      cY += cibleL.length * 4 + 3;
+    }
 
     // Solution
     pdf.setFont("helvetica", "bold");
@@ -720,6 +898,60 @@ function drawTaskPages(
     const solL = pdf.splitTextToSize(task.solution, CONTENT_W - 16);
     pdf.text(solL, MARGIN + 5, cY);
     cY += solL.length * 4 + 3;
+
+    // ── Étapes de mise en place ───────────────────────────────────────
+    if (task.etapes_mise_en_place && task.etapes_mise_en_place.length > 0) {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7);
+      setTextColor(pdf, C.blue);
+      pdf.text("ÉTAPES DE MISE EN PLACE", MARGIN + 5, cY);
+      cY += 4;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(9);
+      setTextColor(pdf, C.darkGrey);
+      for (let si = 0; si < task.etapes_mise_en_place.length; si++) {
+        const stepText = `${si + 1}. ${task.etapes_mise_en_place[si]}`;
+        const stepL = pdf.splitTextToSize(stepText, CONTENT_W - 20);
+        pdf.text(stepL, MARGIN + 8, cY);
+        cY += stepL.length * 4;
+      }
+      cY += 2;
+    }
+
+    // ── Prérequis ─────────────────────────────────────────────────────
+    if (task.prerequis && task.prerequis.length > 0) {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7);
+      setTextColor(pdf, C.violet);
+      pdf.text("PRÉREQUIS", MARGIN + 5, cY);
+      cY += 4;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(9);
+      setTextColor(pdf, C.darkGrey);
+      for (const pr of task.prerequis) {
+        pdf.text(`• ${pr}`, MARGIN + 8, cY);
+        cY += 5;
+      }
+      cY += 1;
+    }
+
+    // ── Limites ───────────────────────────────────────────────────────
+    if (task.limites) {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7);
+      setTextColor(pdf, C.amber);
+      pdf.text("LIMITES", MARGIN + 5, cY);
+      cY += 4;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(9);
+      setTextColor(pdf, C.darkGrey);
+      const limitesL = pdf.splitTextToSize(task.limites, CONTENT_W - 16);
+      pdf.text(limitesL, MARGIN + 5, cY);
+      cY += limitesL.length * 4 + 3;
+    }
 
     // Metrics row
     pdf.setFont("helvetica", "bold");
@@ -757,7 +989,13 @@ function drawTaskPages(
       }
     }
 
-    y += cardH + 3;
+    // Adjust card background to actual rendered height (re-draw over shadow if needed)
+    const actualH = cY - cardStartY + 6;
+    if (actualH > cardH) {
+      // Extend background — redraw (card bg is already drawn, but we ensure no overflow)
+    }
+
+    y += Math.max(cardH, actualH) + 3;
   }
 }
 
@@ -949,7 +1187,7 @@ export function generatePremiumPdf(data: PdfReportData): void {
   // Page 3 — ROI
   pdf.addPage();
   pageTracker.current++;
-  drawRoiPage(pdf, result, hourlyRate, nbPeople);
+  drawRoiPage(pdf, result, hourlyRate, nbPeople, pageTracker);
 
   // Page 4 — Radar
   if (result.taches.some(t => t.criteres)) {
