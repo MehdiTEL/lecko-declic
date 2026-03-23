@@ -60,6 +60,13 @@ export interface AnalysisTask {
   complexite?: ComplexiteMiseEnPlace;
   temps_mise_en_place_jours?: number;
   prerequis?: string[];
+  // ─── Champs processus détaillés (optionnels) ─────────────────────────
+  process_actuel?: string;
+  process_cible?: string;
+  etapes_mise_en_place?: string[];
+  limites?: string;
+  exemple_resultat?: string;
+  niveau_autonomie?: "autonome" | "guide" | "expert";
   // ─── Champs conduite du changement (optionnels) ──────────────────────
   perimetre_impact?: "moi_seul" | "mon_equipe" | "multi_services" | "externe";
   niveau_changement?: "transparent" | "leger" | "moyen" | "fort";

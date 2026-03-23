@@ -12,7 +12,7 @@ import {
   buildFullDiagnosticContext,
   getPageOpeningMessage,
 } from "@/lib/coachPrompt";
-import { PREMADE_GUIDES, FREE_GUIDE_LIMIT } from "@/data/coachResponses";
+import { PREMADE_GUIDES } from "@/data/coachResponses";
 import { AnalysisTask } from "@/types/analysis";
 
 interface UseChat {
@@ -29,8 +29,6 @@ export function useChat(): UseChat {
     updateMessage,
     setStreaming,
     isStreaming,
-    freemiumCount,
-    incrementFreemium,
   } = useChatContext();
 
   const { currentPage, analysisResult, metier: pageMetier, roiParams } = usePageContext();
@@ -80,7 +78,7 @@ export function useChat(): UseChat {
           content:
             `Parfait, on va automatiser **"${task.nom}"** ! Voici un guide pour commencer :\n\n` +
             guide +
-            `\n\n---\nPour un accompagnement personnalisé et interactif**, configurez votre clé API dans les paramètres. Le coach génèrera un workflow exact pour votre cas.`,
+            `\n\n---\nPour un accompagnement **personnalise et interactif**, configurez votre cle API dans les parametres. Le coach generera un workflow exact pour votre cas.`,
         });
       } else {
         // Opening message (no API call needed)
@@ -115,36 +113,38 @@ export function useChat(): UseChat {
       addMessage({ role: "user", content: text });
 
       if (!apiKey || !provider) {
-        // Freemium mode
-        if (freemiumCount >= FREE_GUIDE_LIMIT) {
-          addMessage({
-            role: "assistant",
-            content:
-              "Vous avez atteint la limite des guides gratuits pour cette session. Pour continuer à poser des questions et obtenir des réponses personnalisées, **configurez votre clé API** dans les paramètres.",
-          });
-        } else {
-          incrementFreemium();
-          // Find relevant guide by keyword
-          const lowerText = text.toLowerCase();
-          let guideKey = "Workflow N8N";
-          if (lowerText.includes("make") || lowerText.includes("zapier") || lowerText.includes("no-code")) {
-            guideKey = "Automatisation No-Code";
-          } else if (lowerText.includes("agent") || lowerText.includes("ia") || lowerText.includes("gpt") || lowerText.includes("claude")) {
-            guideKey = "Agent IA";
-          } else if (lowerText.includes("copilot") || lowerText.includes("assistant")) {
-            guideKey = "Copilot / Assistant IA";
-          } else if (lowerText.includes("python") || lowerText.includes("script")) {
-            guideKey = "Script personnalisé";
-          } else if (taskContext) {
-            guideKey = taskContext.task.type_outil;
-          }
+        // Freemium mode — always try to match a premade guide
+        const lowerText = text.toLowerCase();
+        let guideKey: string | null = null;
+        if (lowerText.includes("make") || lowerText.includes("zapier") || lowerText.includes("no-code")) {
+          guideKey = "Automatisation No-Code";
+        } else if (lowerText.includes("agent") || lowerText.includes("ia") || lowerText.includes("gpt") || lowerText.includes("claude")) {
+          guideKey = "Agent IA";
+        } else if (lowerText.includes("copilot") || lowerText.includes("assistant")) {
+          guideKey = "Copilot / Assistant IA";
+        } else if (lowerText.includes("python") || lowerText.includes("script")) {
+          guideKey = "Script personnalisé";
+        } else if (lowerText.includes("n8n") || lowerText.includes("workflow")) {
+          guideKey = "Workflow N8N";
+        } else if (taskContext) {
+          guideKey = taskContext.task.type_outil;
+        }
 
-          const guide = PREMADE_GUIDES[guideKey] ?? PREMADE_GUIDES["Workflow N8N"];
+        const guide = guideKey ? (PREMADE_GUIDES[guideKey] ?? null) : null;
+        if (guide) {
           addMessage({
             role: "assistant",
             content:
               guide +
-              `\n\n---\nPour des réponses personnalisées à vos questions**, configurez votre clé API dans les paramètres.`,
+              `\n\n---\nPour des reponses personnalisees a vos questions, configurez votre cle API dans les parametres.`,
+          });
+        } else {
+          addMessage({
+            role: "assistant",
+            content:
+              `Je n'ai pas de guide pre-ecrit pour cette question. Voici ce que je peux vous proposer :\n\n` +
+              `- Demandez-moi un guide sur **N8N**, **Make**, **les Agents IA**, **Power Automate** ou **les scripts Python**\n` +
+              `- Pour des reponses personnalisees et interactives, configurez votre cle API dans les **parametres**`,
           });
         }
         return;
@@ -190,7 +190,7 @@ export function useChat(): UseChat {
         },
       });
     },
-    [messages, taskContext, addMessage, updateMessage, setStreaming, freemiumCount, incrementFreemium]
+    [messages, taskContext, addMessage, updateMessage, setStreaming]
   );
 
   const handleRecap = useCallback(() => {

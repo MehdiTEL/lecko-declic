@@ -28,6 +28,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Prévenir l'équipe que les réunions seront enregistrées et obtenir leur accord. Faire une démo de 15 min du CR généré vs CR manuel pour montrer le gain.",
+        process_actuel: "Le chef de projet prend des notes sur papier ou OneNote pendant la réunion (3 à 5 par semaine). Après la réunion, il remet en forme dans Word ou un email. Le CR arrive souvent 2-3 jours après avec des oublis sur les décisions et les actions.",
+        process_cible: "La réunion Teams/Zoom est enregistrée et transcrite automatiquement. L'IA extrait les décisions, les actions avec assignations, et les points en suspens. Un CR structuré est envoyé aux participants dans l'heure.",
+        etapes_mise_en_place: ["Activer l'enregistrement et la transcription dans Teams", "Créer un workflow N8N : Webhook Teams → API Claude → Gmail/Outlook", "Rédiger le prompt de structuration", "Tester sur 3 réunions réelles", "Déployer et communiquer aux participants"],
+        limites: "La transcription automatique peut manquer des échanges en aparté ou des murmures. Les réunions très techniques nécessitent une relecture humaine.",
+        exemple_resultat: "Un email structuré avec Participants, Décisions, Actions (responsable + deadline), Points en suspens.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Mise à jour du planning projet",
@@ -50,6 +56,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "mon_equipe",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Le chef de projet vérifie manuellement les statuts dans Jira/Trello/Planner, puis met à jour le Gantt Excel. Chronophage et souvent décalé.",
+        process_cible: "Les statuts sont synchronisés automatiquement entre Jira/Planner et le planning maître.",
+        etapes_mise_en_place: ["Identifier les champs à synchroniser", "Créer workflow N8N : trigger changement Jira → MAJ Excel Online", "Configurer les credentials", "Tester avec 5 tâches sur une semaine"],
+        limites: "Les dépendances entre tâches et jalons nécessitent un ajustement humain.",
+        exemple_resultat: "Le planning se met à jour en temps réel quand un développeur change le statut dans Jira.",
+        niveau_autonomie: "expert",
       },
       {
         nom: "Reporting d'avancement hebdomadaire",
@@ -72,6 +84,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "multi_services",
         niveau_changement: "transparent",
         risque_adoption: "faible",
+        process_actuel: "Chaque vendredi, compilation manuelle depuis Jira, Planner, Excel. 2h pour créer un PowerPoint de statut.",
+        process_cible: "Un rapport est généré automatiquement chaque vendredi à 16h et envoyé par email.",
+        etapes_mise_en_place: ["Créer template rapport dans Power BI ou Sheets", "Configurer Power Automate : trigger vendredi 16h → collecte données → PDF → email", "Tester sur 2 vendredis", "Ajouter les destinataires"],
+        limites: "Le rapport agrège des données quantitatives. Les commentaires qualitatifs doivent être ajoutés manuellement.",
+        exemple_resultat: "Email chaque vendredi à 16h30 avec PDF 2 pages : avancement, tâches terminées, alertes retard.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Suivi des risques et blocages",
@@ -95,6 +113,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Faire un pilote sur 1 sprint avec le registre des risques existant pour comparer la détection IA vs manuelle. Partager les résultats en rétrospective.",
+        process_actuel: "Registre des risques dans un Excel mis à jour en COPIL. Entre deux réunions, les risques évoluent sans mise à jour.",
+        process_cible: "Les risques dans Notion/Planner avec scoring auto. Alerte si risque critique non traité depuis 5 jours.",
+        etapes_mise_en_place: ["Créer base Notion/SharePoint pour les risques", "Configurer N8N : vérification quotidienne → alerte Teams si retard", "Migrer les risques existants"],
+        limites: "L'identification initiale des risques reste un exercice humain.",
+        exemple_resultat: "Notification Teams chaque matin listant les risques critiques non traités.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Communication aux parties prenantes",
@@ -117,6 +141,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "externe",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Rédaction manuelle de chaque communication en adaptant ton et contenu selon le destinataire. 1h par semaine.",
+        process_cible: "L'IA génère un brouillon personnalisé. Le chef de projet relit et envoie en 5 min.",
+        etapes_mise_en_place: ["Créer prompts avec templates par type de communication", "Configurer N8N/Make : input → génération brouillon → draft email", "Tester avec 3 types de communications"],
+        limites: "Les communications sensibles nécessitent une rédaction humaine.",
+        exemple_resultat: "Brouillon email prêt en 30 secondes, adapté au destinataire.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Planification des réunions",
@@ -139,6 +169,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "mon_equipe",
         niveau_changement: "transparent",
         risque_adoption: "faible",
+        process_actuel: "Vérification manuelle des dispos dans Outlook/Teams, envoi d'invitation, préparation de l'ODJ. 15-20 min par réunion ponctuelle.",
+        process_cible: "FindTime ou Calendly propose les créneaux. L'ODJ est pré-rempli depuis un template.",
+        etapes_mise_en_place: ["Activer FindTime (M365) ou créer un compte Calendly", "Créer templates d'ODJ par type de réunion", "Configurer Power Automate : création réunion → injection template ODJ"],
+        limites: "Les réunions avec des externes nécessitent un lien partageable.",
+        exemple_resultat: "Invitation envoyée en 2 clics avec ODJ pré-rempli.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Gestion documentaire",
@@ -162,6 +198,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "transparent",
         risque_adoption: "moyen",
         actions_conduite_changement: "Créer un guide rapide (1 page) des conventions de nommage et le partager à l'équipe. Migrer les 10 documents les plus utilisés en premier pour montrer l'exemple.",
+        process_actuel: "Documents dispersés entre SharePoint, Drive personnel, pièces jointes email. Versioning approximatif (v1, v2-final-FINAL).",
+        process_cible: "Documents centralisés dans SharePoint avec nommage automatique et notification aux parties prenantes.",
+        etapes_mise_en_place: ["Définir l'arborescence SharePoint", "Configurer Power Automate : fichier ajouté → renommer → notifier Teams", "Migrer les documents existants"],
+        limites: "L'automatisation gère classement et notification. La qualité du contenu reste humaine.",
+        exemple_resultat: "CR déposé → renommé '2026-03-23_CR-COPIL_v1.docx' → notification Teams envoyée.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Suivi budgétaire",
@@ -185,6 +227,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "fort",
         risque_adoption: "eleve",
         actions_conduite_changement: "Impliquer le contrôle de gestion dès la phase de cadrage. Faire un pilote sur 1 projet non critique pendant 2 mois. Organiser un atelier de validation croisée données SAP vs données automatisées avec la finance.",
+        process_actuel: "Consolidation des dépenses depuis SAP, bons de commande, feuilles de temps dans un Excel. Mise à jour mensuelle, dépassements détectés avec retard.",
+        process_cible: "Données agrégées automatiquement. Alertes de dépassement en temps réel.",
+        etapes_mise_en_place: ["Connecter sources de données vers Sheets/Power BI", "Configurer seuils d'alerte (80% jaune, 95% rouge)", "Workflow Power Automate : vérification hebdo → alerte si dépassement"],
+        limites: "Nécessite accès aux données financières souvent contrôlé par DSI/DAF.",
+        exemple_resultat: "Dashboard Power BI quotidien avec alerte Teams si un poste dépasse 90%.",
+        niveau_autonomie: "expert",
       },
       {
         nom: "Conduite du changement",
@@ -208,6 +256,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "fort",
         risque_adoption: "eleve",
         actions_conduite_changement: "Identifier 3 ambassadeurs dans les équipes impactées. Co-construire les parcours de formation avec les managers concernés. Organiser des sessions de feedback toutes les 2 semaines pendant le déploiement.",
+        process_actuel: "Réunions d'info, supports PowerPoint, gestion des résistances au cas par cas. Chronophage et difficile à mesurer.",
+        process_cible: "Parcours de formation structurés dans un LMS. Adoption mesurée automatiquement.",
+        etapes_mise_en_place: ["Structurer les contenus dans un LMS ou Notion", "Configurer parcours par profil", "Mettre en place suivi d'adoption via analytics"],
+        limites: "La conduite du changement est fondamentalement humaine. L'outil structure et mesure.",
+        exemple_resultat: "Tableau de bord montrant taux d'adoption par équipe et utilisateurs en difficulté.",
+        niveau_autonomie: "expert",
       },
     ],
   },
@@ -234,6 +288,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "moi_seul",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Le comptable reçoit les factures par email ou courrier, les saisit manuellement dans Sage/Cegid ligne par ligne. 30 à 50 factures par semaine, avec risque d'erreurs de saisie.",
+        process_cible: "Les factures sont envoyées à Dext ou Pennylane qui extrait automatiquement les données par OCR et les injecte dans le logiciel comptable.",
+        etapes_mise_en_place: ["Créer un compte Dext ou Pennylane et connecter le logiciel comptable", "Configurer les règles d'affectation comptable par fournisseur", "Former l'équipe à envoyer les factures par email dédié ou photo", "Tester sur 20 factures et vérifier le taux de reconnaissance"],
+        limites: "Les factures manuscrites ou de mauvaise qualité nécessitent une saisie manuelle. Le taux de reconnaissance OCR est d'environ 95%.",
+        exemple_resultat: "Facture reçue par email → données extraites en 10 secondes → écriture comptable pré-remplie à valider en 1 clic.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Rapprochement bancaire",
@@ -252,6 +312,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "moi_seul",
         niveau_changement: "transparent",
         risque_adoption: "faible",
+        process_actuel: "Le comptable compare manuellement chaque ligne du relevé bancaire avec les écritures comptables dans Excel ou Sage. Opération répétitive prenant 2 à 3h par semaine.",
+        process_cible: "Pennylane ou QuickBooks synchronise les flux bancaires et propose automatiquement les correspondances avec les écritures existantes.",
+        etapes_mise_en_place: ["Connecter le compte bancaire via API DSP2 dans l'outil comptable", "Configurer les règles de matching automatique", "Valider les correspondances proposées pendant 2 semaines"],
+        limites: "Les opérations atypiques ou multi-factures nécessitent un rapprochement manuel. Les écarts de dates peuvent créer de faux négatifs.",
+        exemple_resultat: "90% des lignes bancaires rapprochées automatiquement. Le comptable ne traite que les 10% restants.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Déclarations TVA",
@@ -271,6 +337,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "fort",
         risque_adoption: "eleve",
         actions_conduite_changement: "Faire un test sur une déclaration non critique (acompte) avant de basculer la déclaration principale. Maintenir un double contrôle manuel/automatique pendant 3 mois. Documenter la procédure de repli en cas de dysfonctionnement.",
+        process_actuel: "Le comptable extrait les données de TVA collectée et déductible depuis Sage/Cegid, vérifie manuellement dans Excel, puis saisit la déclaration sur impots.gouv. Risque d'erreur et chronophage.",
+        process_cible: "Le logiciel comptable calcule automatiquement la TVA. Un workflow N8N génère le fichier EDI et le transmet via l'API impots.gouv.",
+        etapes_mise_en_place: ["Vérifier la qualité des codes TVA dans le plan comptable", "Configurer l'export automatique des données TVA depuis Sage/Cegid", "Créer le workflow N8N : extraction → calcul → génération EDI → transmission", "Tester sur une déclaration d'acompte avant la déclaration réelle"],
+        limites: "Les opérations intracommunautaires et les régimes spéciaux nécessitent une vérification humaine. La responsabilité fiscale reste celle du comptable.",
+        exemple_resultat: "Déclaration TVA pré-remplie avec détail par taux, prête à valider en 10 minutes au lieu de 2 heures.",
+        niveau_autonomie: "expert",
       },
       {
         nom: "Relances clients impayés",
@@ -290,6 +362,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Faire valider les templates de relance par la direction commerciale. Tester la séquence sur 10 clients peu sensibles avant déploiement général. Prévoir un mécanisme de stop manuel pour les cas particuliers.",
+        process_actuel: "Le comptable identifie manuellement les factures échues dans le grand livre, rédige un email de relance personnalisé pour chaque client. Suivi dans un tableau Excel.",
+        process_cible: "Un workflow Make déclenche automatiquement des relances progressives (J+7, J+15, J+30) avec emails personnalisés et escalade si nécessaire.",
+        etapes_mise_en_place: ["Rédiger les templates de relance pour chaque palier (amiable, ferme, mise en demeure)", "Configurer le workflow Make : trigger balance âgée → envoi séquentiel", "Connecter le logiciel comptable pour récupérer les créances échues", "Tester la séquence sur 10 clients pilotes"],
+        limites: "Les clients stratégiques ou en litige nécessitent une approche humaine personnalisée. Le ton automatisé peut être mal perçu.",
+        exemple_resultat: "Email de relance amiable envoyé automatiquement à J+7, relance ferme à J+15, alerte au DAF à J+30.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Préparation des bilans",
@@ -309,6 +387,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "leger",
         risque_adoption: "moyen",
         actions_conduite_changement: "Comparer un bilan structuré par IA avec un bilan fait manuellement pour vérifier la fiabilité. Commencer par les annexes moins critiques avant de passer aux états financiers principaux.",
+        process_actuel: "Le comptable compile manuellement les balances, ajuste les écritures d'inventaire dans Excel, prépare les états de synthèse. Période de clôture intense de 2 à 4 semaines.",
+        process_cible: "Les exports Sage/Cegid sont automatisés. Claude analyse les écarts et génère un pré-bilan structuré avec les points d'attention.",
+        etapes_mise_en_place: ["Configurer les exports automatiques des balances depuis Sage/Cegid", "Créer un prompt Claude pour l'analyse des écarts et la structuration du bilan", "Tester sur une situation intermédiaire avant la clôture annuelle"],
+        limites: "Les écritures d'inventaire (provisions, CCA, FNP) nécessitent un jugement comptable humain. L'IA ne remplace pas l'expertise du réviseur.",
+        exemple_resultat: "Document pré-bilan généré avec balance par compte, écarts N/N-1 commentés, et liste des écritures d'inventaire à passer.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Gestion des notes de frais",
@@ -328,6 +412,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Déployer d'abord sur un seul service pilote pendant 1 mois. Organiser une session de prise en main de 20 min par équipe. Créer un guide visuel pas-à-pas pour la soumission de notes de frais.",
+        process_actuel: "Les collaborateurs soumettent des justificatifs papier ou par email. Le comptable vérifie la conformité, saisit dans le logiciel comptable, et effectue le remboursement. Délai moyen de 2 semaines.",
+        process_cible: "Les collaborateurs photographient leurs justificatifs dans Expensya/Mooncard. L'OCR extrait les données, la validation est automatisée, et l'écriture comptable est générée.",
+        etapes_mise_en_place: ["Déployer Expensya ou Mooncard et connecter au logiciel comptable", "Configurer les plafonds et règles de validation par catégorie de frais", "Former les collaborateurs à l'application mobile", "Tester sur un service pilote pendant 1 mois"],
+        limites: "Les frais atypiques ou hors barème nécessitent une validation manuelle. Les justificatifs en langue étrangère peuvent poser problème à l'OCR.",
+        exemple_resultat: "Note de frais soumise en 30 secondes par photo, validée automatiquement si conforme, remboursée sous 48h.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Analyse des écarts budgétaires",
@@ -347,6 +437,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Présenter un exemple concret d'analyse IA vs analyse manuelle au DAF. Faire relire systématiquement les commentaires IA par le contrôleur de gestion pendant la phase de rodage.",
+        process_actuel: "Le comptable compare manuellement le réalisé vs le budget dans Excel, identifie les écarts significatifs et rédige des commentaires explicatifs. 3 à 4h par mois.",
+        process_cible: "Power BI agrège les données automatiquement. Claude génère des commentaires d'analyse sur les écarts détectés.",
+        etapes_mise_en_place: ["Connecter les sources de données (comptabilité + budget) dans Power BI", "Configurer les seuils d'écart significatif par poste", "Créer un prompt Claude pour la génération de commentaires d'analyse", "Tester sur 2 périodes mensuelles"],
+        limites: "Les écarts conjoncturels ou exceptionnels nécessitent une analyse contextuelle humaine. L'IA ne connaît pas l'historique des décisions de gestion.",
+        exemple_resultat: "Rapport mensuel avec écarts > 5% commentés automatiquement : cause probable, tendance, recommandation.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Veille réglementaire fiscale",
@@ -366,6 +462,12 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "leger",
         risque_adoption: "moyen",
         actions_conduite_changement: "Croiser les résumés IA avec les sources officielles (BOFiP, Legifrance) pendant 2 mois pour calibrer la fiabilité. Configurer des alertes uniquement sur les thématiques fiscales pertinentes au périmètre de l'entreprise.",
+        process_actuel: "Le comptable consulte ponctuellement les sites officiels (BOFiP, Legifrance) et les newsletters des cabinets d'expertise comptable. Risque de manquer une évolution impactante.",
+        process_cible: "Un agent IA surveille automatiquement les sources officielles et génère un résumé hebdomadaire des changements fiscaux pertinents.",
+        etapes_mise_en_place: ["Lister les sources réglementaires à surveiller (BOFiP, Legifrance, URSSAF)", "Configurer un agent Perplexity ou Claude avec les thématiques fiscales de l'entreprise", "Mettre en place un envoi hebdomadaire par email des changements détectés"],
+        limites: "L'IA peut manquer des subtilités d'interprétation fiscale. La validation par un expert-comptable reste indispensable pour les sujets complexes.",
+        exemple_resultat: "Email hebdomadaire résumant les 3 changements fiscaux de la semaine avec lien vers la source officielle et impact estimé.",
+        niveau_autonomie: "expert",
       },
     ],
   },
@@ -537,6 +639,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "eleve",
         actions_conduite_changement: "Faire un test en double aveugle : comparer le tri IA vs tri humain sur 50 candidatures passées. Présenter les résultats à la direction RH pour obtenir le feu vert. Maintenir une revue humaine systématique des candidatures rejetées par l'IA pendant 3 mois.",
+        process_actuel: "Le recruteur lit chaque CV un par un, compare manuellement aux critères du poste dans un tableur Excel, classe les candidatures en piles oui/non/peut-être. Temps moyen de 3-5 minutes par CV pour un poste recevant 80-150 candidatures via Indeed ou LinkedIn.",
+        process_cible: "Les CVs reçus sont automatiquement importés dans l'ATS (Workable/Lever), scorés par IA selon des critères pondérés (compétences, expérience, localisation). Seuls les profils au-dessus du seuil sont présentés au recruteur avec un résumé de matching. Réponse automatique aux candidats non retenus via N8N.",
+        etapes_mise_en_place: [
+          "Définir les critères de scoring pondérés pour chaque famille de poste dans l'ATS (Workable ou Lever)",
+          "Configurer le parsing automatique des CVs et activer le scoring IA natif de l'ATS",
+          "Créer les workflows N8N pour les réponses automatiques (accusé réception, refus poli avec délai)",
+          "Tester le scoring sur 50 candidatures passées et ajuster les seuils avec l'équipe RH"
+        ],
+        limites: "L'évaluation du fit culturel, de la motivation et des soft skills reste impossible à automatiser. Les profils atypiques ou en reconversion risquent d'être mal scorés par l'IA.",
+        exemple_resultat: "Sur un poste de Développeur Full-Stack (127 candidatures reçues via Indeed), l'IA a pré-sélectionné 18 profils en 2 minutes. Le recruteur n'a eu qu'à valider cette shortlist, gagnant 6h de tri manuel. 15 des 18 profils étaient pertinents (83% de précision).",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Rédaction des offres d'emploi",
@@ -555,6 +668,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "externe",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Le recruteur rédige chaque offre d'emploi from scratch dans un document Word, copie-colle des éléments d'anciennes offres, vérifie manuellement la conformité légale (mentions obligatoires, écriture inclusive) et publie une par une sur Indeed, LinkedIn et le site carrières.",
+        process_cible: "Le recruteur remplit un brief structuré (intitulé, compétences clés, avantages) dans Google Forms. ChatGPT ou Claude génère une offre optimisée SEO, inclusive et conforme, que le recruteur n'a plus qu'à relire et valider avant publication.",
+        etapes_mise_en_place: [
+          "Créer un template de brief RH structuré dans Google Forms (intitulé, missions, compétences, avantages, contraintes légales)",
+          "Rédiger un prompt système optimisé pour la génération d'offres inclusives et SEO-friendly dans ChatGPT ou Claude",
+          "Tester sur 5 offres existantes et comparer la qualité avec les versions manuelles",
+          "Former l'équipe RH à l'utilisation du prompt et au workflow brief-génération-relecture"
+        ],
+        limites: "Le ton spécifique de la marque employeur et les nuances culturelles de l'entreprise nécessitent toujours une relecture humaine. Les mentions légales spécifiques au secteur doivent être vérifiées par un juriste.",
+        exemple_resultat: "Offre de Chef de Projet Digital générée en 3 minutes au lieu de 45. Score d'inclusivité amélioré : 92/100 contre 71/100 pour la version manuelle précédente. Taux de candidatures spontanées en hausse de 25% après optimisation SEO des offres.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Planification des entretiens",
@@ -573,6 +697,16 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "externe",
         niveau_changement: "transparent",
         risque_adoption: "faible",
+        process_actuel: "Le recruteur envoie un email au candidat avec 3-4 créneaux proposés, attend la réponse, vérifie la disponibilité du manager dans Outlook/Google Calendar, confirme par email, puis envoie un rappel la veille. En moyenne 4-6 échanges d'emails par entretien planifié.",
+        process_cible: "Le candidat reçoit un lien Calendly personnalisé directement depuis l'ATS. Il choisit un créneau parmi les disponibilités réelles du manager. Confirmation instantanée et rappels automatiques (J-1, H-1) envoyés aux deux parties sans intervention du recruteur.",
+        etapes_mise_en_place: [
+          "Créer les types d'événements Calendly par étape du process (entretien RH 30 min, entretien manager 45 min, entretien final 1h)",
+          "Connecter les agendas Google/Outlook des managers à Calendly pour la vérification de disponibilité en temps réel",
+          "Intégrer Calendly à l'ATS (Workable/Lever) pour l'envoi automatique des liens de réservation"
+        ],
+        limites: "Les entretiens avec plusieurs interlocuteurs simultanés (panels) restent complexes à automatiser. Certains managers préfèrent garder le contrôle de leur agenda et refusent la réservation en self-service.",
+        exemple_resultat: "Temps de planification réduit de 15 minutes à 0 par entretien. Taux de no-show passé de 18% à 6% grâce aux rappels automatiques. 94% des candidats jugent le processus de prise de RDV fluide (enquête de satisfaction post-entretien).",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Onboarding des nouveaux collaborateurs",
@@ -592,6 +726,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "fort",
         risque_adoption: "eleve",
         actions_conduite_changement: "Cartographier le processus d'onboarding actuel avec IT, managers et RH avant d'automatiser. Faire un pilote sur les 3 prochaines arrivées avec un binôme humain/automatisé. Recueillir le feedback des nouveaux arrivants pour ajuster le workflow.",
+        process_actuel: "Le RH envoie manuellement un email à l'IT pour la création des comptes (email, Slack, outils métier), prépare les documents d'accueil dans un dossier partagé, envoie le contrat et les pièces à signer par email, et crée le planning de la première semaine dans un tableur Excel partagé avec le manager.",
+        process_cible: "Dès la validation de l'embauche dans BambooHR ou Factorial, un workflow N8N déclenche automatiquement : création des comptes IT via API, envoi du kit de bienvenue par email, envoi des documents à signer via DocuSign, création du planning d'onboarding dans Monday.com avec notifications au manager et au buddy.",
+        etapes_mise_en_place: [
+          "Cartographier le processus d'onboarding actuel et identifier toutes les actions manuelles avec IT, managers et RH",
+          "Configurer BambooHR/Factorial comme déclencheur du workflow N8N (webhook sur changement de statut candidat)",
+          "Créer les intégrations N8N : API IT pour les comptes, DocuSign pour les documents, Monday.com pour le planning",
+          "Tester le workflow complet sur 3 arrivées fictives avant le déploiement en production"
+        ],
+        limites: "L'accueil humain du premier jour, la présentation de l'équipe et l'accompagnement émotionnel du nouvel arrivant restent irremplaçables. Les cas particuliers (mobilité interne, temps partiel) nécessitent des ajustements manuels du workflow.",
+        exemple_resultat: "Onboarding d'une nouvelle Product Manager : 12 comptes IT créés automatiquement en 5 minutes (au lieu de 3 jours de tickets IT), contrat signé via DocuSign en 24h, planning de la première semaine visible dans Monday.com avant même son arrivée. Satisfaction nouvel arrivant : 4.7/5.",
+        niveau_autonomie: "expert",
       },
       {
         nom: "Gestion administrative des contrats",
@@ -610,6 +755,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "moi_seul",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Le RH ouvre un modèle Word du contrat, remplace manuellement les champs (nom, poste, salaire, date de début), convertit en PDF, envoie par email pour signature, relance si pas de retour sous 48h, puis classe le document signé dans un dossier réseau organisé par année.",
+        process_cible: "Le RH saisit les données du nouveau collaborateur dans Factorial ou BambooHR. Power Automate génère automatiquement le contrat depuis le template, l'envoie via DocuSign pour signature électronique, et archive le document signé dans SharePoint avec les métadonnées appropriées.",
+        etapes_mise_en_place: [
+          "Standardiser les modèles de contrats (CDI, CDD, avenant) avec des champs variables dans Word/SharePoint",
+          "Configurer le flux Power Automate : déclencheur Factorial/BambooHR, génération du document, envoi DocuSign",
+          "Paramétrer l'archivage automatique dans SharePoint avec indexation par collaborateur et type de contrat",
+          "Tester le workflow sur 3 contrats fictifs et valider avec le service juridique"
+        ],
+        limites: "Les clauses spécifiques négociées individuellement (clause de non-concurrence, avantages particuliers) nécessitent une intervention manuelle. La validation juridique finale reste humaine pour les contrats atypiques.",
+        exemple_resultat: "Contrat CDI d'un Commercial généré et envoyé en 2 minutes au lieu de 30. Signé électroniquement en 4h (vs 5 jours en moyenne par courrier). Archivé automatiquement dans SharePoint avec 0 erreur de classement sur 45 contrats traités.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Suivi des formations",
@@ -629,6 +785,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Organiser une session de présentation de 30 min du LMS aux managers. Commencer par migrer les formations obligatoires (sécurité, RGPD) pour créer l'habitude d'utilisation.",
+        process_actuel: "Le RH maintient un tableur Excel du plan de formation avec les dates, les collaborateurs inscrits et les certifications à renouveler. Les rappels sont envoyés manuellement par email. Le suivi des heures CPF et des budgets se fait dans un fichier séparé mis à jour trimestriellement.",
+        process_cible: "Le catalogue de formations est centralisé dans 360Learning ou Talentsoft. Les collaborateurs s'inscrivent en self-service. N8N envoie des alertes automatiques 60 et 30 jours avant l'expiration des certifications obligatoires. Les dashboards de suivi sont mis à jour en temps réel.",
+        etapes_mise_en_place: [
+          "Migrer le catalogue de formations et les historiques de certifications dans le LMS (360Learning/Talentsoft)",
+          "Configurer les parcours de formation obligatoires (sécurité, RGPD, habilitations) avec dates d'expiration",
+          "Créer les workflows N8N de rappels automatiques : alerte manager + collaborateur à J-60 et J-30 avant expiration",
+          "Former les managers à la validation des inscriptions dans le LMS et au suivi des tableaux de bord"
+        ],
+        limites: "L'identification des besoins en formation individuels et l'évaluation de l'efficacité des formations nécessitent un échange humain. Les formations sur mesure hors catalogue ne sont pas gérées automatiquement.",
+        exemple_resultat: "Taux de certifications expirées passé de 12% à 2% grâce aux rappels automatiques N8N. 85% des inscriptions aux formations gérées en self-service par les collaborateurs. Gain de 2h/semaine pour le RH sur le suivi administratif.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Entretiens annuels",
@@ -648,6 +815,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "eleve",
         actions_conduite_changement: "Rassurer les managers sur la confidentialité des données d'entretien (présentation RGPD). Faire un pilote avec 2-3 managers volontaires sur un cycle d'entretiens. Montrer concrètement la synthèse IA anonymisée pour démontrer la valeur ajoutée sans risque.",
+        process_actuel: "Le RH envoie les trames d'entretien par email aux managers, relance ceux qui n'ont pas complété à la date limite, collecte les comptes-rendus en PDF ou Word, les relit un par un pour identifier les demandes de formation et les souhaits de mobilité, puis compile une synthèse globale dans un PowerPoint pour la direction.",
+        process_cible: "Les entretiens sont structurés dans Lattice ou Lucca avec des formulaires standardisés. Les managers complètent en ligne, le suivi de complétion est automatique. Claude analyse l'ensemble des retours pour produire une synthèse anonymisée identifiant les tendances (besoins de formation récurrents, signaux faibles, souhaits de mobilité).",
+        etapes_mise_en_place: [
+          "Migrer les trames d'entretien dans Lattice ou Lucca et configurer les cycles d'évaluation (dates, participants, rappels)",
+          "Former les managers à la complétion en ligne et au nouveau workflow de validation",
+          "Configurer les rappels automatiques de complétion dans Lattice/Lucca (J-14, J-7, J-1)",
+          "Créer un prompt Claude dédié à la synthèse anonymisée des retours d'entretien avec catégorisation automatique"
+        ],
+        limites: "La qualité de la synthèse IA dépend de la qualité des commentaires saisis par les managers. L'interprétation fine des situations individuelles et les décisions RH sensibles (augmentations, promotions, plans d'action) restent humaines.",
+        exemple_resultat: "Campagne d'entretiens annuels de 120 collaborateurs : taux de complétion de 98% (vs 74% l'année précédente). Synthèse IA générée en 15 minutes identifiant 3 tendances clés : besoin de formation IA (43% des demandes), souhait de télétravail élargi (38%), alerte managériale sur 2 équipes.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Gestion des conflits et relations sociales",
@@ -666,6 +844,16 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "multi_services",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Le RH gère les conflits au cas par cas via des entretiens individuels, prend des notes manuscrites ou dans un document Word confidentiel, et s'appuie sur sa mémoire et son expérience pour détecter les situations récurrentes. Les échanges avec les IRP se font par email et réunions physiques.",
+        process_cible: "L'IA (Claude) peut aider à structurer la documentation des situations conflictuelles, analyser les tendances dans les signalements anonymisés et préparer des synthèses pour les réunions CSE. La médiation et la gestion relationnelle restent intégralement humaines.",
+        etapes_mise_en_place: [
+          "Mettre en place un formulaire anonyme de signalement dans Google Forms pour centraliser les remontées",
+          "Créer un prompt Claude pour structurer les comptes-rendus de médiation (faits, actions, suivi)",
+          "Configurer un tableau de suivi confidentiel dans BambooHR ou Factorial pour les cas en cours"
+        ],
+        limites: "La médiation, l'écoute active, la gestion émotionnelle et la négociation avec les IRP sont des compétences exclusivement humaines. L'IA ne peut ni remplacer l'empathie ni prendre de décisions disciplinaires.",
+        exemple_resultat: "Documentation structurée d'un conflit inter-équipes en 20 minutes au lieu de 1h30. Identification par Claude d'un pattern récurrent de tensions liées aux horaires dans 3 signalements anonymes, permettant au RH d'agir préventivement avant l'escalade.",
+        niveau_autonomie: "expert",
       },
     ],
   },
@@ -693,6 +881,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Faire un comparatif sur 1 semaine : leads qualifiés manuellement vs leads scorés par IA. Partager les résultats de conversion avec l'équipe commerciale pour démontrer l'efficacité.",
+        process_actuel: "Le commercial recherche manuellement des prospects sur LinkedIn Sales Navigator, visite les sites web un par un, note les informations dans un tableur Excel ou directement dans Pipedrive/HubSpot. La qualification se fait par intuition et expérience, avec des appels exploratoires de 10-15 minutes par lead.",
+        process_cible: "Phantombuster scrape automatiquement les profils LinkedIn correspondant à l'ICP (Ideal Customer Profile). Les données sont enrichies via Clay (email, taille entreprise, technologies utilisées, levées de fonds). Un scoring IA dans HubSpot classe les leads par potentiel. Le commercial ne traite que les leads scorés A et B.",
+        etapes_mise_en_place: [
+          "Définir l'ICP (Ideal Customer Profile) avec l'équipe commerciale et le traduire en filtres LinkedIn Sales Navigator",
+          "Configurer Phantombuster pour l'extraction automatique des profils LinkedIn correspondant aux filtres",
+          "Connecter Clay pour l'enrichissement des données (email, entreprise, signaux d'achat) et le scoring automatique",
+          "Synchroniser les leads qualifiés dans HubSpot/Pipedrive avec les scores et données enrichies via N8N"
+        ],
+        limites: "Le scoring IA peut manquer des signaux faibles (changement de poste récent, post LinkedIn révélateur). La qualification finale nécessite un échange humain pour valider le budget et le timing du projet.",
+        exemple_resultat: "Pipeline de 340 leads qualifiés générés en 1 semaine (vs 45 manuellement). Taux de conversion lead-to-meeting passé de 3% à 11% grâce au scoring IA. Le commercial se concentre sur 35 leads A au lieu de traiter 340 contacts indifférenciés.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Rédaction et personnalisation des emails de prospection",
@@ -712,6 +911,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "moyen",
         risque_adoption: "moyen",
         actions_conduite_changement: "Faire tester 5 emails générés par IA par un commercial senior pour valider le ton. Mesurer le taux de réponse IA vs manuel sur 2 semaines avant de généraliser.",
+        process_actuel: "Le commercial rédige chaque email de prospection manuellement, visite le profil LinkedIn du prospect, parcourt le site de l'entreprise, et tente de personnaliser l'accroche. Temps moyen de 8-12 minutes par email personnalisé, ce qui limite à 15-20 emails/jour.",
+        process_cible: "Lemlist orchestre des séquences multicanal (email + LinkedIn). Clay enrichit chaque prospect avec des données contextuelles (actualités, posts LinkedIn, techno stack). Claude génère des emails hyper-personnalisés par lot, avec une accroche unique par prospect basée sur un signal d'achat identifié.",
+        etapes_mise_en_place: [
+          "Créer les templates de séquences dans Lemlist avec des variables de personnalisation (accroche, pain point, proposition de valeur)",
+          "Configurer Clay pour enrichir chaque prospect avec des données contextuelles (dernière actualité, post LinkedIn récent, technologies utilisées)",
+          "Rédiger le prompt Claude pour la génération d'emails personnalisés à partir des données Clay (ton, longueur, CTA)",
+          "Tester sur un lot de 50 prospects et mesurer le taux d'ouverture et de réponse vs les emails manuels"
+        ],
+        limites: "Le risque de ton trop générique si le prompt est mal calibré. Les emails IA peuvent manquer de l'authenticité d'un message vraiment personnel. Le suivi post-réponse (conversation) reste nécessairement humain.",
+        exemple_resultat: "Séquence de 200 emails personnalisés générés en 30 minutes (vs 2 jours manuellement). Taux d'ouverture de 47% et taux de réponse de 12% (vs 8% pour les emails manuels). 24 rendez-vous qualifiés obtenus sur une campagne de prospection SaaS.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Mise à jour du CRM",
@@ -731,6 +941,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "fort",
         risque_adoption: "eleve",
         actions_conduite_changement: "Impliquer 2 commerciaux volontaires dans le paramétrage des synchronisations. Montrer en réunion d'équipe le temps gagné sur la saisie manuelle. Prévoir 1 mois de double saisie (ancien/nouveau) pour sécuriser la transition et rassurer sur la fiabilité des données.",
+        process_actuel: "Le commercial met à jour manuellement HubSpot ou Salesforce après chaque appel, email ou rendez-vous. Il copie-colle les notes de réunion, change le statut du deal, met à jour les montants. En pratique, le CRM est souvent mis à jour en fin de semaine par lot, avec des oublis et des données obsolètes.",
+        process_cible: "Les emails envoyés/reçus sont automatiquement logués dans HubSpot/Salesforce. Les notes d'appels sont transcrites par IA et ajoutées au contact. Les changements de statut LinkedIn (changement de poste, promotion) sont synchronisés via Zapier. Le commercial n'a plus qu'à valider les mises à jour suggérées.",
+        etapes_mise_en_place: [
+          "Activer le tracking email natif dans HubSpot/Salesforce pour le logging automatique des échanges",
+          "Configurer Zapier pour synchroniser les données LinkedIn Sales Navigator vers le CRM (changements de poste, nouvelles connexions)",
+          "Mettre en place la transcription automatique des appels via Gong ou Fireflies.ai avec résumé IA poussé dans le CRM",
+          "Former l'équipe commerciale au nouveau workflow de validation (revue hebdomadaire des mises à jour automatiques)"
+        ],
+        limites: "La synchronisation automatique peut créer des doublons si les règles de déduplication ne sont pas bien configurées. Les informations sensibles ou confidentielles partagées en off ne doivent pas être loguées automatiquement.",
+        exemple_resultat: "Taux de complétion des fiches CRM passé de 45% à 92%. Temps de saisie CRM réduit de 5h à 30 minutes par semaine par commercial. Le directeur commercial dispose enfin d'un pipeline fiable en temps réel pour ses prévisions.",
+        niveau_autonomie: "expert",
       },
       {
         nom: "Préparation des propositions commerciales",
@@ -749,6 +970,17 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "externe",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Le commercial duplique un ancien devis PowerPoint ou Word, remplace les informations client, ajuste les montants manuellement, personnalise les arguments en s'appuyant sur ses notes de rendez-vous. La mise en page prend souvent autant de temps que le contenu. Temps moyen : 2-3h par proposition.",
+        process_cible: "Le commercial sélectionne un template PandaDoc/Qwilr pré-configuré, les données client sont pré-remplies depuis HubSpot/Pipedrive. ChatGPT génère les sections argumentaires personnalisées (contexte client, bénéfices attendus, ROI estimé) à partir des notes CRM. Le commercial ajuste et envoie en 30 minutes.",
+        etapes_mise_en_place: [
+          "Créer 3-5 templates de propositions commerciales dans PandaDoc ou Qwilr (par offre/segment)",
+          "Connecter PandaDoc/Qwilr au CRM (HubSpot/Pipedrive) pour le pré-remplissage automatique des données client",
+          "Rédiger un prompt ChatGPT pour générer les sections argumentaires personnalisées à partir du brief client",
+          "Former les commerciaux au nouveau workflow template-génération-personnalisation-envoi"
+        ],
+        limites: "Les propositions complexes avec des configurations techniques sur mesure nécessitent toujours une intervention humaine approfondie. Le pricing stratégique (remises, conditions spéciales) reste une décision commerciale humaine.",
+        exemple_resultat: "Proposition commerciale pour un client SaaS (licence 50 utilisateurs) générée en 35 minutes au lieu de 2h30. Section ROI personnalisée avec les KPIs du client. Taux d'acceptation des propositions passé de 28% à 37% grâce à la personnalisation systématique.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Suivi et relances des opportunités",
@@ -768,6 +1000,16 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         niveau_changement: "leger",
         risque_adoption: "moyen",
         actions_conduite_changement: "Définir ensemble les règles de fréquence de relance pour éviter le spam. Tester la séquence sur un segment de prospects froids avant de l'appliquer aux prospects chauds.",
+        process_actuel: "Le commercial gère ses relances avec des rappels Outlook/Google Calendar, des post-its ou une colonne 'à relancer' dans son CRM. Il rédige chaque email de relance manuellement, souvent avec le même message générique. Les prospects passent entre les mailles du filet quand le commercial est débordé.",
+        process_cible: "HubSpot Sequences ou Lemlist déclenche automatiquement des séquences de relance multicanal (email, LinkedIn, téléphone) basées sur le comportement du prospect (ouverture email, visite site, inactivité). Les emails de relance sont personnalisés par étape du funnel avec des variantes A/B testées.",
+        etapes_mise_en_place: [
+          "Cartographier les étapes du funnel de vente et définir les règles de relance par étape (délai, canal, message)",
+          "Créer les séquences de relance dans HubSpot Sequences ou Lemlist avec 4-5 touchpoints par séquence",
+          "Configurer les triggers comportementaux (ouverture email sans réponse, visite page pricing, inactivité 7 jours)"
+        ],
+        limites: "Le risque de sur-sollicitation si les séquences ne sont pas bien calibrées. Les relances automatiques manquent de contexte sur les échanges informels (appels, salons). Un prospect qui demande explicitement de ne plus être contacté doit être exclu manuellement.",
+        exemple_resultat: "Séquence de relance en 5 touchpoints sur 3 semaines : 23% des prospects inactifs ont répondu au 3e ou 4e email. 8 deals réactivés sur un trimestre représentant 45K EUR de pipeline récupéré. Gain de 4h/semaine de relances manuelles par commercial.",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Reporting commercial",
@@ -786,6 +1028,16 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "mon_equipe",
         niveau_changement: "transparent",
         risque_adoption: "faible",
+        process_actuel: "Le commercial ou le directeur commercial exporte manuellement les données du CRM dans Excel, crée des tableaux croisés dynamiques, met à jour des graphiques PowerPoint pour la réunion hebdomadaire. Le reporting prend 1-2h et les données sont souvent obsolètes au moment de la présentation.",
+        process_cible: "Un dashboard Power BI connecté en temps réel à HubSpot/Salesforce affiche le pipeline, les taux de conversion et le CA par commercial. Copilot M365 génère automatiquement un résumé hebdomadaire en langage naturel avec les points d'attention et les opportunités à risque.",
+        etapes_mise_en_place: [
+          "Connecter Power BI au CRM (HubSpot/Salesforce) via les connecteurs natifs et définir les KPIs clés (pipeline, win rate, cycle de vente)",
+          "Créer les dashboards Power BI par vue : équipe, individuel, par segment, par période",
+          "Configurer Copilot M365 pour générer un résumé hebdomadaire automatique à partir des données Power BI"
+        ],
+        limites: "La qualité du reporting dépend de la qualité des données saisies dans le CRM. Les analyses stratégiques (pourquoi un deal a été perdu, comment ajuster le pricing) nécessitent une interprétation humaine. Les données qualitatives (feedback client, objections récurrentes) ne sont pas captées automatiquement.",
+        exemple_resultat: "Dashboard Power BI en temps réel remplaçant le reporting Excel hebdomadaire de 2h. Le directeur commercial reçoit chaque lundi un résumé Copilot : '3 deals à risque de glissement (total 120K EUR), 2 opportunités à closer cette semaine, taux de conversion en hausse de 4 points ce mois-ci.'",
+        niveau_autonomie: "autonome",
       },
       {
         nom: "Recherche d'information pré-RDV",
@@ -804,6 +1056,16 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "moi_seul",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Avant un rendez-vous client, le commercial passe 20-30 minutes à rechercher manuellement des informations : profil LinkedIn du contact, site web de l'entreprise, actualités récentes sur Google, offres concurrentes. Il prend des notes dans un document Notion ou directement dans le CRM, souvent de manière incomplète.",
+        process_cible: "Un agent Perplexity Pro compile automatiquement un brief client structuré (actualités récentes, enjeux sectoriels, concurrents identifiés, historique des échanges CRM) à partir d'un template. Le commercial reçoit le brief dans Notion 1h avant le rendez-vous, prêt à être consulté.",
+        etapes_mise_en_place: [
+          "Créer un template de brief client structuré dans Notion (sections : entreprise, contact, actualités, enjeux, concurrents, historique CRM)",
+          "Configurer Perplexity Pro avec un prompt dédié à la recherche d'informations commerciales par entreprise/secteur",
+          "Automatiser la génération du brief 1h avant chaque rendez-vous CRM via un workflow N8N (trigger calendrier)"
+        ],
+        limites: "Les informations internes à l'entreprise prospect (budget réel, processus de décision, tensions internes) ne sont pas accessibles via la recherche web. Le brief doit être complété par les notes de rendez-vous précédents et l'intuition du commercial.",
+        exemple_resultat: "Brief client de 2 pages généré automatiquement avant un rendez-vous avec le DSI d'un groupe retail : actualité de transformation digitale identifiée, 3 concurrents en lice, historique de 4 échanges résumé depuis HubSpot. Le commercial entre en rendez-vous en connaissant le contexte en 5 minutes de lecture.",
+        niveau_autonomie: "guide",
       },
       {
         nom: "Négociation et closing",
@@ -822,6 +1084,16 @@ export const JOB_DATABASE: Record<string, AnalysisResult> = {
         perimetre_impact: "externe",
         niveau_changement: "leger",
         risque_adoption: "faible",
+        process_actuel: "Le commercial prépare ses arguments de négociation dans un document personnel, anticipe les objections de mémoire, adapte son pricing au feeling. Les conditions commerciales (remises, délais de paiement) sont négociées en direct sans grille de référence systématique.",
+        process_cible: "L'IA (Claude/ChatGPT) prépare un dossier de négociation structuré : arguments différenciants vs chaque concurrent identifié, réponses aux objections fréquentes, fourchette de pricing recommandée basée sur les deals similaires gagnés dans Salesforce/HubSpot. La négociation elle-même reste 100% humaine.",
+        etapes_mise_en_place: [
+          "Constituer une base d'objections fréquentes et de réponses validées dans Notion avec l'équipe commerciale",
+          "Créer un prompt Claude dédié à la préparation de dossiers de négociation (arguments, objections, pricing)",
+          "Connecter le prompt aux données CRM (deals similaires, historique de pricing, taux de remise moyen) via l'API HubSpot/Salesforce"
+        ],
+        limites: "Les négociations de closing sont intrinsèquement humaines : la lecture des signaux non-verbaux, la gestion du timing, la création de confiance et l'art du compromis ne peuvent pas être automatisés. L'IA prépare, l'humain négocie.",
+        exemple_resultat: "Dossier de négociation généré en 10 minutes pour un deal à 85K EUR : 5 arguments différenciants vs le concurrent principal, réponses à 8 objections anticipées, recommandation de pricing à 78K EUR (basée sur 12 deals similaires gagnés). Le commercial a closé à 80K EUR, dans la fourchette recommandée.",
+        niveau_autonomie: "expert",
       },
     ],
   },
@@ -2342,3 +2614,40 @@ export function getSimilarJobs(metier: string, count = 3): string[] {
 }
 
 export const FREE_JOB_LABELS = Object.values(JOB_DATABASE).map((j) => j.metier);
+
+/**
+ * Cherche un métier dans Supabase d'abord, puis en fallback local.
+ * Le fallback local assure le fonctionnement hors-ligne.
+ */
+export async function findJobWithFallback(metier: string): Promise<AnalysisResult | null> {
+  const lower = metier.toLowerCase().trim();
+
+  // 1. Essayer Supabase (données potentiellement plus récentes)
+  try {
+    const { createClient } = await import("@supabase/supabase-js");
+    const url = import.meta.env.VITE_SUPABASE_URL;
+    const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (url && key) {
+      const supabase = createClient(url, key);
+      const { data, error } = await (supabase.from("metiers") as any)
+        .select("*")
+        .ilike("metier", `%${lower}%`)
+        .limit(1)
+        .single();
+
+      if (!error && data) {
+        return {
+          metier: data.metier,
+          score_global: data.score_global,
+          heures_economisees_semaine: data.heures_economisees_semaine,
+          taches: data.taches,
+        };
+      }
+    }
+  } catch {
+    // Supabase indisponible → fallback local
+  }
+
+  // 2. Fallback local
+  return findInLocalDatabase(metier);
+}

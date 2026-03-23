@@ -66,6 +66,18 @@
     --badge-hard-bg: 210 40% 96%;     /* slate-100 */
     --badge-hard-text: 215 16% 47%;   /* slate-500 */
 
+    /* Accent colors — dark-mode aware */
+    --accent-green-bg: 138 76% 97%;
+    --accent-green-text: 160 72% 30%;
+    --accent-violet-bg: 271 91% 97%;
+    --accent-violet-text: 271 55% 45%;
+    --accent-blue-bg: 214 100% 97%;
+    --accent-blue-text: 221 83% 40%;
+    --accent-amber-bg: 48 100% 96%;
+    --accent-amber-text: 32 95% 35%;
+    --accent-rose-bg: 0 72% 97%;
+    --accent-rose-text: 0 72% 40%;
+
     /* Shadows — plus douces, teinte bleu au hover */
     --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.04), 0 1px 2px -1px hsl(222 47% 11% / 0.03);
     --shadow-card-hover: 0 8px 24px -4px hsl(221 83% 53% / 0.10), 0 2px 8px -2px hsl(222 47% 11% / 0.06);
@@ -114,6 +126,17 @@
     --sidebar-accent-foreground: 210 40% 96%;
     --sidebar-border: 215 25% 25%;
     --sidebar-ring: 221 83% 60%;
+
+    --accent-green-bg: 160 50% 12%;
+    --accent-green-text: 160 72% 65%;
+    --accent-violet-bg: 271 40% 15%;
+    --accent-violet-text: 271 91% 75%;
+    --accent-blue-bg: 221 45% 14%;
+    --accent-blue-text: 221 83% 75%;
+    --accent-amber-bg: 30 62% 12%;
+    --accent-amber-text: 38 92% 70%;
+    --accent-rose-bg: 0 40% 14%;
+    --accent-rose-text: 0 72% 70%;
 
     --badge-auto-bg: 158 64% 15%;
     --badge-auto-text: 152 76% 74%;

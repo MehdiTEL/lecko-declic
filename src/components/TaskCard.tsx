@@ -149,10 +149,10 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
 
   const sparklineColor =
     task.categorie === "automatisable"
-      ? "hsl(221 83% 53%)"
+      ? "hsl(var(--primary))"
       : task.categorie === "partiellement_automatisable"
-      ? "hsl(38 92% 50%)"
-      : "hsl(215 16% 47%)";
+      ? "hsl(var(--accent))"
+      : "hsl(var(--foreground-muted))";
   const { openChat } = useChatContext();
   const cat = categoryConfig[task.categorie];
   const tool = toolConfig[task.type_outil];
@@ -162,10 +162,10 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
   // Score badge style — soft, professional
   const scoreBgStyle =
     score >= 3
-      ? { backgroundColor: "hsl(138 76% 97%)", color: "hsl(160 72% 30%)" }
+      ? { backgroundColor: "hsl(var(--accent-green-bg))", color: "hsl(var(--accent-green-text))" }
       : score === 2
-      ? { backgroundColor: "hsl(48 100% 96%)", color: "hsl(32 95% 35%)" }
-      : { backgroundColor: "hsl(210 40% 96%)", color: "hsl(215 16% 47%)" };
+      ? { backgroundColor: "hsl(var(--accent-amber-bg))", color: "hsl(var(--accent-amber-text))" }
+      : { backgroundColor: "hsl(var(--muted))", color: "hsl(var(--foreground-muted))" };
 
   return (
     <motion.div
@@ -267,7 +267,7 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
               <div className="flex flex-wrap gap-2">
                 {task.peut_fonctionner_sans_ia === true && (
                   <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ backgroundColor: "hsl(138 76% 97%)", color: "hsl(160 72% 30%)" }}>
+                    style={{ backgroundColor: "hsl(var(--accent-green-bg))", color: "hsl(var(--accent-green-text))" }}>
                     <Zap size={11} />
                     Sans IA
                   </span>
@@ -277,7 +277,7 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
                     <button
                       onClick={(e) => { e.stopPropagation(); setShowRaisonIa(!showRaisonIa); }}
                       className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-colors"
-                      style={{ backgroundColor: "hsl(271 91% 97%)", color: "hsl(271 55% 45%)" }}
+                      style={{ backgroundColor: "hsl(var(--accent-violet-bg))", color: "hsl(var(--accent-violet-text))" }}
                     >
                       <Brain size={11} />
                       IA recommandée
@@ -443,7 +443,7 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
 
               {/* Expert CTA — if task needs consultant */}
               {(task.niveau_accompagnement === "consultant" || task.risque_adoption === "eleve" || task.perimetre_impact === "multi_services" || task.perimetre_impact === "externe" || task.categorie === "difficilement_automatisable") && !isDemo && (
-                <div className="rounded-xl p-4 space-y-2" style={{ backgroundColor: "hsl(221 100% 98%)", borderLeft: "3px solid hsl(var(--primary))" }}>
+                <div className="rounded-xl p-4 space-y-2" style={{ backgroundColor: "hsl(var(--accent-blue-bg))", borderLeft: "3px solid hsl(var(--primary))" }}>
                   <p className="text-sm font-semibold text-foreground">
                     Cette tâche bénéficie d'un accompagnement structuré
                   </p>
@@ -468,7 +468,7 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
               {/* Metrics row + sparkline */}
               <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-full"
-                  style={{ backgroundColor: "hsl(214 100% 97%)", color: "hsl(221 83% 40%)" }}>
+                  style={{ backgroundColor: "hsl(var(--accent-blue-bg))", color: "hsl(var(--accent-blue-text))" }}>
                   <Clock size={11} />
                   ~{task.temps_gagne_heures_semaine}h / semaine
                 </span>

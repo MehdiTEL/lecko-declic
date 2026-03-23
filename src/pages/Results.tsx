@@ -167,7 +167,9 @@ export default function Results() {
       }
       const key = getApiKey();
       if (!key) {
-        navigate("/?requireKey=1");
+        setError("L'analyse IA nécessite une clé API. Configurez-la dans les paramètres pour analyser ce métier, ou choisissez un métier de la base gratuite (Chef de projet, Comptable, etc.).");
+        setErrorShowSettings(true);
+        setLoading(false);
         return;
       }
       runAnalysis(metier);
@@ -220,10 +222,12 @@ export default function Results() {
     }
   }
 
-  async function runAnalysis(job: string, retry = false) {
+  async function runAnalysis(job: string) {
     const apiKey = getApiKey();
     if (!apiKey) {
-      navigate("/?requireKey=1");
+      setError("L'analyse IA nécessite une clé API. Configurez-la dans les paramètres pour analyser ce métier, ou choisissez un métier de la base gratuite (Chef de projet, Comptable, etc.).");
+      setErrorShowSettings(true);
+      setLoading(false);
       return;
     }
 
@@ -272,11 +276,6 @@ export default function Results() {
       const elapsed = Date.now() - startTime;
       const remaining = minLoadMs - elapsed;
       if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
-
-      if (!retry && !(err instanceof Error && (err as { showSettings?: boolean }).showSettings)) {
-        await runAnalysis(job, true);
-        return;
-      }
 
       const e = err as Error & { showSettings?: boolean };
       setError(e.message ?? "Une erreur est survenue. Veuillez réessayer.");

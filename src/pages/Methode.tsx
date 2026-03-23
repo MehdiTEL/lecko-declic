@@ -102,9 +102,9 @@ export default function Methode() {
   };
 
   const scoreLabel = () => {
-    if (totalCritScore >= 3) return { text: "Priorité absolue — automatisez ça maintenant", color: "hsl(160 72% 35%)", bg: "hsl(138 76% 97%)" };
-    if (totalCritScore === 2) return { text: "Candidat intéressant — à creuser", color: "hsl(32 95% 35%)", bg: "hsl(48 100% 96%)" };
-    return { text: "Pas le bon levier — gardez votre énergie", color: "hsl(215 16% 47%)", bg: "hsl(210 40% 96%)" };
+    if (totalCritScore >= 3) return { text: "Priorité absolue — automatisez ça maintenant", color: "hsl(var(--accent-green-text))", bg: "hsl(var(--accent-green-bg))" };
+    if (totalCritScore === 2) return { text: "Candidat intéressant — à creuser", color: "hsl(var(--accent-amber-text))", bg: "hsl(var(--accent-amber-bg))" };
+    return { text: "Pas le bon levier — gardez votre énergie", color: "hsl(var(--foreground-muted))", bg: "hsl(var(--muted))" };
   };
 
   return (
@@ -237,14 +237,14 @@ export default function Methode() {
         </section>
 
         {/* Phase 2 — Évaluer */}
-        <section id="phase-2" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(221 83% 53%)" }}>
+        <section id="phase-2" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(var(--accent-blue-text))" }}>
           <div className="flex items-start gap-4 mb-5">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "hsl(214 100% 97%)" }}>
-              <BarChart3 size={18} style={{ color: "hsl(221 83% 53%)" }} strokeWidth={2} />
+              style={{ backgroundColor: "hsl(var(--accent-blue-bg))" }}>
+              <BarChart3 size={18} style={{ color: "hsl(var(--accent-blue-text))" }} strokeWidth={2} />
             </div>
             <div>
-              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(221 83% 53%)" }}>Phase 2 — Évaluer</p>
+              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(var(--accent-blue-text))" }}>Phase 2 — Évaluer</p>
               <h2 className="text-xl font-bold font-heading text-foreground">Mesurez le vrai potentiel de chaque tâche</h2>
             </div>
           </div>
@@ -269,14 +269,14 @@ export default function Methode() {
         </section>
 
         {/* Phase 3 — Concevoir */}
-        <section id="phase-3" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(271 91% 55%)" }}>
+        <section id="phase-3" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(var(--accent-violet-text))" }}>
           <div className="flex items-start gap-4 mb-5">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "hsl(271 91% 97%)" }}>
-              <Wrench size={18} style={{ color: "hsl(271 55% 50%)" }} strokeWidth={2} />
+              style={{ backgroundColor: "hsl(var(--accent-violet-bg))" }}>
+              <Wrench size={18} style={{ color: "hsl(var(--accent-violet-text))" }} strokeWidth={2} />
             </div>
             <div>
-              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(271 55% 50%)" }}>Phase 3 — Concevoir</p>
+              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(var(--accent-violet-text))" }}>Phase 3 — Concevoir</p>
               <h2 className="text-xl font-bold font-heading text-foreground">Dessinez votre automatisation avant de la construire</h2>
             </div>
           </div>
@@ -289,11 +289,11 @@ export default function Methode() {
               return (
                 <div key={item.label} className="flex gap-3 p-4 rounded-xl border border-border bg-muted/20">
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "hsl(271 91% 97%)" }}>
-                    <Icon size={14} style={{ color: "hsl(271 55% 50%)" }} strokeWidth={2} />
+                    style={{ backgroundColor: "hsl(var(--accent-violet-bg))" }}>
+                    <Icon size={14} style={{ color: "hsl(var(--accent-violet-text))" }} strokeWidth={2} />
                   </div>
                   <div>
-                    <p className="label-uppercase text-[10px] mb-0.5" style={{ color: "hsl(271 55% 50%)" }}>{item.label}</p>
+                    <p className="label-uppercase text-[10px] mb-0.5" style={{ color: "hsl(var(--accent-violet-text))" }}>{item.label}</p>
                     <p className="text-sm font-medium text-foreground">{item.desc}</p>
                     <p className="text-xs text-foreground-muted mt-0.5">Ex : {item.ex}</p>
                   </div>
@@ -312,14 +312,14 @@ export default function Methode() {
         </section>
 
         {/* Phase 4 — Lancer */}
-        <section id="phase-4" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(160 72% 35%)" }}>
+        <section id="phase-4" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(var(--accent-green-text))" }}>
           <div className="flex items-start gap-4 mb-5">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "hsl(138 76% 97%)" }}>
-              <Play size={18} style={{ color: "hsl(160 72% 35%)" }} strokeWidth={2} />
+              style={{ backgroundColor: "hsl(var(--accent-green-bg))" }}>
+              <Play size={18} style={{ color: "hsl(var(--accent-green-text))" }} strokeWidth={2} />
             </div>
             <div>
-              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(160 72% 35%)" }}>Phase 4 — Lancer</p>
+              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(var(--accent-green-text))" }}>Phase 4 — Lancer</p>
               <h2 className="text-xl font-bold font-heading text-foreground">Testez, ajustez, déployez</h2>
             </div>
           </div>
@@ -347,14 +347,14 @@ export default function Methode() {
         </section>
 
         {/* Phase 5 — Consolider */}
-        <section id="phase-5" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(32 95% 42%)" }}>
+        <section id="phase-5" className="lecko-card p-8" style={{ borderLeft: "4px solid hsl(var(--accent-amber-text))" }}>
           <div className="flex items-start gap-4 mb-5">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "hsl(48 100% 96%)" }}>
-              <Award size={18} style={{ color: "hsl(32 95% 42%)" }} strokeWidth={2} />
+              style={{ backgroundColor: "hsl(var(--accent-amber-bg))" }}>
+              <Award size={18} style={{ color: "hsl(var(--accent-amber-text))" }} strokeWidth={2} />
             </div>
             <div>
-              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(32 95% 42%)" }}>Phase 5 — Consolider</p>
+              <p className="label-uppercase mb-1 text-[11px]" style={{ color: "hsl(var(--accent-amber-text))" }}>Phase 5 — Consolider</p>
               <h2 className="text-xl font-bold font-heading text-foreground">Ancrez les gains et passez à la suivante</h2>
             </div>
           </div>
@@ -378,8 +378,8 @@ export default function Methode() {
           </div>
           {checklist.every(Boolean) && (
             <div className="p-4 rounded-xl border"
-              style={{ backgroundColor: "hsl(138 76% 97%)", borderColor: "hsl(160 72% 35% / 0.3)" }}>
-              <p className="text-sm font-semibold" style={{ color: "hsl(160 72% 30%)" }}>
+              style={{ backgroundColor: "hsl(var(--accent-green-bg))", borderColor: "hsl(var(--accent-green-text) / 0.3)" }}>
+              <p className="text-sm font-semibold" style={{ color: "hsl(var(--accent-green-text))" }}>
                 Tout est coché. Vous avez une automatisation solide. Passez à la suivante.
               </p>
             </div>
