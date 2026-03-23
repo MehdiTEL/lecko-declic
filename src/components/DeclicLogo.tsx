@@ -9,9 +9,9 @@ interface DeclicLogoProps {
 }
 
 const HEIGHTS = {
-  sm: 24,
-  md: 32,
-  lg: 48,
+  sm: 32,
+  md: 44,
+  lg: 64,
 };
 
 export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoProps) {
