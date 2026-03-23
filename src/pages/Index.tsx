@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User, RefreshCw, Sparkles } from "lucide-react";
+import { ArrowRight, Search, BarChart3, Wrench, Play, Award, Users, Send, CheckCircle, Building2, Mail, User, RefreshCw, Sparkles, ExternalLink } from "lucide-react";
 import Onboarding from "@/components/Onboarding";
 import { usePageContext } from "@/context/PageContext";
 import { getDemoScenario, DEMO_SCENARIOS } from "@/data/demoScenarios";
@@ -310,292 +310,279 @@ export default function Index() {
     return <Onboarding onComplete={handleOnboardingComplete} />;
   }
 
+  const handlePersonalized = () => {
+    const job = metier.trim() || "";
+    if (!getApiKey()) {
+      navigate(`/configurer-api?metier=${encodeURIComponent(job)}&redirect=diagnostic`);
+      return;
+    }
+    navigate(`/diagnostic?metier=${encodeURIComponent(job)}`);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
+      <div className="declic-deco-square" aria-hidden />
 
-      {/* ── HERO — centré, orienté action ──────────────────────────────── */}
-      <section className="px-4 pt-12 pb-16 md:pt-16 md:pb-20">
+      {/* ═══ HERO ═══ */}
+      <section className="px-4 pt-16 pb-10 md:pt-24 md:pb-14">
         <div className="max-w-3xl mx-auto text-center">
-
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-5">
-            Diagnostic IA par métier
+          <p className="text-[11px] font-medium text-foreground-muted tracking-wide mb-8">
+            Par <span className="font-semibold text-foreground">Lecko</span> — 20 ans d'expertise en transformation digitale
           </p>
-
           <h1
-            className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4"
-            style={{ lineHeight: "1.15", letterSpacing: "-0.02em" }}
+            className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-5"
+            style={{ lineHeight: "1.08", letterSpacing: "-0.03em" }}
           >
-            Identifiez ce que l'IA peut{" "}
-            <span className="underline-orange">automatiser</span>{" "}
-            dans votre quotidien.
+            Votre diagnostic IA<br className="hidden sm:block" />
+            en <span className="text-lecko-blue">30 secondes</span>.
           </h1>
-
-          <p className="text-base sm:text-lg text-foreground-secondary mb-10 max-w-xl mx-auto" style={{ lineHeight: "1.65" }}>
-            Entrez votre métier. En 30 secondes, obtenez la liste de vos tâches
-            automatisables, le temps récupérable, et un plan d'action concret.
+          <p className="text-base md:text-lg text-foreground-muted mb-10 max-w-lg mx-auto" style={{ lineHeight: "1.65" }}>
+            Entrez votre métier. Découvrez vos tâches automatisables,
+            le temps récupérable, et un plan d'action structuré.
           </p>
 
-          {/* ── Dual choice: Express vs Personnalisé ──────────────── */}
-          <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-
-            {/* CARD 1 — Diagnostic Express (gratuit) */}
-            <div className="lecko-card p-6 flex flex-col text-left relative overflow-hidden">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-gr33t-500/10 flex items-center justify-center shrink-0">
-                  <Search size={16} className="text-gr33t-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground">Diagnostic Express</p>
-                  <p className="text-[10px] font-semibold text-gr33t-600 uppercase tracking-wider">Gratuit — sans inscription</p>
-                </div>
+          {/* Input principal */}
+          <div className="max-w-xl mx-auto mb-5">
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <div className="relative flex-1">
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted/50 pointer-events-none" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={metier}
+                  onChange={(e) => setMetier(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
+                  placeholder="Ex : Chef de projet, Comptable, RH..."
+                  className="w-full h-14 pl-12 pr-4 text-base bg-background border-2 border-border rounded-2xl outline-none focus:border-lecko-blue focus:shadow-[0_0_0_4px_hsl(221_83%_53%/0.1)] transition-all text-foreground placeholder:text-foreground-muted/40"
+                />
               </div>
-
-              <ul className="space-y-1.5 mb-5 flex-1">
-                {["Score d'automatisation", "Tâches identifiées + ROI", "Plan d'action en 6 phases", "Base de 15 métiers"].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-xs text-foreground-secondary">
-                    <div className="w-1 h-1 rounded-full bg-gr33t-500 shrink-0 mt-1.5" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="flex flex-col gap-2">
-                <div className="relative">
-                  <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted pointer-events-none" />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={metier}
-                    onChange={(e) => setMetier(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
-                    placeholder="Votre métier..."
-                    className="w-full h-10 pl-9 pr-3 text-sm bg-background border border-border rounded-lg outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-foreground-muted"
-                  />
-                </div>
-                <button
-                  onClick={() => handleAnalyze()}
-                  disabled={!metier.trim()}
-                  className="w-full h-10 font-semibold text-sm text-white rounded-lg bg-gr33t-600 hover:bg-gr33t-700 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  Lancer le diagnostic
-                </button>
-              </div>
-
-              <div className="flex flex-wrap gap-1 mt-3">
-                {FREE_JOB_LABELS.slice(0, 6).map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => handleAnalyze(s)}
-                    className="text-[11px] text-foreground-muted hover:text-primary transition-colors"
-                  >
-                    {s}{" "}·
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* CARD 2 — Diagnostic Personnalisé (clé API) */}
-            <div className="relative lecko-card p-6 flex flex-col text-left border-2 border-primary/20 bg-primary/[0.02]">
-              {/* Recommended badge */}
-              <div className="absolute top-3 right-3">
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary uppercase tracking-wider">
-                  Recommandé
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <Sparkles size={16} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground">Diagnostic Personnalisé</p>
-                  <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">Clé API requise</p>
-                </div>
-              </div>
-
-              <ul className="space-y-1.5 mb-5 flex-1">
-                {[
-                  "Tout le diagnostic Express +",
-                  "Analyse de VOTRE quotidien réel",
-                  "Adapté à vos outils et contraintes",
-                  "Recommandations sur-mesure par l'IA",
-                ].map((item, i) => (
-                  <li key={item} className={`flex items-start gap-2 text-xs ${i === 0 ? "text-foreground-muted" : "text-foreground-secondary font-medium"}`}>
-                    <div className={`w-1 h-1 rounded-full shrink-0 mt-1.5 ${i === 0 ? "bg-foreground-muted" : "bg-primary"}`} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
               <button
-                onClick={() => {
-                  const job = metier.trim() || "";
-                  if (!getApiKey()) {
-                    navigate(`/configurer-api?metier=${encodeURIComponent(job)}&redirect=diagnostic`);
-                    return;
-                  }
-                  navigate(`/diagnostic?metier=${encodeURIComponent(job)}`);
-                }}
-                className="w-full h-10 font-semibold text-sm text-white rounded-lg bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                onClick={() => handleAnalyze()}
+                disabled={!metier.trim()}
+                className="shrink-0 h-14 px-8 font-semibold text-[15px] text-white rounded-2xl bg-lecko-blue hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <Sparkles size={14} />
-                Démarrer le diagnostic
+                Analyser
               </button>
-
-              <p className="text-[10px] text-foreground-muted mt-2 text-center">
-                Utilise votre clé OpenAI ou Anthropic.{" "}
-                <Link to="/configurer-api" className="text-primary hover:underline">
-                  En savoir plus
-                </Link>
-              </p>
             </div>
-
           </div>
 
-          {/* Compteurs factuels */}
-          <div className="flex justify-center gap-8 mt-10 pt-8 border-t border-border">
-            {[
-              { value: "15", label: "métiers analysables" },
-              { value: "120+", label: "tâches dans la base" },
-              { value: "6", label: "phases DÉCLIC" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="text-xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-xs text-foreground-muted">{stat.label}</p>
-              </div>
+          {/* Métiers cliquables */}
+          <div className="flex flex-wrap justify-center gap-2 mb-3">
+            {FREE_JOB_LABELS.slice(0, 8).map((s) => (
+              <button
+                key={s}
+                onClick={() => handleAnalyze(s)}
+                className="px-3 py-1 text-[13px] text-foreground-muted hover:text-lecko-blue hover:bg-lecko-blue/5 rounded-lg transition-colors"
+              >
+                {s}
+              </button>
             ))}
           </div>
 
-        </div>
-      </section>
-
-      {/* ── TEAM CTA ─────────────────────────────────────────────────────────── */}
-      <section className="px-4 py-10">
-        <div className="max-w-5xl mx-auto">
-          <Link
-            to="/equipe"
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 rounded-2xl border border-dashed border-primary/25 bg-primary/[0.02] hover:border-primary/50 hover:bg-primary/[0.04] transition-all duration-200 group"
+          {/* CTA personnalisé */}
+          <button
+            onClick={handlePersonalized}
+            className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-lecko-blue transition-colors mt-1"
           >
-            <div className="w-11 h-11 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
-              <Users size={20} className="text-primary" strokeWidth={1.5} />
-            </div>
-            <div className="flex-1">
-              <p className="font-heading font-semibold text-foreground text-base">Analyse d'équipe</p>
-              <p className="text-sm text-foreground-secondary mt-0.5">
-                Plusieurs métiers ? Obtenez un diagnostic consolidé avec ROI agrégé.
-              </p>
-            </div>
-            <span className="text-sm font-semibold text-primary flex items-center gap-1.5 group-hover:gap-2.5 transition-all shrink-0">
-              Lancer une analyse d'équipe <ArrowRight size={15} />
-            </span>
-          </Link>
+            <Sparkles size={14} />
+            Diagnostic personnalisé — basé sur votre quotidien réel
+            <ArrowRight size={13} />
+          </button>
+
+          <p className="text-[11px] text-foreground-muted/60 mt-4">
+            Gratuit. Sans inscription. Résultats immédiats.
+          </p>
         </div>
       </section>
 
-      {/* ── APPROACH — 5 PHASES ──────────────────────────────────────────────── */}
-      <section className="px-4 py-24 section-alt">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="section-label mb-4 inline-block">Méthode</span>
-            <h2 className="font-heading text-heading-lg md:text-heading-xl text-foreground mb-5">
-              Une approche en 6 phases pour automatiser{" "}
-              <span className="underline-orange">durablement</span>
+      {/* ═══ APERÇU PRODUIT ═══ */}
+      <section className="px-4 pb-16 md:pb-24">
+        <div className="max-w-4xl mx-auto">
+          <div className="relative rounded-2xl border border-border overflow-hidden shadow-2xl shadow-lecko-blue/5">
+            <div className="h-10 bg-card border-b border-border flex items-center gap-2 px-4">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-300/60" />
+                <div className="w-3 h-3 rounded-full bg-yellow-300/60" />
+                <div className="w-3 h-3 rounded-full bg-green-300/60" />
+              </div>
+              <span className="text-[11px] text-foreground-muted ml-2 font-mono">declic.lecko.fr/resultats</span>
+            </div>
+            <img src="/preview-diagnostic.png" alt="Aperçu du diagnostic DÉCLIC" className="w-full" loading="lazy" />
+            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent" />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ ACCOMPAGNEMENT ═══ */}
+      <section className="px-4 py-16 md:py-20 border-t border-border">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-lecko-blue mb-4">Accompagnement</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4" style={{ lineHeight: "1.2", letterSpacing: "-0.02em" }}>
+                Un outil, une équipe,<br />
+                un accompagnement complet.
+              </h2>
+              <p className="text-sm text-foreground-secondary leading-relaxed mb-6">
+                DÉCLIC vous donne le diagnostic. Quand vous avez besoin d'aller plus loin — intégration technique, conduite du changement, déploiement à l'échelle — notre équipe de consultants prend le relais.
+              </p>
+              <div className="space-y-3">
+                {[
+                  { title: "Automatisation de processus", detail: "Conception et optimisation de workflows IA (N8N, Power Automate, Make)" },
+                  { title: "Déploiement M365 et outils collaboratifs", detail: "Migration, adoption, gouvernance — du cadrage au pilotage" },
+                  { title: "Stratégie IA et acculturation", detail: "Cadrage des usages, formation des équipes, choix des outils" },
+                  { title: "Conduite du changement", detail: "Accompagnement humain pour sécuriser l'adoption à l'échelle" },
+                ].map((item) => (
+                  <div key={item.title} className="flex gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-lecko-blue shrink-0 mt-2" />
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                      <p className="text-xs text-foreground-muted mt-0.5">{item.detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-border p-6 bg-card">
+                <p className="text-xs font-semibold uppercase tracking-widest text-foreground-muted mb-5">Lecko en chiffres</p>
+                <div className="grid grid-cols-2 gap-6">
+                  {[
+                    { value: "2005", label: "Année de création" },
+                    { value: "20+", label: "Consultants" },
+                    { value: "14", label: "Éditions du Référentiel" },
+                    { value: "500+", label: "Missions réalisées" },
+                  ].map((stat) => (
+                    <div key={stat.label}>
+                      <p className="text-2xl font-bold text-foreground" style={{ letterSpacing: "-0.02em" }}>{stat.value}</p>
+                      <p className="text-xs text-foreground-muted mt-0.5">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <a
+                href="https://referentiel.lecko.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-xl border border-border p-4 bg-card hover:border-lecko-blue/30 hover:shadow-sm transition-all group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-lecko-blue/10 flex items-center justify-center shrink-0">
+                  <ExternalLink size={16} className="text-lecko-blue" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground">Référentiel Lecko</p>
+                  <p className="text-xs text-foreground-muted">L'étude annuelle de référence sur la transformation</p>
+                </div>
+                <ArrowRight size={14} className="text-foreground-muted group-hover:text-lecko-blue group-hover:translate-x-1 transition-all shrink-0" />
+              </a>
+
+              <Link
+                to="/notre-histoire"
+                className="flex items-center justify-center gap-2 w-full h-12 rounded-xl font-semibold text-sm bg-lecko-blue text-white hover:bg-blue-700 transition-colors"
+              >
+                Découvrir notre histoire
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ MÉTHODE ═══ */}
+      <section className="px-4 py-16 md:py-20" style={{ backgroundColor: "hsl(var(--muted) / 0.3)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs font-semibold uppercase tracking-widest text-lecko-blue mb-3">Méthodologie</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground" style={{ letterSpacing: "-0.02em" }}>
+              6 phases pour automatiser sans improviser
             </h2>
-            <p className="text-body-lg text-foreground-secondary mx-auto max-w-xl">
-              Pas de promesses magiques. Une méthode structurée qui respecte une règle d'or :
-              on n'automatise que ce qu'on comprend parfaitement.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-10">
-            {DECLIC_PHASES.map((phase, idx) => {
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {DECLIC_PHASES.map((phase) => {
               const Icon = phase.icon;
               return (
-                <motion.div
+                <Link
                   key={phase.num}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.1 }}
+                  to="/methode"
+                  className="group p-4 rounded-xl bg-card border border-border hover:border-lecko-blue/30 hover:shadow-sm transition-all text-center"
                 >
-                  <Link
-                    to="/methode"
-                    className="lecko-card p-5 flex flex-col gap-3 group h-full"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-heading text-3xl font-bold" style={{ color: phase.color, opacity: 0.15 }}>
-                        {phase.num}
-                      </span>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${phase.color}10` }}>
-                        <Icon size={18} style={{ color: phase.color }} strokeWidth={1.5} />
-                      </div>
-                    </div>
-                    <div>
-                      <p className="font-heading font-semibold text-foreground text-base mb-1">{phase.label}</p>
-                      <p className="text-sm text-foreground-muted leading-snug">{phase.desc}</p>
-                    </div>
-                  </Link>
-                </motion.div>
+                  <div className="w-8 h-8 rounded-lg mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: `${phase.color}12` }}>
+                    <Icon size={16} style={{ color: phase.color }} strokeWidth={2} />
+                  </div>
+                  <p className="text-xs font-bold" style={{ color: phase.color }}>{phase.num}</p>
+                  <p className="text-sm font-semibold text-foreground mt-1">{phase.label}</p>
+                  <p className="text-[11px] text-foreground-muted mt-1 leading-snug">{phase.desc}</p>
+                </Link>
               );
             })}
           </div>
 
-          <p className="text-center">
-            <Link
-              to="/methode"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline transition-colors"
-            >
-              Découvrir la méthode en détail <ArrowRight size={14} />
+          <p className="text-center mt-6">
+            <Link to="/methode" className="text-sm font-medium text-lecko-blue hover:underline inline-flex items-center gap-1.5">
+              Découvrir la méthode en détail <ArrowRight size={13} />
             </Link>
-          </p>
-          <p className="text-center mt-2 text-sm text-foreground-muted max-w-2xl mx-auto">
-            Notre app vous accompagne dans les phases 1 à 3. Pour les phases 4 et 5, le DÉCLIC Copilot vous guide pas à pas.
           </p>
         </div>
       </section>
 
+      {/* ═══ CTA FINAL ═══ */}
+      <section className="px-4 py-16 md:py-20 border-t border-border">
+        <div className="max-w-xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3" style={{ letterSpacing: "-0.02em" }}>
+            Identifiez votre potentiel d'automatisation.
+          </h2>
+          <p className="text-sm text-foreground-muted mb-8">
+            Gratuit. Aucune inscription. Résultats immédiats.
+          </p>
 
-      {/* ── CONTACT ──────────────────────────────────────────────────────────── */}
-      <section className="px-4 py-24 section-alt">
-        <div className="max-w-3xl mx-auto">
-          <div className="mb-10">
-            <span className="section-label mb-4 inline-block">Contact</span>
-            <h2 className="font-heading text-heading-lg md:text-heading-xl text-foreground mb-4">
-              Une <span className="underline-orange">question</span> ?
-            </h2>
-            <p className="text-body-lg text-foreground-secondary max-w-xl">
-              Laissez-nous vos coordonnées, nous revenons vers vous sous 48h.
-            </p>
+          <div className="max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <input
+                type="text"
+                value={metier}
+                onChange={(e) => setMetier(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
+                placeholder="Votre métier..."
+                className="flex-1 h-12 px-4 text-sm bg-background border-2 border-border rounded-xl outline-none focus:border-lecko-blue transition-all text-foreground placeholder:text-foreground-muted/40"
+              />
+              <button
+                onClick={() => handleAnalyze()}
+                disabled={!metier.trim()}
+                className="shrink-0 h-12 px-6 font-semibold text-sm text-white rounded-xl bg-lecko-blue hover:bg-blue-700 transition-all disabled:opacity-30"
+              >
+                Analyser
+              </button>
+            </div>
           </div>
-          <div className="lecko-card p-8">
-            <ContactSection />
+
+          <div className="flex flex-wrap justify-center gap-6 mt-8 text-xs text-foreground-muted">
+            <Link to="/notre-histoire" className="hover:text-foreground transition-colors">Notre histoire</Link>
+            <Link to="/methode" className="hover:text-foreground transition-colors">La méthode</Link>
+            <Link to="/equipe" className="hover:text-foreground transition-colors">Mode équipe</Link>
+            <a href="https://referentiel.lecko.fr" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Référentiel Lecko</a>
           </div>
         </div>
       </section>
 
       {/* Demo selector (/?demos) */}
       {showDemoSelector && (
-        <section className="px-4 py-16 section-alt">
-          <div className="max-w-5xl mx-auto">
+        <section className="px-4 py-16" style={{ backgroundColor: "hsl(var(--muted) / 0.3)" }}>
+          <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
-              <span className="section-label mb-4 inline-block">Mode démo</span>
-              <h2 className="font-heading text-heading-lg text-foreground mb-3">
-                Choisissez un scénario de démonstration
-              </h2>
-              <p className="text-body-lg text-foreground-secondary max-w-xl mx-auto">
-                Données fictives pré-remplies pour présenter DÉCLIC en réunion client ou en webinaire.
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-lecko-blue mb-3">Mode démo</p>
+              <h2 className="text-2xl font-bold text-foreground mb-3">Choisissez un scénario</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {DEMO_SCENARIOS.map((s) => (
-                <div key={s.id} className="lecko-card p-6 flex flex-col gap-3">
-                  <p className="font-heading font-semibold text-foreground">{s.label}</p>
+                <div key={s.id} className="rounded-xl border border-border p-6 bg-card flex flex-col gap-3">
+                  <p className="font-semibold text-foreground">{s.label}</p>
                   <p className="text-sm text-foreground-secondary flex-1">{s.description}</p>
-                  <p className="text-xs text-foreground-muted">{s.context}</p>
                   <button
                     onClick={() => navigate(`/?demo=${s.id}`)}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline mt-1"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-lecko-blue hover:underline mt-1"
                   >
                     Lancer cette démo <ArrowRight size={14} />
                   </button>
