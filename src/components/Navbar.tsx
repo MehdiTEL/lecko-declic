@@ -17,10 +17,10 @@ export default function Navbar() {
   const navLinks = [
     { to: "/", label: "Accueil" },
     { to: "/methode", label: "Méthode" },
-    { to: "/notre-histoire", label: "Notre histoire" },
     { to: "/equipe", label: "Équipe", icon: <Users size={15} strokeWidth={1.5} /> },
     { to: "/historique", label: "Mes diagnostics", icon: <History size={15} strokeWidth={1.5} /> },
     ...(hasProgress ? [{ to: "/mon-parcours", label: "Mon parcours", icon: <Trophy size={15} strokeWidth={1.5} /> }] : []),
+    { to: "/notre-histoire", label: "Notre histoire" },
   ];
 
   const linkClass = (to: string) =>
