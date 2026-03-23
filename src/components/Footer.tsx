@@ -45,6 +45,7 @@ export default function Footer() {
                 {[
                   { label: "Diagnostic métier", href: "/" },
                   { label: "Méthode DÉCLIC", href: "/methode" },
+                  { label: "Notre histoire", href: "/notre-histoire" },
                   { label: "Mode équipe", href: "/equipe" },
                 ].map((l) => (
                   <Link key={l.label} to={l.href}

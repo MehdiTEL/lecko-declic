@@ -13,6 +13,7 @@ import Methode from "./pages/Methode";
 import MonParcours from "./pages/MonParcours";
 import DiagnosticForm from "./pages/DiagnosticForm";
 import ConfigurerApi from "./pages/ConfigurerApi";
+import NotreHistoire from "./pages/NotreHistoire";
 import NotFound from "./pages/NotFound";
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/mon-parcours" element={<MonParcours />} />
             <Route path="/diagnostic" element={<DiagnosticForm />} />
             <Route path="/configurer-api" element={<ConfigurerApi />} />
+            <Route path="/notre-histoire" element={<NotreHistoire />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatPanel />
