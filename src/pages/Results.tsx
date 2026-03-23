@@ -18,6 +18,7 @@ import AccompagnementSplit from "@/components/AccompagnementSplit";
 import BadgeShelf from "@/components/BadgeShelf";
 import ChallengeCards from "@/components/ChallengeCards";
 import ActionPlan from "@/components/ActionPlan";
+import ConsultantContactForm from "@/components/ConsultantContactForm";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
 import { DECLIC_PHASES, DeclicPhase, PhaseConfig } from "@/types/declic";
@@ -64,6 +65,7 @@ export default function Results() {
   const [toolFilter, setToolFilter] = useState<ToolFilter>("all");
   const [accompFilter, setAccompFilter] = useState<AccompagnementFilter>("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [showConceptionForm, setShowConceptionForm] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const resultsRef = useRef<HTMLDivElement>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
@@ -533,6 +535,34 @@ export default function Results() {
                 </div>
               </div>
 
+              {/* CTA consultant conception */}
+              {!isDemo && (
+                <div className="lecko-card p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-foreground">Workflows multi-outils, intégrations API, architecture complexe ?</p>
+                    <p className="text-xs text-foreground-secondary mt-1">Un consultant construit avec vous en une demi-journée ce qui prendrait 2 semaines en tâtonnement.</p>
+                  </div>
+                  <button onClick={() => setShowConceptionForm(true)} className="shrink-0 px-4 py-2 rounded-xl text-sm font-semibold bg-primary text-white hover:opacity-90 transition-opacity">
+                    Être accompagné
+                  </button>
+                </div>
+              )}
+              {showConceptionForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "hsl(222 47% 11% / 0.5)" }}>
+                  <div className="bg-card border border-border rounded-2xl shadow-elevated max-w-md w-full p-6 animate-fade-in">
+                    <ConsultantContactForm
+                      variant="card"
+                      source="phase_concevoir"
+                      contextMessage={`Accompagnement Phase Concevoir — ${result.metier}, ${result.taches.length} tâches identifiées.`}
+                      metier={result.metier}
+                      score={result.score_global}
+                      onClose={() => setShowConceptionForm(false)}
+                      onSuccess={() => { setShowConceptionForm(false); showToast("Demande envoyée."); }}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Filters */}
           <div>
             <button
@@ -656,6 +686,7 @@ export default function Results() {
                 analysisId={analysisId}
                 trackedStatus={trackedTasks.find((t) => t.taskName === task.nom)?.status ?? "todo"}
                 onStatusChange={(taskName, status) => setTaskStatus(analysisId, taskName, status)}
+                isDemo={isDemo}
               />
             ))}
             {filteredTasks.length === 0 && (
@@ -706,6 +737,23 @@ export default function Results() {
                   <Share2 size={15} /> Partager le diagnostic
                 </button>
               </div>
+
+              {/* Team deployment CTA */}
+              {!isDemo && (
+                <div className="rounded-2xl p-5" style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
+                  <p className="text-sm font-semibold text-foreground mb-1">Vous déployez pour une équipe ou un service entier ?</p>
+                  <p className="text-xs text-foreground-secondary mb-4 leading-relaxed">
+                    Passer d'un diagnostic individuel à un déploiement collectif, c'est de la transformation organisationnelle.
+                  </p>
+                  <ConsultantContactForm
+                    variant="inline"
+                    source="phase_lancer_equipe"
+                    contextMessage={`Déploiement équipe envisagé — ${result.metier}, score ${result.score_global}%, ${result.heures_economisees_semaine}h/sem récupérables.`}
+                    metier={result.metier}
+                    score={result.score_global}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -738,6 +786,23 @@ export default function Results() {
                   <p className="text-xs text-foreground-secondary leading-relaxed">Comparez avant/après. 80% de résultat vaut mieux que 100% jamais livré.</p>
                 </div>
               </div>
+
+              {/* Iteration CTA */}
+              {!isDemo && (
+                <div className="lecko-card p-5">
+                  <p className="text-sm font-semibold text-foreground mb-1">Vos automatisations ne donnent pas les résultats attendus ?</p>
+                  <p className="text-xs text-foreground-secondary mb-3 leading-relaxed">
+                    Un consultant audite vos workflows, identifie les points de friction et optimise pour atteindre les 80% de fiabilité visés.
+                  </p>
+                  <ConsultantContactForm
+                    variant="inline"
+                    source="phase_iterer"
+                    contextMessage={`Besoin d'optimisation des automatisations en production — ${result.metier}.`}
+                    metier={result.metier}
+                    score={result.score_global}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -807,6 +872,8 @@ export default function Results() {
           <DeclicCTA
             score={result.score_global}
             metier={result.metier}
+            tasks={result.taches}
+            roiParams={{ hourlyRate: roiHourlyRate, nbPeople: roiNbPeople }}
             typeAnalyse="individuel"
             onVisible={handleCtaVisible}
           />

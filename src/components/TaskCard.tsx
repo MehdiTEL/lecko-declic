@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info, Sparkles, Users, Wrench } from "lucide-react";
 import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass, ACCOMPAGNEMENT_CONFIG, COMPLEXITE_CONFIG, ECOSYSTEM_LABELS, PERIMETRE_IMPACT_CONFIG, NIVEAU_CHANGEMENT_CONFIG, RISQUE_ADOPTION_CONFIG } from "@/types/analysis";
+import ConsultantContactForm from "@/components/ConsultantContactForm";
 import type { AccompagnementLevel, ComplexiteMiseEnPlace, ToolEcosystem } from "@/types/analysis";
 import type { TaskStatus } from "@/types/gamification";
 import { useChatContext } from "@/context/ChatContext";
@@ -133,9 +134,10 @@ interface TaskCardProps {
   analysisId?: string;
   trackedStatus?: TaskStatus;
   onStatusChange?: (taskName: string, status: TaskStatus) => void;
+  isDemo?: boolean;
 }
 
-export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, trackedStatus, onStatusChange }: TaskCardProps) {
+export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, trackedStatus, onStatusChange, isDemo }: TaskCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [showRaisonIa, setShowRaisonIa] = useState(false);
 
@@ -436,6 +438,30 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
                       {task.actions_conduite_changement}
                     </p>
                   )}
+                </div>
+              )}
+
+              {/* Expert CTA — if task needs consultant */}
+              {(task.niveau_accompagnement === "consultant" || task.risque_adoption === "eleve" || task.perimetre_impact === "multi_services" || task.perimetre_impact === "externe" || task.categorie === "difficilement_automatisable") && !isDemo && (
+                <div className="rounded-xl p-4 space-y-2" style={{ backgroundColor: "hsl(221 100% 98%)", borderLeft: "3px solid hsl(var(--primary))" }}>
+                  <p className="text-sm font-semibold text-foreground">
+                    Cette tâche bénéficie d'un accompagnement structuré
+                  </p>
+                  <p className="text-xs text-foreground-secondary leading-relaxed">
+                    {task.perimetre_impact === "multi_services" || task.perimetre_impact === "externe"
+                      ? `L'automatisation impacte ${PERIMETRE_IMPACT_CONFIG[task.perimetre_impact]?.label.toLowerCase() ?? "plusieurs parties prenantes"}. `
+                      : ""}
+                    {task.risque_adoption === "eleve"
+                      ? "Le risque d'adoption est élevé. "
+                      : ""}
+                    Un consultant divise par 3 le temps de mise en place et sécurise le résultat.
+                  </p>
+                  <ConsultantContactForm
+                    variant="inline"
+                    source={`task_expert_${task.nom.replace(/\s+/g, "_").toLowerCase().slice(0, 30)}`}
+                    contextMessage={`Accompagnement pour "${task.nom}" (${metier ?? "métier"}, ${task.categorie}).`}
+                    metier={metier}
+                  />
                 </div>
               )}
 

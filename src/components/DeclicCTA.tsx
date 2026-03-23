@@ -2,10 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, X, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import type { AnalysisTask } from "@/types/analysis";
+import ConsultantContactForm from "@/components/ConsultantContactForm";
 
 interface DeclicCTAProps {
   score: number;
   metier: string;
+  tasks?: AnalysisTask[];
+  roiParams?: { hourlyRate: number; nbPeople: number };
   typeAnalyse?: "individuel" | "equipe";
   onVisible?: (visible: boolean) => void;
 }
@@ -121,7 +125,8 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
   );
 }
 
-export default function DeclicCTA({ score, metier, typeAnalyse = "individuel", onVisible }: DeclicCTAProps) {
+export default function DeclicCTA({ score, metier, tasks, roiParams, typeAnalyse = "individuel", onVisible }: DeclicCTAProps) {
+  const expertCount = tasks?.filter(t => t.niveau_accompagnement === "consultant" || t.categorie === "difficilement_automatisable").length ?? 0;
   const [showFallback, setShowFallback] = useState(false);
   const blockRef = useRef<HTMLDivElement>(null);
 
