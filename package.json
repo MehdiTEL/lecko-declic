@@ -1,7 +1,7 @@
 {
   "name": "declic",
   "version": "0.1.0",
-  "description": "DÉCLIC — Plateforme de diagnostic et d'automatisation IA par métier. Méthodologie DÉCLIC de Lecko.",
+  "description": "D\u00c9CLIC \u2014 Plateforme de diagnostic et d'automatisation IA par m\u00e9tier. M\u00e9thodologie D\u00c9CLIC de Lecko.",
   "author": "Lecko",
   "license": "MIT",
   "private": false,
@@ -10,7 +10,16 @@
     "type": "git",
     "url": "https://github.com/MehdiTEL/lecko-declic.git"
   },
-  "keywords": ["automatisation", "ia", "diagnostic", "metier", "lecko", "declic", "react", "typescript"],
+  "keywords": [
+    "automatisation",
+    "ia",
+    "diagnostic",
+    "metier",
+    "lecko",
+    "declic",
+    "react",
+    "typescript"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -92,7 +101,6 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
     "jsdom": "^20.0.3",
-    "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
