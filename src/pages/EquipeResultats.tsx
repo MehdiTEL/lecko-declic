@@ -95,7 +95,7 @@ export default function EquipeResultats() {
   useEffect(() => { setPage("equipe_results"); }, [setPage]);
 
   useEffect(() => {
-    const raw = sessionStorage.getItem("lecko-team-result");
+    const raw = sessionStorage.getItem("declic-team-result");
     if (!raw) {
       navigate("/equipe");
       return;
@@ -315,7 +315,7 @@ export default function EquipeResultats() {
               className="lecko-card p-6"
             >
               <h2 className="text-lg font-bold font-heading text-foreground mb-1 flex items-center gap-2">
-                🏆 Top 5 des automatisations à impact immédiat
+                Top 5 des automatisations à impact immédiat
               </h2>
               <p className="text-xs text-foreground-muted mb-5">
                 Meilleures opportunités classées par impact total (heures × personnes)

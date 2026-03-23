@@ -1,6 +1,6 @@
 import { HistoryEntry } from "@/types/analysis";
 
-const STORAGE_KEY = "lecko-history";
+const STORAGE_KEY = "declic-history";
 
 export function getHistory(): HistoryEntry[] {
   try {

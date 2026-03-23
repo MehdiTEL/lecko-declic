@@ -166,7 +166,7 @@ export default function ApiKeyModal({
           </button>
 
           <p className="text-xs text-foreground-muted leading-relaxed bg-muted/50 rounded-lg px-3 py-2.5">
-            💡 Votre clé est stockée localement dans votre navigateur (localStorage). Elle n'est jamais
+            Votre clé est stockée localement dans votre navigateur (localStorage). Elle n'est jamais
             transmise à DÉCLIC ni à aucun tiers.
           </p>
         </div>

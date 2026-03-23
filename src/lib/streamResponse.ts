@@ -115,7 +115,7 @@ export async function streamChatResponse(options: StreamOptions) {
       if (!response.ok) {
         const errBody = await response.json().catch(() => ({}));
         const msg = errBody?.error?.message ?? `Erreur OpenAI (${response.status})`;
-        if (response.status === 429) onError("⏳ Limite d'appels atteinte. Réessayez dans quelques secondes.");
+        if (response.status === 429) onError("Limite d'appels atteinte. Réessayez dans quelques secondes.");
         else if (response.status === 401) onError("Clé API OpenAI invalide. Vérifiez vos paramètres.");
         else onError(msg);
         return;
@@ -144,7 +144,7 @@ export async function streamChatResponse(options: StreamOptions) {
       if (!response.ok) {
         const errBody = await response.json().catch(() => ({}));
         const msg = errBody?.error?.message ?? `Erreur Anthropic (${response.status})`;
-        if (response.status === 429) onError("⏳ Limite d'appels atteinte. Réessayez dans quelques secondes.");
+        if (response.status === 429) onError("Limite d'appels atteinte. Réessayez dans quelques secondes.");
         else if (response.status === 401) onError("Clé API Anthropic invalide. Vérifiez vos paramètres.");
         else onError(msg);
         return;
@@ -153,6 +153,6 @@ export async function streamChatResponse(options: StreamOptions) {
       await parseAnthropicStream(response, onToken, onDone);
     }
   } catch (e) {
-    onError("⚠️ Erreur de connexion. Vérifiez votre connexion internet.");
+    onError("Erreur de connexion. Vérifiez votre connexion internet.");
   }
 }

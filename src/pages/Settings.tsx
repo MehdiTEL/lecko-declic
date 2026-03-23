@@ -205,7 +205,7 @@ export default function Settings() {
           )}
 
           <p className="text-xs text-foreground-muted leading-relaxed">
-            💡 Votre clé est stockée localement dans votre navigateur. Elle n'est jamais transmise à DÉCLIC.
+            Votre clé est stockée localement dans votre navigateur. Elle n'est jamais transmise à DÉCLIC.
           </p>
         </section>
 

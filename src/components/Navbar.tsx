@@ -143,10 +143,10 @@ export default function Navbar() {
           >
             {currentMaturity.emoji} {currentMaturity.label} · {globalProgress.percent}%
             {progressState.streak.currentStreak >= 2 && (
-              <span className="text-amber-500">🔥{progressState.streak.currentStreak}</span>
+              <span className="text-amber-500">Streak: {progressState.streak.currentStreak}</span>
             )}
             {progressState.streak.currentStreak === 0 && hasProgress && (
-              <span className="opacity-30">🔥0</span>
+              <span className="opacity-30">Streak: 0</span>
             )}
           </Link>
         </div>

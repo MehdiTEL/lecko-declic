@@ -77,7 +77,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
       {isUser && (
         <div className="shrink-0 w-7 h-7 rounded-full bg-muted flex items-center justify-center text-sm mt-0.5">
-          👤
+          
         </div>
       )}
     </div>

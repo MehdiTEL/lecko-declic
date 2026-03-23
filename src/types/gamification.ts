@@ -18,7 +18,7 @@ export const MATURITY_LEVELS: MaturityConfig[] = [
   {
     level: "explorateur",
     label: "Explorateur",
-    emoji: "🔍",
+    emoji: "",
     minPercent: 0,
     color: "#6B7280",
     bgLight: "hsl(220 9% 94%)",
@@ -27,7 +27,7 @@ export const MATURITY_LEVELS: MaturityConfig[] = [
   {
     level: "batisseur",
     label: "Bâtisseur",
-    emoji: "🔧",
+    emoji: "",
     minPercent: 25,
     color: "#2563EB",
     bgLight: "hsl(221 100% 96%)",
@@ -36,7 +36,7 @@ export const MATURITY_LEVELS: MaturityConfig[] = [
   {
     level: "automatiseur",
     label: "Automatiseur",
-    emoji: "⚡",
+    emoji: "",
     minPercent: 50,
     color: "#F59E0B",
     bgLight: "hsl(48 100% 96%)",
@@ -45,7 +45,7 @@ export const MATURITY_LEVELS: MaturityConfig[] = [
   {
     level: "transformateur",
     label: "Transformateur",
-    emoji: "🏆",
+    emoji: "",
     minPercent: 75,
     color: "#10B981",
     bgLight: "hsl(152 76% 94%)",

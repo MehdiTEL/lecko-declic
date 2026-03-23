@@ -119,9 +119,9 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
       {/* KPIs row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         {[
-          { icon: "💶", label: "/ semaine", value: totalWeekEur, color: "text-lecko-orange" },
-          { icon: "📅", label: "/ mois", value: totalMonthEur, color: "text-primary" },
-          { icon: "📆", label: "/ an", value: totalYearEur, color: "text-primary" },
+          { icon: "banknote", label: "/ semaine", value: totalWeekEur, color: "text-lecko-orange" },
+          { icon: "calendar", label: "/ mois", value: totalMonthEur, color: "text-primary" },
+          { icon: "calendarDays", label: "/ an", value: totalYearEur, color: "text-primary" },
         ].map((k, i) => (
           <motion.div
             key={i}
@@ -141,7 +141,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
           transition={{ delay: 0.24 }}
           className="lecko-card p-4 flex flex-col items-center text-center gap-1"
         >
-          <span className="text-xl mb-0.5">👤</span>
+          <span className="text-xl mb-0.5">·</span>
           <span className="font-bold text-2xl text-gr33t-500">{totalEtp.toFixed(1)}</span>
           <span className="text-xs text-foreground-muted">équivalent temps plein</span>
         </motion.div>
@@ -151,7 +151,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
       {totalYearEur > 0 && (
         <div className="rounded-xl border border-lecko-orange/20 bg-lecko-orange/5 px-5 py-4">
           <div className="flex items-start gap-3">
-            <span className="text-xl shrink-0">📊</span>
+            <span className="text-xl shrink-0"></span>
             <div>
               <p className="text-sm font-semibold text-foreground mb-0.5">
                 Économie annuelle de{" "}

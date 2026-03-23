@@ -4,7 +4,7 @@ export type Theme = "light" | "dark";
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem("lecko-theme") as Theme | null;
+    const stored = localStorage.getItem("declic-theme") as Theme | null;
     if (stored) return stored;
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   });
@@ -16,13 +16,13 @@ export function useTheme() {
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("lecko-theme", theme);
+    localStorage.setItem("declic-theme", theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
 
   const resetTheme = () => {
-    localStorage.removeItem("lecko-theme");
+    localStorage.removeItem("declic-theme");
     const sys = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     setTheme(sys);
   };

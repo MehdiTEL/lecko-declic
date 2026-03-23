@@ -119,21 +119,21 @@ export function ChatPanel() {
           <div className="px-5 py-2.5 border-b border-border shrink-0"
             style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
             <p className="text-xs text-primary font-medium truncate">
-              🎯 Tâche : {taskContext.task.nom}
+              Tâche : {taskContext.task.nom}
             </p>
           </div>
         ) : analysisResult && (currentPage === "results" || currentPage === "equipe_results") ? (
           <div className="px-5 py-2.5 border-b border-border shrink-0"
             style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
             <p className="text-xs text-primary font-medium truncate">
-              📊 Diagnostic : {pageMetier} · {analysisResult.score_global}%
+              Diagnostic : {pageMetier} · {analysisResult.score_global}%
             </p>
           </div>
         ) : currentPage === "methode" ? (
           <div className="px-5 py-2.5 border-b border-border shrink-0"
             style={{ backgroundColor: "hsl(var(--surface-accent))" }}>
             <p className="text-xs text-primary font-medium truncate">
-              📖 Méthode DÉCLIC
+              Méthode DÉCLIC
             </p>
           </div>
         ) : null}

@@ -55,8 +55,8 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
         <span className="text-xs text-slate-400 font-mono">
           {isWorkflow
             ? n8n
-              ? "📥 Workflow N8N importable"
-              : "📥 Workflow Make importable"
+              ? "Workflow N8N importable"
+              : "Workflow Make importable"
             : language || "code"}
         </span>
         <div className="flex items-center gap-2">

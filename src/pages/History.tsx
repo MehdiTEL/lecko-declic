@@ -49,7 +49,7 @@ export default function History() {
             animate={{ opacity: 1 }}
             className="lecko-card p-12 text-center"
           >
-            <div className="text-5xl mb-4">📭</div>
+            <div className="text-5xl mb-4"></div>
             <p className="text-foreground-secondary font-medium mb-4">
               Aucune analyse pour le moment. Lancez votre première analyse !
             </p>

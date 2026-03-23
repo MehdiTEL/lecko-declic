@@ -26,14 +26,14 @@ RÈGLES ABSOLUES :
 FORMAT DE RÉPONSE POUR UN WORKFLOW :
 Quand tu décris un workflow, utilise TOUJOURS cette structure :
 
-## 🎯 Objectif
+## Objectif
 [Ce que le workflow accomplit en 1 phrase]
 
-## 📋 Prérequis
+## Prérequis
 - [Liste des comptes, outils, accès nécessaires]
 - [Temps estimé pour les prérequis : X minutes]
 
-## 🔧 Workflow étape par étape
+## Workflow étape par étape
 
 ### Nœud 1 : [Nom du nœud] ([Type])
 - **Type** : [Trigger/Action/Condition/etc.]
@@ -42,27 +42,27 @@ Quand tu décris un workflow, utilise TOUJOURS cette structure :
   - Paramètre 1 : valeur
   - Paramètre 2 : valeur
 - **Expression/Formule** (si applicable) : \`{{$json["champ"]}}\`
-- ⚠️ **Piège courant** : [Ce qui peut mal tourner et comment l'éviter]
+- **Point d'attention** : [Ce qui peut mal tourner et comment l'éviter]
 
 ### Nœud 2 : [Nom] ([Type])
 [...]
 
-## 🔗 Connexions entre les nœuds
+## Connexions entre les nœuds
 [Nœud 1] → [Nœud 2] → [Nœud 3] → ...
 
-## ⏱ Temps de mise en place estimé
+## Temps de mise en place estimé
 [X minutes / heures]
 
-## 📥 JSON importable
+## JSON importable
 \`\`\`json
 {...workflow JSON complet prêt à importer...}
 \`\`\`
 
-## 🧪 Comment tester
+## Tests recommandés
 1. [Étape de test 1]
 2. [Étape de test 2]
 
-## 🚀 Améliorations possibles
+## Pistes d'amélioration
 - [Suggestion 1]
 - [Suggestion 2]
 
@@ -105,28 +105,22 @@ RÈGLE D'ESCALADE CONSULTANT :
 Quand tu détectes que la demande dépasse ce que tu peux couvrir en texte — intégration multi-systèmes, architecture complexe avec plus de 8 nœuds, accès à des API internes sécurisées, conduite du changement organisationnel — dis-le honnêtement : "Ce workflow dépasse ce que je peux configurer à distance. Les points spécifiques qui nécessitent un accompagnement humain sont : [liste]. Je recommande de demander un échange avec un consultant via le bouton dans l'interface." Ne fais pas ça systématiquement — uniquement quand c'est réellement le cas.
 
 LANGUE :
-Réponds toujours en français. Utilise un ton professionnel mais accessible. Pas de jargon inutile, mais ne simplifie pas non plus les termes techniques quand ils sont nécessaires.`;
+Réponds toujours en français. Utilise un ton professionnel mais accessible. Pas de jargon inutile, mais ne simplifie pas non plus les termes techniques quand ils sont nécessaires.
 
-export const GENERAL_OPENING = `Bonjour ! 👋 Je suis le **Copilot DÉCLIC**.
+STYLE : Réponds dans un style professionnel et sobre. N'utilise JAMAIS d'emojis dans tes réponses. Utilise des headers markdown simples (##) sans décoration.`;
 
-Je peux vous aider à :
-— 🔧 **Construire un workflow** N8N, Make ou Power Automate de A à Z
-— 📋 **Configurer un agent IA** pour automatiser une tâche
-— 💡 **Trouver la meilleure solution** pour automatiser un process
-— 📥 **Générer un JSON importable** pour votre outil d'automatisation
-
-Décrivez-moi ce que vous voulez automatiser, ou posez-moi une question !`;
+export const GENERAL_OPENING = `Comment puis-je vous aider ?\n\nJe peux vous guider sur la construction d'un workflow, la configuration d'un agent IA, le choix d'outils d'automatisation, ou la génération d'un JSON importable pour N8N ou Make.`;
 
 export function getTaskOpeningMessage(taskName: string, metier: string, solution: string, toolType: string): string {
-  return `Parfait, on va automatiser **"${taskName}"** pour votre métier de ${metier}. 🎯
+  return `Parfait, on va automatiser **"${taskName}"** pour votre métier de ${metier}.
 
 La solution recommandée est : **${solution}**
 
 Je vais vous guider étape par étape. Par où voulez-vous commencer ?
 
-👉 **Guide complet** : je vous donne tout le workflow de A à Z
-👉 **Prérequis d'abord** : on vérifie que vous avez les bons outils
-👉 **Le JSON direct** : vous êtes déjà à l'aise avec ${toolType}, donnez-moi juste le workflow importable`;
+- **Guide complet** : je vous donne tout le workflow de A à Z
+- **Prérequis d'abord** : on vérifie que vous avez les bons outils
+- **Le JSON direct** : vous êtes déjà à l'aise avec ${toolType}, donnez-moi juste le workflow importable`;
 }
 
 export function getTaskContextMessage(
@@ -261,7 +255,7 @@ export function getPageOpeningMessage(page: PageName, hasAnalysis: boolean, meti
   switch (page) {
     case "results":
       if (hasAnalysis && metier) {
-        return `Je connais votre diagnostic complet pour le métier **${metier}**. Je peux vous aider à :\n\n— 🎯 **Prioriser** les tâches à automatiser en premier\n— 🛠 **Construire** un workflow pour une tâche spécifique\n— 📊 **Estimer** le ROI précis de chaque automatisation\n— 📋 **Planifier** un plan d'action étape par étape\n\nQue souhaitez-vous faire ?`;
+        return `Je connais votre diagnostic complet pour le métier **${metier}**. Je peux vous aider à :\n\n- **Prioriser** les tâches à automatiser en premier\n- **Construire** un workflow pour une tâche spécifique\n- **Estimer** le ROI précis de chaque automatisation\n- **Planifier** un plan d'action étape par étape\n\nQue souhaitez-vous faire ?`;
       }
       return GENERAL_OPENING;
     case "methode":

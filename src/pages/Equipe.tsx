@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Plus, X, Sparkles, Rocket } from "lucide-react";
+import { Users, Plus, X, Sparkles, Rocket, User, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -113,7 +113,7 @@ export default function Equipe() {
     };
 
     // Store in sessionStorage for the results page
-    sessionStorage.setItem("lecko-team-result", JSON.stringify(teamResult));
+    sessionStorage.setItem("declic-team-result", JSON.stringify(teamResult));
     navigate("/equipe/resultats");
   };
 
@@ -162,7 +162,7 @@ export default function Equipe() {
                   {progress.map((p) => (
                     <div key={p.metier} className="flex items-center gap-3 text-sm">
                       <span className="w-5 text-center">
-                        {p.status === "done" && "✅"}
+                        {p.status === "done" && <Check size={14} className="text-emerald-600" />}
                         {p.status === "running" && (
                           <span className="inline-block w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                         )}
@@ -271,7 +271,7 @@ export default function Equipe() {
                     transition={{ duration: 0.2 }}
                     className="flex items-center gap-3 bg-muted/50 rounded-lg px-3 py-2.5"
                   >
-                    <span className="text-sm">👤</span>
+                    <User size={14} className="text-foreground-muted" />
                     <span className="flex-1 text-sm font-semibold text-foreground">{m.metier}</span>
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs text-foreground-muted">×</span>

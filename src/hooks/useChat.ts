@@ -80,7 +80,7 @@ export function useChat(): UseChat {
           content:
             `Parfait, on va automatiser **"${task.nom}"** ! Voici un guide pour commencer :\n\n` +
             guide +
-            `\n\n---\n🔑 **Pour un accompagnement personnalisé et interactif**, configurez votre clé API dans les paramètres. Le coach génèrera un workflow exact pour votre cas.`,
+            `\n\n---\nPour un accompagnement personnalisé et interactif**, configurez votre clé API dans les paramètres. Le coach génèrera un workflow exact pour votre cas.`,
         });
       } else {
         // Opening message (no API call needed)
@@ -95,7 +95,7 @@ export function useChat(): UseChat {
         addMessage({
           role: "assistant",
           content:
-            `Bonjour ! 👋 Je suis votre **Copilot DÉCLIC**.\n\nPour une expérience complète avec des réponses personnalisées, configurez votre clé API dans les **paramètres**.\n\nEn attendant, je peux vous montrer des guides génériques sur N8N, Make, Power Automate ou les Agents IA. Quel sujet vous intéresse ?`,
+            `Bienvenue. Je suis votre **Copilot DÉCLIC**.\n\nPour une expérience complète avec des réponses personnalisées, configurez votre clé API dans les **paramètres**.\n\nEn attendant, je peux vous montrer des guides génériques sur N8N, Make, Power Automate ou les Agents IA. Quel sujet vous intéresse ?`,
         });
       } else {
         const opening = getPageOpeningMessage(currentPage, hasAnalysis, pageMetier ?? undefined);
@@ -120,7 +120,7 @@ export function useChat(): UseChat {
           addMessage({
             role: "assistant",
             content:
-              "🔑 Vous avez atteint la limite des guides gratuits pour cette session. Pour continuer à poser des questions et obtenir des réponses personnalisées, **configurez votre clé API** dans les paramètres.",
+              "Vous avez atteint la limite des guides gratuits pour cette session. Pour continuer à poser des questions et obtenir des réponses personnalisées, **configurez votre clé API** dans les paramètres.",
           });
         } else {
           incrementFreemium();
@@ -144,7 +144,7 @@ export function useChat(): UseChat {
             role: "assistant",
             content:
               guide +
-              `\n\n---\n🔑 **Pour des réponses personnalisées à vos questions**, configurez votre clé API dans les paramètres.`,
+              `\n\n---\nPour des réponses personnalisées à vos questions**, configurez votre clé API dans les paramètres.`,
           });
         }
         return;
@@ -194,7 +194,7 @@ export function useChat(): UseChat {
   );
 
   const handleRecap = useCallback(() => {
-    sendMessage("Récapitule tout ce qu'on a fait et ce qu'il reste à faire, sous forme de checklist avec ✅ pour les étapes couvertes et ⬜ pour les étapes restantes.");
+    sendMessage("Récapitule tout ce qu'on a fait et ce qu'il reste à faire, sous forme de checklist sous forme de liste structurée avec les étapes couvertes et les étapes restantes.");
   }, [sendMessage]);
 
   return { initChat, sendMessage, handleRecap };

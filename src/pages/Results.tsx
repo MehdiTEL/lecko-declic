@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings, Sparkles, Bot, Users } from "lucide-react";
+import { ArrowLeft, Download, Share2, RotateCcw, Filter, Settings, Sparkles, Bot, Users, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -310,7 +310,7 @@ export default function Results() {
         <Navbar />
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="lecko-card p-8 max-w-md w-full text-center">
-            <div className="text-4xl mb-4">⚠️</div>
+            <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-4"><AlertTriangle size={24} className="text-destructive" /></div>
             <h2 className="text-xl font-bold text-foreground mb-2">Une erreur est survenue</h2>
             <p className="text-foreground-secondary text-sm mb-6">{error}</p>
             <div className="flex flex-col gap-3">
@@ -330,7 +330,7 @@ export default function Results() {
                 Réessayer
               </button>
               <p className="text-xs text-foreground-muted">
-                💡 Vous pouvez aussi essayer avec un autre fournisseur dans les{" "}
+                Vous pouvez aussi essayer avec un autre fournisseur dans les{" "}
                 <Link to="/parametres" className="text-primary hover:underline">paramètres</Link>.
               </p>
             </div>
@@ -385,7 +385,7 @@ export default function Results() {
       {isDemo && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-3 flex items-center justify-between">
           <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
-            ⚠️ MODE DÉMO — Données fictives à titre d'illustration
+            MODE DÉMO — Données fictives à titre d'illustration
           </p>
           <button
             onClick={() => navigate("/")}
