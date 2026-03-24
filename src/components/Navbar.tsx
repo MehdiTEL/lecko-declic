@@ -52,14 +52,14 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* DÉCLIC Copilot — pill button with Sparkles */}
+          {/* Consultant IA — pill button with Sparkles */}
           <button
             onClick={() => openChat()}
             className="relative inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-            aria-label="DÉCLIC Copilot"
+            aria-label="Consultant IA"
           >
             <Sparkles size={15} strokeWidth={1.5} />
-            <span>DÉCLIC Copilot</span>
+            <span>Consultant IA</span>
             {!hasSeenNew && (
               <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gr33t-500 border-2 border-white dark:border-card animate-pulse" />
             )}
@@ -102,7 +102,7 @@ export default function Navbar() {
           <button
             onClick={() => openChat()}
             className="relative p-2 rounded-full bg-primary text-white shadow-sm"
-            aria-label="DÉCLIC Copilot"
+            aria-label="Consultant IA"
           >
             <Sparkles size={18} strokeWidth={1.5} />
             {!hasSeenNew && (
@@ -159,7 +159,7 @@ export default function Navbar() {
             className="flex items-center gap-2 text-sm font-semibold py-2.5 text-primary hover:text-primary/80 transition-colors text-left"
           >
             <Sparkles size={15} strokeWidth={1.5} />
-            DÉCLIC Copilot
+            Consultant IA
           </button>
           {profile && (
             <div className="border-t border-border/60 pt-3 mt-2 flex items-center justify-between">

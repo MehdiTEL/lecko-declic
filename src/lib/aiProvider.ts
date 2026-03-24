@@ -227,6 +227,102 @@ export async function analyzeJob(metier: string): Promise<string> {
   return data.choices?.[0]?.message?.content ?? "";
 }
 
+// ─── Workflow JSON generation ────────────────────────────────────────
+
+import type { AnalysisTask } from "@/types/analysis";
+
+const WORKFLOW_SYSTEM_PROMPT = `Tu es un expert en automatisation. Tu generes des workflows JSON importables.
+
+REGLES :
+- Reponds UNIQUEMENT avec du JSON valide, sans texte avant ou apres, sans backticks
+- Le JSON doit etre directement importable dans l'outil cible
+- Utilise des noms de noeuds en francais
+- Inclus des commentaires dans les descriptions de noeuds
+- Configure les credentials en placeholder (l'utilisateur les remplira)`;
+
+const N8N_PROMPT = `Genere un workflow JSON N8N (format n8n export) pour cette tache.
+Le JSON doit avoir la structure : { "meta": {...}, "nodes": [...], "connections": {...} }
+Chaque noeud doit avoir : type, name, parameters, position (x,y pour le canvas).
+Utilise les vrais types de noeuds n8n (n8n-nodes-base.webhook, n8n-nodes-base.httpRequest, etc.)`;
+
+const MAKE_PROMPT = `Genere un blueprint Make (ex-Integromat) pour cette tache.
+Le JSON doit avoir la structure : { "name": "...", "flow": [...], "modules": [...] }
+Chaque module doit avoir : module (type), mapper, metadata.`;
+
+export async function generateWorkflowJson(
+  task: AnalysisTask,
+  metier: string,
+  format: "n8n" | "make"
+): Promise<string> {
+  const provider = getProvider();
+  const apiKey = getApiKey();
+
+  if (!apiKey || !provider) {
+    throw new Error("Cle API requise pour generer des workflows.");
+  }
+
+  const formatPrompt = format === "n8n" ? N8N_PROMPT : MAKE_PROMPT;
+
+  const userMessage = `Metier : ${metier}
+Tache : ${task.nom}
+Description : ${task.description}
+Solution : ${task.solution}
+Outils : ${task.outils_specifiques?.join(", ") ?? task.type_outil}
+Ecosysteme : ${task.ecosysteme ?? "N8N"}
+
+${formatPrompt}`;
+
+  if (provider === "anthropic") {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4096,
+        system: WORKFLOW_SYSTEM_PROMPT,
+        messages: [{ role: "user", content: userMessage }],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur API Anthropic (${response.status})`);
+    }
+
+    const data = await response.json();
+    return data.content?.[0]?.text ?? "";
+  }
+
+  // OpenAI
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-4o",
+      temperature: 0.3,
+      max_tokens: 4096,
+      messages: [
+        { role: "system", content: WORKFLOW_SYSTEM_PROMPT },
+        { role: "user", content: userMessage },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Erreur API OpenAI (${response.status})`);
+  }
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content ?? "";
+}
+
 // ─── Personalized analysis (from diagnostic form) ───────────────────
 
 import { buildPersonalizedSystemPrompt, buildUserMessage } from "@/lib/diagnosticPrompt";

@@ -3,6 +3,8 @@ import { useState, useMemo } from "react";
 import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info, Sparkles, Users, Wrench } from "lucide-react";
 import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass, ACCOMPAGNEMENT_CONFIG, COMPLEXITE_CONFIG, ECOSYSTEM_LABELS, PERIMETRE_IMPACT_CONFIG, NIVEAU_CHANGEMENT_CONFIG, RISQUE_ADOPTION_CONFIG } from "@/types/analysis";
 import ConsultantContactForm from "@/components/ConsultantContactForm";
+import WorkflowPreview from "@/components/WorkflowPreview";
+import WorkflowGenerator from "@/components/WorkflowGenerator";
 import type { AccompagnementLevel, ComplexiteMiseEnPlace, ToolEcosystem } from "@/types/analysis";
 import type { TaskStatus } from "@/types/gamification";
 import { useChatContext } from "@/context/ChatContext";
@@ -487,16 +489,27 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
                 )}
               </div>
 
-              {/* DÉCLIC Copilot CTA */}
+              {/* Workflow preview + generator */}
+              {task.categorie !== "difficilement_automatisable" && (
+                <div className="space-y-4 mt-2">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-foreground-muted mb-2">Workflow d'automatisation</p>
+                    <WorkflowPreview task={task} />
+                  </div>
+                  <WorkflowGenerator task={task} metier={metier ?? ""} />
+                </div>
+              )}
+
+              {/* Consultant Augmenté CTA */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   openChat({ task, metier: metier ?? "" });
                 }}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline transition-colors mt-1"
+                className="inline-flex items-center gap-2 text-xs text-foreground-muted hover:text-primary transition-colors mt-2"
               >
-                Se faire accompagner
-                <ArrowRight size={14} />
+                <Sparkles size={12} />
+                Poser une question au Consultant IA
               </button>
             </div>
           </motion.div>

@@ -84,8 +84,8 @@ export function ChatPanel() {
           <div className="flex items-center gap-2">
             <Sparkles size={18} strokeWidth={1.5} className="text-white" />
             <div>
-              <p className="text-sm font-semibold text-white">DÉCLIC Copilot</p>
-              <p className="text-xs text-white/70 mt-0.5">Votre guide étape par étape</p>
+              <p className="text-sm font-semibold text-white">Consultant Augmenté</p>
+              <p className="text-xs text-white/70 mt-0.5">by Lecko</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
