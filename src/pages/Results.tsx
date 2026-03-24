@@ -7,6 +7,7 @@ import TaskCard from "@/components/TaskCard";
 import DeclicCTA from "@/components/DeclicCTA";
 import Footer from "@/components/Footer";
 import ConsultantContactForm from "@/components/ConsultantContactForm";
+import EmailResultsForm from "@/components/EmailResultsForm";
 import ResultsDashboard from "@/components/ResultsDashboard";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
@@ -400,6 +401,11 @@ export default function Results() {
           </div>
 
         </div>
+      </div>
+
+      {/* Email results capture */}
+      <div className="max-w-4xl mx-auto px-4 mt-6">
+        <EmailResultsForm result={result} />
       </div>
 
       {/* ═══════════ ZONE B — Les tâches ═══════════ */}
