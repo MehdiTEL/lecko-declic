@@ -53,6 +53,7 @@ export default function Results() {
   const [toolFilter, setToolFilter] = useState<ToolFilter>("all");
   const [accompFilter, setAccompFilter] = useState<AccompagnementFilter>("all");
   const [showConceptionForm, setShowConceptionForm] = useState(false);
+  const [viewMode, setViewMode] = useState<"simple" | "technique">("simple");
   const { toast, showToast, hideToast } = useToast();
   const resultsRef = useRef<HTMLDivElement>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
@@ -439,6 +440,31 @@ export default function Results() {
           </div>
         </div>
 
+        {/* Mode toggle: Simple vs Technique */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center bg-muted rounded-full p-0.5">
+            <button
+              onClick={() => setViewMode("simple")}
+              className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
+                viewMode === "simple" ? "bg-card text-foreground shadow-sm" : "text-foreground-muted"
+              }`}
+            >
+              Simplifié
+            </button>
+            <button
+              onClick={() => setViewMode("technique")}
+              className={`px-3 py-1 text-xs font-semibold rounded-full transition-all ${
+                viewMode === "technique" ? "bg-card text-foreground shadow-sm" : "text-foreground-muted"
+              }`}
+            >
+              Technique
+            </button>
+          </div>
+          <span className="text-[10px] text-foreground-muted">
+            {viewMode === "simple" ? "Vue accessible — langage courant, pas de jargon" : "Vue détaillée — outils, workflows, JSON"}
+          </span>
+        </div>
+
         <p className="text-xs text-foreground-muted mb-4">
           Triées par score DÉCLIC décroissant — les plus impactantes en premier.
         </p>
@@ -458,6 +484,7 @@ export default function Results() {
                 trackedStatus={trackedTasks.find((t) => t.taskName === task.nom)?.status ?? "todo"}
                 onStatusChange={(taskName, status) => setTaskStatus(analysisId, taskName, status)}
                 isDemo={isDemo}
+                viewMode={viewMode}
               />
             ))}
           {filteredTasks.length === 0 && (

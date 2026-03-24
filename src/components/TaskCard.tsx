@@ -140,9 +140,11 @@ interface TaskCardProps {
   trackedStatus?: TaskStatus;
   onStatusChange?: (taskName: string, status: TaskStatus) => void;
   isDemo?: boolean;
+  viewMode?: "simple" | "technique";
 }
 
-export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, trackedStatus, onStatusChange, isDemo }: TaskCardProps) {
+export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, trackedStatus, onStatusChange, isDemo, viewMode = "technique" }: TaskCardProps) {
+  const isSimple = viewMode === "simple";
   const [expanded, setExpanded] = useState(false);
   const [showRaisonIa, setShowRaisonIa] = useState(false);
 
@@ -268,43 +270,77 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
             <div className="px-5 pb-5 border-t border-border pt-4 space-y-4">
               <p className="text-sm text-foreground-secondary leading-relaxed">{task.description}</p>
 
-              {/* AI / No-AI badges */}
-              <div className="flex flex-wrap gap-2">
-                {task.peut_fonctionner_sans_ia === true && (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ backgroundColor: "hsl(var(--accent-green-bg))", color: "hsl(var(--accent-green-text))" }}>
-                    <Zap size={11} />
-                    Sans IA
-                  </span>
-                )}
-                {task.peut_fonctionner_sans_ia === false && (
-                  <div className="relative">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setShowRaisonIa(!showRaisonIa); }}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-colors"
-                      style={{ backgroundColor: "hsl(var(--accent-violet-bg))", color: "hsl(var(--accent-violet-text))" }}
-                    >
-                      <Brain size={11} />
-                      IA recommandée
-                      <Info size={10} />
-                    </button>
-                    {showRaisonIa && task.raison_ia && (
-                      <div className="absolute top-full left-0 mt-2 z-10 w-64 bg-card border border-border rounded-xl shadow-elevated p-3 text-xs text-foreground-secondary animate-fade-in">
-                        {task.raison_ia}
+              {/* Simple mode — friendly explanation */}
+              {isSimple && (
+                <div className="rounded-xl p-4 space-y-3" style={{ backgroundColor: "hsl(var(--accent-blue-bg))" }}>
+                  <p className="text-sm font-semibold" style={{ color: "hsl(var(--accent-blue-text))" }}>
+                    {task.peut_fonctionner_sans_ia === true
+                      ? "Cette tâche peut être automatisée sans intelligence artificielle."
+                      : "Cette tâche bénéficie de l'intelligence artificielle pour être automatisée."}
+                  </p>
+                  <p className="text-sm text-foreground-secondary leading-relaxed">
+                    <strong>Ce qui change pour vous :</strong> {task.process_cible
+                      ?? `Au lieu de faire cette tâche manuellement (~${task.temps_gagne_heures_semaine}h/semaine), un outil s'en charge automatiquement. Vous gardez le contrôle et validez quand nécessaire.`}
+                  </p>
+                  {task.exemple_resultat && (
+                    <p className="text-sm text-foreground-secondary">
+                      <strong>Résultat concret :</strong> {task.exemple_resultat}
+                    </p>
+                  )}
+                  {task.niveau_accompagnement && (
+                    <p className="text-xs text-foreground-muted mt-2">
+                      {task.niveau_accompagnement === "express"
+                        ? "Vous pouvez mettre ça en place vous-même en quelques heures."
+                        : task.niveau_accompagnement === "guide"
+                        ? "Le Consultant IA vous guide pas à pas pour la mise en place."
+                        : "Un consultant Lecko vous accompagne pour cette mise en place."}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Technical mode — full details */}
+              {!isSimple && (
+                <>
+                  {/* AI / No-AI badges */}
+                  <div className="flex flex-wrap gap-2">
+                    {task.peut_fonctionner_sans_ia === true && (
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+                        style={{ backgroundColor: "hsl(var(--accent-green-bg))", color: "hsl(var(--accent-green-text))" }}>
+                        <Zap size={11} />
+                        Sans IA
+                      </span>
+                    )}
+                    {task.peut_fonctionner_sans_ia === false && (
+                      <div className="relative">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setShowRaisonIa(!showRaisonIa); }}
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-colors"
+                          style={{ backgroundColor: "hsl(var(--accent-violet-bg))", color: "hsl(var(--accent-violet-text))" }}
+                        >
+                          <Brain size={11} />
+                          IA recommandée
+                          <Info size={10} />
+                        </button>
+                        {showRaisonIa && task.raison_ia && (
+                          <div className="absolute top-full left-0 mt-2 z-10 w-64 bg-card border border-border rounded-xl shadow-elevated p-3 text-xs text-foreground-secondary animate-fade-in">
+                            {task.raison_ia}
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                )}
 
-                {/* Tool badge */}
-                <span className={`inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full ${tool.badgeClass}`}>
-                  {task.type_outil}
-                </span>
-              </div>
+                    {/* Tool badge */}
+                    <span className={`inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full ${tool.badgeClass}`}>
+                      {task.type_outil}
+                    </span>
+                  </div>
+                </>
+              )}
 
               {/* Solution */}
               <div>
-                <p className="label-uppercase mb-1.5 text-[11px]">Solution recommandée</p>
+                <p className="label-uppercase mb-1.5 text-[11px]">{isSimple ? "Comment ça marche" : "Solution recommandée"}</p>
                 <p className="text-sm text-foreground-secondary leading-relaxed">{task.solution}</p>
               </div>
 
@@ -489,8 +525,8 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
                 )}
               </div>
 
-              {/* Workflow preview + generator */}
-              {task.categorie !== "difficilement_automatisable" && (
+              {/* Workflow preview + generator — technical mode only */}
+              {!isSimple && task.categorie !== "difficilement_automatisable" && (
                 <div className="space-y-4 mt-2">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-foreground-muted mb-2">Workflow d'automatisation</p>
