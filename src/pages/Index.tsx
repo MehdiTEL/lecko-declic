@@ -82,11 +82,10 @@ function NoMatchModal({ metier, onClose, onUseApi, similarJobs, onPickJob }: NoM
         </div>
         <div className="text-center">
           <h2 className="font-heading text-lg font-bold text-foreground mb-2">
-            Métier non disponible en mode gratuit
+            Ce métier n'est pas dans notre base express
           </h2>
           <p className="text-sm text-foreground-secondary">
-            <span className="font-semibold text-primary">"{metier}"</span> n'est pas encore dans
-            notre base gratuite. Utilisez votre clé API pour une analyse personnalisée.
+            Le diagnostic express couvre 15 métiers. <span className="font-semibold text-primary">"{metier}"</span> n'en fait pas encore partie. Essayez un métier proche ci-dessous, ou lancez un diagnostic personnalisé.
           </p>
         </div>
 
@@ -94,7 +93,7 @@ function NoMatchModal({ metier, onClose, onUseApi, similarJobs, onPickJob }: NoM
           onClick={onUseApi}
           className="w-full h-11 rounded-full font-semibold text-sm bg-primary text-white hover:bg-primary/90 transition-all hover:shadow-md flex items-center justify-center gap-2"
         >
-          Utiliser ma clé API
+          Diagnostic personnalisé
           <ArrowRight size={15} />
         </button>
 
@@ -636,7 +635,7 @@ export default function Index() {
         <NoMatchModal
           metier={noMatchMetier}
           onClose={() => setShowNoMatchModal(false)}
-          onUseApi={() => { setShowNoMatchModal(false); setPendingJob(noMatchMetier); setShowApiModal(true); }}
+          onUseApi={() => { setShowNoMatchModal(false); navigate(`/diagnostic?metier=${encodeURIComponent(noMatchMetier)}`); }}
           similarJobs={similarJobs}
           onPickJob={(job) => { setShowNoMatchModal(false); navigate(`/resultats?metier=${encodeURIComponent(job)}&source=local`); }}
         />

@@ -69,8 +69,7 @@ export function ChatPanel() {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40"
-        style={{ backgroundColor: "hsl(222 47% 11% / 0.35)" }}
+        className="fixed inset-0 z-40 bg-black/35"
         onClick={closeChat}
       />
 
@@ -176,8 +175,7 @@ export function ChatPanel() {
 
       {/* Reset confirm */}
       {showResetConfirm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-          style={{ backgroundColor: "hsl(222 47% 11% / 0.5)" }}>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50">
           <div className="bg-card border border-border rounded-2xl p-6 shadow-elevated max-w-sm w-full animate-fade-in">
             <h3 className="font-semibold text-foreground mb-2">Nouveau sujet ?</h3>
             <p className="text-sm text-foreground-secondary mb-5">

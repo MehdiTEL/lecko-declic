@@ -532,7 +532,7 @@ export default function Results() {
 
       {/* Consultant contact modal */}
       {showConceptionForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "hsl(222 47% 11% / 0.5)" }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="bg-card border border-border rounded-2xl shadow-elevated max-w-md w-full p-6">
             <ConsultantContactForm
               variant="card"

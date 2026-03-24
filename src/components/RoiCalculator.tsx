@@ -207,7 +207,7 @@ export default function RoiCalculator({
           className="callout-orange"
         >
           <p className="font-semibold mb-0.5">
-            Votre économie annuelle de <span style={{ color: "hsl(32 95% 35%)" }}>{formatEur(yearEur)}</span> représente :
+            Votre économie annuelle de <span style={{ color: "hsl(var(--lecko-orange))" }}>{formatEur(yearEur)}</span> représente :
           </p>
           <p>{comparison}</p>
         </motion.div>

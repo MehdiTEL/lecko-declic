@@ -119,7 +119,7 @@ export default function WhereToStart({ tasks, metier, onFilterEasyWins, onFilter
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
         {/* Easy wins */}
-        <div className="lecko-card p-5" style={{ borderLeft: "3px solid hsl(160 72% 35%)" }}>
+        <div className="lecko-card p-5" style={{ borderLeft: "3px solid hsl(var(--accent-green-text))" }}>
           <div className="flex items-center gap-2 mb-2">
             <Zap size={14} className="text-gr33t-500 shrink-0" />
             <p className="text-xs font-semibold uppercase tracking-wider text-gr33t-500">
@@ -142,10 +142,10 @@ export default function WhereToStart({ tasks, metier, onFilterEasyWins, onFilter
         </div>
 
         {/* AI tasks */}
-        <div className="lecko-card p-5" style={{ borderLeft: "3px solid hsl(271 91% 55%)" }}>
+        <div className="lecko-card p-5" style={{ borderLeft: "3px solid hsl(var(--accent-violet-text))" }}>
           <div className="flex items-center gap-2 mb-2">
-            <Brain size={14} className="shrink-0" style={{ color: "hsl(271 55% 50%)" }} />
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "hsl(271 55% 50%)" }}>
+            <Brain size={14} className="shrink-0" style={{ color: "hsl(var(--accent-violet-text))" }} />
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "hsl(var(--accent-violet-text))" }}>
               Avec IA
             </p>
           </div>
@@ -157,7 +157,7 @@ export default function WhereToStart({ tasks, metier, onFilterEasyWins, onFilter
             onClick={onFilterAI}
             disabled={aiNeeded.length === 0}
             className="inline-flex items-center gap-1.5 text-xs font-medium hover:underline disabled:opacity-40 disabled:pointer-events-none transition-colors"
-            style={{ color: "hsl(271 55% 50%)" }}
+            style={{ color: "hsl(var(--accent-violet-text))" }}
           >
             <Filter size={11} />
             Voir ces {aiNeeded.length} tâche{aiNeeded.length !== 1 ? "s" : ""}

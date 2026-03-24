@@ -1,23 +1,26 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
-import Results from "./pages/Results";
-import History from "./pages/History";
-import Settings from "./pages/Settings";
-import Equipe from "./pages/Equipe";
-import EquipeResultats from "./pages/EquipeResultats";
-import Methode from "./pages/Methode";
-import MonParcours from "./pages/MonParcours";
-import DiagnosticForm from "./pages/DiagnosticForm";
-import ConfigurerApi from "./pages/ConfigurerApi";
-import NotreHistoire from "./pages/NotreHistoire";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
-import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+// Lazy-loaded pages (code splitting)
+const Results = lazy(() => import("./pages/Results"));
+const History = lazy(() => import("./pages/History"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Equipe = lazy(() => import("./pages/Equipe"));
+const EquipeResultats = lazy(() => import("./pages/EquipeResultats"));
+const Methode = lazy(() => import("./pages/Methode"));
+const MonParcours = lazy(() => import("./pages/MonParcours"));
+const DiagnosticForm = lazy(() => import("./pages/DiagnosticForm"));
+const ConfigurerApi = lazy(() => import("./pages/ConfigurerApi"));
+const NotreHistoire = lazy(() => import("./pages/NotreHistoire"));
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
 import { ProgressProvider } from "./context/ProgressContext";
@@ -42,6 +45,7 @@ const App = () => (
         <ProgressProvider>
         <PageProvider>
         <ChatProvider>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><div className="w-6 h-6 border-2 border-lecko-blue border-t-transparent rounded-full animate-spin" /></div>}>
           <Routes>
             {/* Auth */}
             <Route path="/login" element={<Login />} />
@@ -63,6 +67,7 @@ const App = () => (
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
           <ChatPanel />
           <AppCelebration />
         </ChatProvider>
