@@ -8,6 +8,7 @@ import DeclicCTA from "@/components/DeclicCTA";
 import Footer from "@/components/Footer";
 import ConsultantContactForm from "@/components/ConsultantContactForm";
 import EmailResultsForm from "@/components/EmailResultsForm";
+import ActionTracker from "@/components/ActionTracker";
 import ResultsDashboard from "@/components/ResultsDashboard";
 import { Toast, useToast } from "@/components/Toast";
 import { AnalysisResult, AnalysisTask, AnalysisSource, TaskCategory, ToolType, AccompagnementLevel } from "@/types/analysis";
@@ -499,6 +500,15 @@ export default function Results() {
             </div>
           )}
         </div>
+
+        {/* Plan d'action avec suivi */}
+        <section className="mt-8 pt-8 border-t border-border">
+          <h2 className="text-lg font-bold text-foreground mb-4">Plan d'action</h2>
+          <p className="text-sm text-foreground-muted mb-6">
+            Cochez les automatisations au fur et a mesure de leur mise en place.
+          </p>
+          <ActionTracker result={result} />
+        </section>
       </main>
 
       {/* ═══════════ ZONE D — Tableau de bord ROI ═══════════ */}
