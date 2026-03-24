@@ -166,12 +166,9 @@ export default function Navbar() {
             className="absolute right-2 -top-3.5 flex items-center gap-1.5 text-xs font-bold px-2 py-0.5 rounded-full bg-white dark:bg-card border border-border/60 shadow-sm hover:shadow-md transition-shadow"
             style={{ color: currentMaturity.color }}
           >
-            {currentMaturity.emoji} {currentMaturity.label} · {globalProgress.percent}%
+            {currentMaturity.label} · {globalProgress.percent}%
             {progressState.streak.currentStreak >= 2 && (
-              <span className="text-amber-500">Streak: {progressState.streak.currentStreak}</span>
-            )}
-            {progressState.streak.currentStreak === 0 && hasProgress && (
-              <span className="opacity-30">Streak: 0</span>
+              <span className="text-amber-500 ml-1">{progressState.streak.currentStreak}j</span>
             )}
           </Link>
         </div>

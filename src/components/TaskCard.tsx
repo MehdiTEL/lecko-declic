@@ -102,12 +102,15 @@ function StatusCircle({ status, onChange }: { status: TaskStatus; onChange: (s: 
   };
 
   return (
-    <motion.button
+    <motion.div
+      role="button"
+      tabIndex={0}
       onClick={(e) => { e.stopPropagation(); onChange(nextStatus[status]); }}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.stopPropagation(); e.preventDefault(); onChange(nextStatus[status]); } }}
       whileTap={{ scale: 0.9 }}
       animate={status === "done" ? { scale: [0.9, 1.1, 1] } : {}}
       transition={{ duration: 0.3 }}
-      className="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors"
+      className="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer"
       style={{
         borderColor: status === "done" ? "#10B981" : status === "in_progress" ? "#2563EB" : "hsl(var(--border))",
         backgroundColor: status === "done" ? "#10B981" : status === "in_progress" ? "rgba(37,99,235,0.12)" : "transparent",
@@ -122,7 +125,7 @@ function StatusCircle({ status, onChange }: { status: TaskStatus; onChange: (s: 
       {status === "in_progress" && (
         <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
       )}
-    </motion.button>
+    </motion.div>
   );
 }
 
