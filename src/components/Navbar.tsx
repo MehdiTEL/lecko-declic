@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { useChatContext } from "@/context/ChatContext";
 import { useProgress } from "@/context/ProgressContext";
+import { useAuth } from "@/context/AuthContext";
 import DeclicLogo from "@/components/DeclicLogo";
 
 export default function Navbar() {
@@ -12,6 +13,7 @@ export default function Navbar() {
   const location = useLocation();
   const { openChat, hasSeenNew } = useChatContext();
   const { globalProgress, currentMaturity, state: progressState } = useProgress();
+  const { profile, signOut } = useAuth();
   const hasProgress = globalProgress.total > 0;
 
   const navLinks = [
@@ -62,6 +64,16 @@ export default function Navbar() {
               <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gr33t-500 border-2 border-white dark:border-card animate-pulse" />
             )}
           </button>
+
+          {/* User info + logout */}
+          {profile && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-foreground-muted">{profile.prenom}</span>
+              <button onClick={signOut} className="text-xs text-foreground-muted hover:text-foreground transition-colors">
+                Deconnexion
+              </button>
+            </div>
+          )}
 
           {/* Theme toggle — styled as the DÉCLIC orange dot */}
           <button
@@ -149,6 +161,17 @@ export default function Navbar() {
             <Sparkles size={15} strokeWidth={1.5} />
             DÉCLIC Copilot
           </button>
+          {profile && (
+            <div className="border-t border-border/60 pt-3 mt-2 flex items-center justify-between">
+              <span className="text-xs text-foreground-muted">{profile.prenom} {profile.nom}</span>
+              <button
+                onClick={() => { setMenuOpen(false); signOut(); }}
+                className="text-xs text-foreground-muted hover:text-foreground transition-colors"
+              >
+                Deconnexion
+              </button>
+            </div>
+          )}
         </div>
       )}
       {/* Progress bar — only if user has tracked tasks */}

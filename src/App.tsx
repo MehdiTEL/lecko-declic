@@ -15,6 +15,9 @@ import DiagnosticForm from "./pages/DiagnosticForm";
 import ConfigurerApi from "./pages/ConfigurerApi";
 import NotreHistoire from "./pages/NotreHistoire";
 import NotFound from "./pages/NotFound";
+import { AuthProvider } from "./context/AuthContext";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
 import { ProgressProvider } from "./context/ProgressContext";
@@ -35,21 +38,23 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AuthProvider>
         <ProgressProvider>
         <PageProvider>
         <ChatProvider>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/resultats" element={<Results />} />
-            <Route path="/historique" element={<History />} />
-            <Route path="/parametres" element={<Settings />} />
-            <Route path="/equipe" element={<Equipe />} />
-            <Route path="/equipe/resultats" element={<EquipeResultats />} />
-            <Route path="/methode" element={<Methode />} />
-            <Route path="/mon-parcours" element={<MonParcours />} />
-            <Route path="/diagnostic" element={<DiagnosticForm />} />
-            <Route path="/configurer-api" element={<ConfigurerApi />} />
-            <Route path="/notre-histoire" element={<NotreHistoire />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/resultats" element={<ProtectedRoute><Results /></ProtectedRoute>} />
+            <Route path="/historique" element={<ProtectedRoute><History /></ProtectedRoute>} />
+            <Route path="/parametres" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/equipe" element={<ProtectedRoute><Equipe /></ProtectedRoute>} />
+            <Route path="/equipe/resultats" element={<ProtectedRoute><EquipeResultats /></ProtectedRoute>} />
+            <Route path="/methode" element={<ProtectedRoute><Methode /></ProtectedRoute>} />
+            <Route path="/mon-parcours" element={<ProtectedRoute><MonParcours /></ProtectedRoute>} />
+            <Route path="/diagnostic" element={<ProtectedRoute><DiagnosticForm /></ProtectedRoute>} />
+            <Route path="/configurer-api" element={<ProtectedRoute><ConfigurerApi /></ProtectedRoute>} />
+            <Route path="/notre-histoire" element={<ProtectedRoute><NotreHistoire /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatPanel />
@@ -57,6 +62,7 @@ const App = () => (
         </ChatProvider>
         </PageProvider>
         </ProgressProvider>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
