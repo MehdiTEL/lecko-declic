@@ -43,18 +43,24 @@ const App = () => (
         <PageProvider>
         <ChatProvider>
           <Routes>
+            {/* Auth */}
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-            <Route path="/resultats" element={<ProtectedRoute><Results /></ProtectedRoute>} />
-            <Route path="/historique" element={<ProtectedRoute><History /></ProtectedRoute>} />
-            <Route path="/parametres" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-            <Route path="/equipe" element={<ProtectedRoute><Equipe /></ProtectedRoute>} />
-            <Route path="/equipe/resultats" element={<ProtectedRoute><EquipeResultats /></ProtectedRoute>} />
-            <Route path="/methode" element={<ProtectedRoute><Methode /></ProtectedRoute>} />
-            <Route path="/mon-parcours" element={<ProtectedRoute><MonParcours /></ProtectedRoute>} />
+
+            {/* Public — accessible sans inscription */}
+            <Route path="/" element={<Index />} />
+            <Route path="/resultats" element={<Results />} />
+            <Route path="/methode" element={<Methode />} />
+            <Route path="/notre-histoire" element={<NotreHistoire />} />
+
+            {/* Premium — inscription requise */}
             <Route path="/diagnostic" element={<ProtectedRoute><DiagnosticForm /></ProtectedRoute>} />
             <Route path="/configurer-api" element={<ProtectedRoute><ConfigurerApi /></ProtectedRoute>} />
-            <Route path="/notre-histoire" element={<ProtectedRoute><NotreHistoire /></ProtectedRoute>} />
+            <Route path="/equipe" element={<ProtectedRoute><Equipe /></ProtectedRoute>} />
+            <Route path="/equipe/resultats" element={<ProtectedRoute><EquipeResultats /></ProtectedRoute>} />
+            <Route path="/historique" element={<ProtectedRoute><History /></ProtectedRoute>} />
+            <Route path="/parametres" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/mon-parcours" element={<ProtectedRoute><MonParcours /></ProtectedRoute>} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatPanel />
