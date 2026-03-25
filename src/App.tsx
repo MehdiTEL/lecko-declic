@@ -15,6 +15,7 @@ const Results = lazy(() => import("./pages/Results"));
 const History = lazy(() => import("./pages/History"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Equipe = lazy(() => import("./pages/Equipe"));
+const EquipeRejoindre = lazy(() => import("./pages/EquipeRejoindre"));
 const EquipeResultats = lazy(() => import("./pages/EquipeResultats"));
 const Methode = lazy(() => import("./pages/Methode"));
 const MonParcours = lazy(() => import("./pages/MonParcours"));
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/diagnostic" element={<ProtectedRoute><DiagnosticForm /></ProtectedRoute>} />
             <Route path="/configurer-api" element={<ProtectedRoute><ConfigurerApi /></ProtectedRoute>} />
             <Route path="/equipe" element={<ProtectedRoute><Equipe /></ProtectedRoute>} />
+            <Route path="/equipe/rejoindre" element={<EquipeRejoindre />} />
             <Route path="/equipe/resultats" element={<ProtectedRoute><EquipeResultats /></ProtectedRoute>} />
             <Route path="/historique" element={<ProtectedRoute><History /></ProtectedRoute>} />
             <Route path="/parametres" element={<ProtectedRoute><Settings /></ProtectedRoute>} />

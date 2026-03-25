@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Plus, X, Sparkles, Rocket, User, Check } from "lucide-react";
+import { Users, Plus, X, Sparkles, Rocket, User, Check, Copy, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,6 +8,7 @@ import { FREE_JOB_LABELS, findInLocalDatabase } from "@/data/jobDatabase";
 import { getApiKey, analyzeJob as callAnalyzeJob } from "@/lib/aiProvider";
 import { AnalysisResult, AnalysisSource } from "@/types/analysis";
 import { TeamMember, TeamJobResult, TeamAnalysisResult } from "@/types/team";
+import { createTeamSession, loadTeamSession } from "@/lib/teamSession";
 
 const MAX_MEMBERS = 10;
 
@@ -23,6 +24,11 @@ export default function Equipe() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [progress, setProgress] = useState<ProgressItem[]>([]);
   const [progressLabel, setProgressLabel] = useState("");
+  const [activeTab, setActiveTab] = useState<"rapide" | "collab">("rapide");
+  const [sessionCode, setSessionCode] = useState<string | null>(null);
+  const [sessionNom, setSessionNom] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [sessionMembers, setSessionMembers] = useState<any[]>([]);
 
   const addMember = (metier?: string) => {
     const job = (metier ?? input).trim();
@@ -117,6 +123,28 @@ export default function Equipe() {
     navigate("/equipe/resultats");
   };
 
+  const handleCreateSession = async () => {
+    if (!sessionNom.trim()) return;
+    setCreating(true);
+    try {
+      const code = await createTeamSession(sessionNom.trim());
+      setSessionCode(code);
+      // Start polling
+      const interval = setInterval(async () => {
+        try {
+          const { members: m } = await loadTeamSession(code);
+          setSessionMembers(m);
+        } catch { /* silent */ }
+      }, 5000);
+      // Cleanup not strictly needed for demo, but good practice
+      void interval;
+    } catch (e: any) {
+      console.error(e);
+    } finally {
+      setCreating(false);
+    }
+  };
+
   const totalPeople = members.reduce((s, m) => s + m.count, 0);
 
   return (
@@ -144,6 +172,17 @@ export default function Equipe() {
           </p>
         </motion.div>
 
+        {/* Tab switcher */}
+        <div className="flex gap-1 p-1 rounded-xl bg-muted mb-6">
+          <button onClick={() => setActiveTab("rapide")} className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${activeTab === "rapide" ? "bg-card text-foreground shadow-sm" : "text-foreground-muted"}`}>
+            Analyse rapide
+          </button>
+          <button onClick={() => setActiveTab("collab")} className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${activeTab === "collab" ? "bg-card text-foreground shadow-sm" : "text-foreground-muted"}`}>
+            Session collaborative
+          </button>
+        </div>
+
+        {activeTab === "rapide" && (<>
         {/* Loading overlay */}
         <AnimatePresence>
           {isAnalyzing && (

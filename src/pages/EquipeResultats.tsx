@@ -443,6 +443,91 @@ export default function EquipeResultats() {
         </div>
       </div>
 
+      {/* Heatmap des opportunites */}
+      <div className="max-w-5xl mx-auto px-4 pb-8">
+        <div className="lecko-card p-5 md:p-6">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Carte de chaleur des opportunites</p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr>
+                  <th className="text-left py-2 pr-4 text-foreground-muted font-semibold">Metier</th>
+                  {["Recurrence", "Energie", "Scalabilite", "Fiabilite", "Penibilite"].map(c => (
+                    <th key={c} className="py-2 px-2 text-center text-foreground-muted font-semibold">{c}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {team.results.map((r) => {
+                  const tasks = r.result.taches;
+                  const total = tasks.length || 1;
+                  const criteres = ["recurrence", "energie", "scalabilite", "fiabilite", "penibilite"] as const;
+                  return (
+                    <tr key={r.member.id} className="border-t border-border/50">
+                      <td className="py-2.5 pr-4 font-medium text-foreground">{r.member.metier}</td>
+                      {criteres.map(c => {
+                        const pct = Math.round((tasks.filter(t => t.criteres?.[c]).length / total) * 100);
+                        const opacity = Math.max(0.05, pct / 100);
+                        return (
+                          <td key={c} className="py-2.5 px-2 text-center">
+                            <span
+                              className="inline-block w-full py-1 rounded text-[11px] font-bold"
+                              style={{ backgroundColor: `rgba(37, 99, 235, ${opacity})`, color: pct > 50 ? "white" : "hsl(var(--foreground))" }}
+                            >
+                              {pct}%
+                            </span>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-[10px] text-foreground-muted mt-3">Les cellules les plus foncees = le plus fort potentiel d'automatisation sur ce critere</p>
+        </div>
+
+        {/* Top 3 actions transverses */}
+        {(() => {
+          const taskMap = new Map<string, { metiers: Set<string>; totalHours: number }>();
+          team.results.forEach(r => {
+            r.result.taches.forEach(t => {
+              const key = t.nom.toLowerCase().trim();
+              const existing = taskMap.get(key) ?? { metiers: new Set<string>(), totalHours: 0 };
+              existing.metiers.add(r.member.metier);
+              existing.totalHours += t.temps_gagne_heures_semaine * r.member.count;
+              taskMap.set(key, existing);
+            });
+          });
+          const transverses = Array.from(taskMap.entries())
+            .filter(([, v]) => v.metiers.size > 1)
+            .sort((a, b) => b[1].totalHours - a[1].totalHours)
+            .slice(0, 3);
+
+          if (transverses.length === 0) return null;
+
+          return (
+            <div className="lecko-card p-5 md:p-6 mt-4">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Top actions transverses</p>
+              <p className="text-xs text-foreground-muted mb-3">Taches qui reviennent dans plusieurs metiers — impact demultiplie.</p>
+              <div className="space-y-2">
+                {transverses.map(([name, data], i) => (
+                  <div key={name} className="flex items-center gap-3 p-3 rounded-xl bg-muted/30">
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground capitalize">{name}</p>
+                      <p className="text-[11px] text-foreground-muted">{Array.from(data.metiers).join(", ")}</p>
+                    </div>
+                    <span className="text-sm font-bold text-primary shrink-0">{data.totalHours.toFixed(1)}h/sem</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+
       <Footer />
 
       <MicroCTA
