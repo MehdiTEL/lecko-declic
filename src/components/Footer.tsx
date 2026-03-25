@@ -47,6 +47,7 @@ export default function Footer() {
                   { label: "Méthode DÉCLIC", href: "/methode" },
                   { label: "Notre histoire", href: "/notre-histoire" },
                   { label: "Mode équipe", href: "/equipe" },
+                  { label: "Impact collectif", href: "/stats" },
                 ].map((l) => (
                   <Link key={l.label} to={l.href}
                     className="block text-sm text-slate-300 transition-colors hover:text-white">

@@ -24,6 +24,7 @@ import { usePageContext } from "@/context/PageContext";
 import { useProgress } from "@/context/ProgressContext";
 import { useProfile } from "@/context/ProfileContext";
 import { incrementDiagnosticsCount } from "@/lib/userProfile";
+import { incrementGlobalCounter } from "@/lib/statsCounter";
 import ProfileQuestion from "@/components/ProfileQuestion";
 import { AnimatePresence } from "framer-motion";
 
@@ -84,6 +85,8 @@ export default function Results() {
       // Increment diagnostic count once per session
       if (!sessionStorage.getItem("declic-counted-this-session")) {
         incrementDiagnosticsCount();
+        incrementGlobalCounter("total_diagnostics");
+        incrementGlobalCounter("total_hours_saved", Math.round(result.heures_economisees_semaine));
         sessionStorage.setItem("declic-counted-this-session", "1");
       }
     }

@@ -24,6 +24,7 @@ const DiagnosticForm = lazy(() => import("./pages/DiagnosticForm"));
 const ConfigurerApi = lazy(() => import("./pages/ConfigurerApi"));
 const NotreHistoire = lazy(() => import("./pages/NotreHistoire"));
 const Profil = lazy(() => import("./pages/Profil"));
+const Stats = lazy(() => import("./pages/Stats"));
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
 import { ProgressProvider } from "./context/ProgressContext";
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/resultats" element={<Results />} />
             <Route path="/methode" element={<Methode />} />
             <Route path="/notre-histoire" element={<NotreHistoire />} />
+            <Route path="/stats" element={<Stats />} />
 
             {/* Premium — inscription requise */}
             <Route path="/diagnostic" element={<ProtectedRoute><DiagnosticForm /></ProtectedRoute>} />
