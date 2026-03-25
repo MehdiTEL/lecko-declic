@@ -357,6 +357,65 @@ export default function Equipe() {
               : "L'analyse peut prendre quelques secondes par métier"}
           </p>
         </motion.div>
+        </>)}
+
+        {activeTab === "collab" && (
+          <div className="space-y-6">
+            {!sessionCode ? (
+              /* Create session form */
+              <div className="lecko-card p-6 space-y-4">
+                <h2 className="text-lg font-bold text-foreground">Creer une session</h2>
+                <p className="text-sm text-foreground-muted">Invitez vos collegues a analyser leur metier. Chacun recoit son diagnostic individuel, et vous obtenez une vue consolidee.</p>
+                <input value={sessionNom} onChange={e => setSessionNom(e.target.value)} placeholder="Nom de la session (ex: Equipe RH)" className="w-full h-11 px-3 text-sm bg-background border border-border rounded-xl outline-none focus:border-primary" />
+                <button onClick={handleCreateSession} disabled={!sessionNom.trim() || creating} className="w-full h-11 rounded-xl font-semibold text-sm bg-primary text-white hover:opacity-90 disabled:opacity-40 flex items-center justify-center gap-2">
+                  {creating ? <Loader2 size={15} className="animate-spin" /> : <Users size={15} />}
+                  {creating ? "Creation..." : "Creer la session"}
+                </button>
+              </div>
+            ) : (
+              /* Session created — share code */
+              <div className="space-y-4">
+                <div className="lecko-card p-6 text-center">
+                  <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Session creee</p>
+                  <p className="text-3xl font-bold text-foreground tracking-wider mb-3">{sessionCode}</p>
+                  <p className="text-sm text-foreground-muted mb-4">Partagez ce code avec vos collegues pour qu'ils rejoignent la session.</p>
+                  <div className="flex gap-2 justify-center">
+                    <button onClick={() => { navigator.clipboard.writeText(`https://declic.lecko.fr/equipe/rejoindre?code=${sessionCode}`); }} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border border-border hover:border-primary hover:text-primary transition-colors">
+                      <Copy size={14} /> Copier le lien
+                    </button>
+                  </div>
+                </div>
+
+                {/* Waiting room */}
+                <div className="lecko-card p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-sm font-bold text-foreground">Participants ({sessionMembers.length})</h3>
+                    <span className="text-[10px] text-foreground-muted">Actualisation automatique</span>
+                  </div>
+                  {sessionMembers.length === 0 ? (
+                    <p className="text-sm text-foreground-muted text-center py-6">En attente des participants...</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {sessionMembers.map((m: any) => (
+                        <div key={m.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30">
+                          <span className="text-sm font-medium text-foreground">{m.metier} ({m.count})</span>
+                          <span className={`text-xs font-semibold ${m.result ? "text-emerald-600" : "text-foreground-muted"}`}>
+                            {m.result ? "Analyse" : "En attente"}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {sessionMembers.length > 0 && sessionMembers.every((m: any) => m.result) && (
+                    <button onClick={() => navigate(`/equipe/resultats?sessionCode=${sessionCode}`)} className="w-full mt-4 h-11 rounded-xl font-semibold text-sm bg-primary text-white hover:opacity-90">
+                      Voir les resultats consolides
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </main>
 
       <Footer />

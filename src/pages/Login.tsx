@@ -70,7 +70,13 @@ export default function Login() {
     if (err) {
       setError(err);
     } else {
-      setSuccessMsg("Verifiez votre email pour confirmer votre compte.");
+      // Auto-login after signup (no email confirmation required)
+      const { error: loginErr } = await signIn(signupEmail, signupPassword);
+      if (!loginErr) {
+        navigate("/");
+      } else {
+        setSuccessMsg("Compte cree. Vous pouvez vous connecter.");
+      }
     }
   }
 
