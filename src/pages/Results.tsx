@@ -22,6 +22,10 @@ import { analyzeJobPersonalized } from "@/lib/aiProvider";
 import type { DiagnosticFormData } from "@/types/diagnostic";
 import { usePageContext } from "@/context/PageContext";
 import { useProgress } from "@/context/ProgressContext";
+import { useProfile } from "@/context/ProfileContext";
+import { incrementDiagnosticsCount } from "@/lib/userProfile";
+import ProfileQuestion from "@/components/ProfileQuestion";
+import { AnimatePresence } from "framer-motion";
 
 type CategoryFilter = "all" | TaskCategory | "easy_wins" | "ai_needed";
 type ToolFilter = "all" | ToolType;
@@ -75,8 +79,17 @@ export default function Results() {
   // Sync with PageContext for Copilot awareness
   useEffect(() => { setPage("results"); }, [setPage]);
   useEffect(() => {
-    if (result) setAnalysis(result, result.metier);
+    if (result) {
+      setAnalysis(result, result.metier);
+      // Increment diagnostic count once per session
+      if (!sessionStorage.getItem("declic-counted-this-session")) {
+        incrementDiagnosticsCount();
+        sessionStorage.setItem("declic-counted-this-session", "1");
+      }
+    }
   }, [result, setAnalysis]);
+
+  const { pendingQuestion, answerQuestion, dismissQuestion } = useProfile();
 
   // Init progression tracking
   const analysisId = result ? `analysis-${result.metier.toLowerCase().replace(/\s+/g, "-")}` : "";
@@ -576,6 +589,20 @@ export default function Results() {
       )}
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
+
+      {/* Profile progressive question */}
+      <AnimatePresence>
+        {pendingQuestion && (
+          <ProfileQuestion
+            question={pendingQuestion}
+            onAnswer={(value) => {
+              answerQuestion(pendingQuestion, value);
+              showToast("Recommandations personnalisees.");
+            }}
+            onDismiss={dismissQuestion}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

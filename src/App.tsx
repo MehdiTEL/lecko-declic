@@ -30,6 +30,7 @@ import { ProgressProvider } from "./context/ProgressContext";
 import { useProgress } from "./context/ProgressContext";
 import { ChatPanel } from "./components/chat/ChatPanel";
 import CelebrationOverlay from "./components/CelebrationOverlay";
+import { ProfileProvider } from "./context/ProfileContext";
 
 const queryClient = new QueryClient();
 
@@ -42,9 +43,11 @@ function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <ProgressProvider>
-        <PageProvider>
-          <ChatProvider>{children}</ChatProvider>
-        </PageProvider>
+        <ProfileProvider>
+          <PageProvider>
+            <ChatProvider>{children}</ChatProvider>
+          </PageProvider>
+        </ProfileProvider>
       </ProgressProvider>
     </AuthProvider>
   );
