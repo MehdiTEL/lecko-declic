@@ -78,6 +78,7 @@ const App = () => (
             <Route path="/parametres" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/mon-parcours" element={<ProtectedRoute><MonParcours /></ProtectedRoute>} />
             <Route path="/mes-automations" element={<ProtectedRoute><MesAutomations /></ProtectedRoute>} />
+            <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
