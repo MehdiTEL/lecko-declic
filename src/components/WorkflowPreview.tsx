@@ -6,7 +6,7 @@ interface WorkflowPreviewProps {
 
 // Node types with colors
 const NODE_TYPES = {
-  trigger: { label: "Declencheur", color: "#10B981", bgLight: "#ECFDF5" },
+  trigger: { label: "Declencheur", color: "#059669", bgLight: "#ECFDF5" },
   preprocess: { label: "Pre-traitement", color: "#2563EB", bgLight: "#EFF6FF" },
   decision: { label: "Decision", color: "#F59E0B", bgLight: "#FFFBEB" },
   action_ia: { label: "Appel IA", color: "#7C3AED", bgLight: "#F5F3FF" },

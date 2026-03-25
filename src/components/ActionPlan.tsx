@@ -8,10 +8,10 @@ import { useChatContext } from "@/context/ChatContext";
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const PHASE_COLORS: Record<ActionStep["phase"], string> = {
-  quick_win: "#10B981",
+  quick_win: "#059669",
   short_term: "#2563EB",
   medium_term: "#F59E0B",
-  long_term: "#6B7280",
+  long_term: "#64748b",
 };
 
 const PHASE_ICONS: Record<ActionStep["phase"], React.ReactNode> = {

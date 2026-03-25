@@ -20,9 +20,9 @@ interface ResultsDashboardProps {
 }
 
 const CAT_COLORS: Record<TaskCategory, string> = {
-  automatisable: "#10B981",
+  automatisable: "#059669" /* gr33t-600 */,
   partiellement_automatisable: "#F59E0B",
-  difficilement_automatisable: "#6B7280",
+  difficilement_automatisable: "#64748b" /* slate-500 — foreground-muted */,
 };
 
 const CAT_LABELS: Record<TaskCategory, string> = {
@@ -85,7 +85,7 @@ export default function ResultsDashboard({ result, initialRate, initialPeople, o
     return Object.entries(cats).map(([name, value]) => ({
       name,
       value,
-      color: name === "Automatisable" ? "#10B981" : name === "Partiel" ? "#F59E0B" : "#6B7280",
+      color: name === "Automatisable" ? "#059669" /* gr33t-600 */ : name === "Partiel" ? "#F59E0B" : "#64748b" /* slate-500 — foreground-muted */,
     }));
   }, [result.taches]);
 

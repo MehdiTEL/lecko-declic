@@ -12,6 +12,8 @@ export default {
     },
     extend: {
       fontFamily: {
+        // heading: Inter — modernite, lisibilite haute densite (titres)
+        // sans: Source Sans 3 — charte Lecko, corps de texte
         sans: ["'Source Sans 3'", "Calibri", "sans-serif"],
         heading: ["'Inter'", "system-ui", "sans-serif"],
       },
