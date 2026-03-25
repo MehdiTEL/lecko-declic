@@ -224,7 +224,7 @@ export default function CelebrationOverlay({
         )}
         {celebration.type === "badge_earned" && celebration.badge && (() => {
           const rarityConf = BADGE_RARITY_CONFIG[celebration.badge!.rarity];
-          const IconComp = (LucideIcons as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }>>)[celebration.badge!.icon] ?? LucideIcons.Award;
+          const IconComp = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }>>)[celebration.badge!.icon] ?? LucideIcons.Award;
           return (
             <motion.div
               key="badge_earned"
