@@ -14,6 +14,8 @@ import {
 import { clearHistory } from "@/lib/history";
 import { useTheme } from "@/hooks/useTheme";
 import ApiKeyModal from "@/components/ApiKeyModal";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +33,7 @@ const PROVIDER_LABELS: Record<AIProvider, string> = {
 };
 
 export default function Settings() {
+  const { user } = useAuth();
   const [apiKey, setApiKeyState] = useState<string | null>(getApiKey());
   const [provider, setProviderState] = useState<AIProvider | null>(getProvider());
   const [editKeyMode, setEditKeyMode] = useState(false);
@@ -40,6 +43,7 @@ export default function Settings() {
   const [editError, setEditError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmClearHistory, setConfirmClearHistory] = useState(false);
+  const [emailOptIn, setEmailOptIn] = useState(true);
   const [confirmReset, setConfirmReset] = useState(false);
   const [savedFeedback, setSavedFeedback] = useState(false);
   const { resetTheme } = useTheme();
@@ -292,6 +296,40 @@ export default function Settings() {
             </div>
           </div>
         </section>
+
+        {/* Email notifications */}
+        {user && (
+          <section className="lecko-card p-5 md:p-6">
+            <h2 className="font-heading text-base font-bold text-foreground mb-4">Notifications email</h2>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-foreground">Rapport mensuel de progression</p>
+                <p className="text-xs text-foreground-muted mt-0.5">Recevez chaque mois un recapitulatif de vos automations en cours</p>
+              </div>
+              <button
+                onClick={async () => {
+                  const newVal = !emailOptIn;
+                  setEmailOptIn(newVal);
+                  await (supabase.from("user_profiles") as any).update({ email_monthly_opt_in: newVal }).eq("id", user.id);
+                }}
+                className={`relative w-10 h-5 rounded-full transition-colors ${emailOptIn ? "bg-primary" : "bg-muted"}`}
+              >
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-all ${emailOptIn ? "left-[22px]" : "left-0.5"}`} />
+              </button>
+            </div>
+            {import.meta.env.DEV && (
+              <button
+                onClick={async () => {
+                  await supabase.functions.invoke("monthly-progress-email", { body: { test: true } });
+                  alert("Email de test envoye");
+                }}
+                className="mt-3 text-xs text-foreground-muted hover:text-primary transition-colors"
+              >
+                [DEV] Tester l'email de progression
+              </button>
+            )}
+          </section>
+        )}
       </main>
 
       {/* Change provider modal */}

@@ -103,12 +103,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       if (error.message.includes("Invalid login")) {
         return { error: "Email ou mot de passe incorrect." };
       }
       return { error: error.message };
+    }
+    // Link anon_id to profile for email features
+    const anonId = localStorage.getItem("declic-anon-id");
+    if (anonId && data.user) {
+      (supabase.from("user_profiles") as any)
+        .update({ anon_id_link: anonId })
+        .eq("id", data.user.id)
+        .then(() => {}).catch(() => {});
     }
     return { error: null };
   };
