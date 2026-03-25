@@ -13,3 +13,7 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+Object.defineProperty(globalThis, "crypto", {
+  value: { randomUUID: () => "test-uuid-1234" },
+});
