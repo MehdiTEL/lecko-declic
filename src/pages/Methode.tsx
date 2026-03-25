@@ -4,13 +4,59 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, CheckSquare, Square, Search, BarChart3, Wrench,
   Play, Award, ShieldCheck, RefreshCw, AlertTriangle, Lightbulb,
-  Target, Inbox, GitBranch, Send, BellRing,
+  Target, Inbox, GitBranch, Send, BellRing, Download, Loader2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { DECLIC_PHASES } from "@/types/declic";
 import { useChatContext } from "@/context/ChatContext";
 import { usePageContext } from "@/context/PageContext";
+import { PHASE_TEMPLATES } from "@/lib/declicTemplates";
+
+function ResourcesSection() {
+  const [loading, setLoading] = useState<number | null>(null);
+
+  const handleDownload = async (phase: number) => {
+    setLoading(phase);
+    try {
+      const { generatePhasePdf } = await import("@/lib/generatePhasePdf");
+      const template = PHASE_TEMPLATES.find(t => t.phase === phase);
+      if (template) await generatePhasePdf(template);
+    } catch (e) {
+      console.error("PDF generation error:", e);
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  return (
+    <section className="max-w-5xl mx-auto px-4 pb-16">
+      <div className="pt-12 border-t border-border">
+        <p className="text-xs font-semibold uppercase tracking-widest text-lecko-blue mb-4">Ressources</p>
+        <h2 className="text-xl font-bold text-foreground mb-2">Templates DECLIC</h2>
+        <p className="text-sm text-foreground-muted mb-8">Un template PDF par phase, a utiliser seul ou avec votre equipe.</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {PHASE_TEMPLATES.map((t) => (
+            <button
+              key={t.phase}
+              onClick={() => handleDownload(t.phase)}
+              disabled={loading === t.phase}
+              className="text-left p-4 rounded-xl border border-border bg-card hover:border-lecko-blue/30 hover:shadow-sm transition-all"
+            >
+              <span className="text-xs font-bold text-lecko-blue">Phase {t.label}</span>
+              <p className="text-sm font-semibold text-foreground mt-1">{t.nom}</p>
+              <p className="text-xs text-foreground-muted mt-0.5 line-clamp-2">{t.description}</p>
+              <span className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-lecko-blue">
+                {loading === t.phase ? <Loader2 size={11} className="animate-spin" /> : <Download size={11} />}
+                {loading === t.phase ? "Generation..." : "Telecharger PDF"}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 const PHASE_ICONS = [ShieldCheck, Search, BarChart3, Wrench, Play, RefreshCw, Award];
 
@@ -408,6 +454,9 @@ export default function Methode() {
           </div>
         </section>
       </div>
+
+      {/* Resources — downloadable templates */}
+      <ResourcesSection />
 
       <Footer />
     </div>
