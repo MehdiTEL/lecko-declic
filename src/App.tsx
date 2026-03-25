@@ -1,12 +1,12 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
+const Login = lazy(() => import("./pages/Login"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -35,16 +35,25 @@ function AppCelebration() {
   return <CelebrationOverlay celebration={celebration} onDismiss={dismissCelebration} />;
 }
 
+function AppProviders({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      <ProgressProvider>
+        <PageProvider>
+          <ChatProvider>{children}</ChatProvider>
+        </PageProvider>
+      </ProgressProvider>
+    </AuthProvider>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-        <ProgressProvider>
-        <PageProvider>
-        <ChatProvider>
+        <AppProviders>
           <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><div className="w-6 h-6 border-2 border-lecko-blue border-t-transparent rounded-full animate-spin" /></div>}>
           <Routes>
             {/* Auth */}
@@ -70,10 +79,7 @@ const App = () => (
           </Suspense>
           <ChatPanel />
           <AppCelebration />
-        </ChatProvider>
-        </PageProvider>
-        </ProgressProvider>
-        </AuthProvider>
+        </AppProviders>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

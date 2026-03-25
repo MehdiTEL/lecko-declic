@@ -88,7 +88,13 @@ export default function ScoreCircle({ score, size = 160 }: ScoreCircleProps) {
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             style={{
-              filter: done ? "drop-shadow(0 0 6px hsl(221 83% 53% / 0.4))" : "none",
+              filter: done
+                ? score >= 60
+                  ? "drop-shadow(0 0 6px hsl(160 84% 39% / 0.4))"
+                  : score >= 35
+                  ? "drop-shadow(0 0 6px hsl(38 92% 50% / 0.4))"
+                  : "drop-shadow(0 0 6px hsl(215 16% 47% / 0.3))"
+                : "none",
               transition: "filter 0.5s ease",
             }}
           />

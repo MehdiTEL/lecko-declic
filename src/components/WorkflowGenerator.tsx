@@ -20,7 +20,7 @@ export default function WorkflowGenerator({ task, metier }: WorkflowGeneratorPro
     const provider = getProvider();
 
     if (!apiKey || !provider) {
-      setError("Configurez votre cle API dans les parametres pour generer des workflows.");
+      setError("Configurez votre clé API dans les paramètres pour générer des workflows.");
       return;
     }
 
@@ -48,14 +48,14 @@ export default function WorkflowGenerator({ task, metier }: WorkflowGeneratorPro
           disabled={loading}
           className="flex-1 py-3 px-4 rounded-xl font-semibold text-sm text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 bg-gradient-to-r from-orange-500 to-red-500"
         >
-          Generer JSON N8N
+          Générer JSON N8N
         </button>
         <button
           onClick={() => handleGenerate("make")}
           disabled={loading}
           className="flex-1 py-3 px-4 rounded-xl font-semibold text-sm text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 bg-gradient-to-r from-cyan-500 to-blue-500"
         >
-          Generer Blueprint Make
+          Générer Blueprint Make
         </button>
       </div>
 

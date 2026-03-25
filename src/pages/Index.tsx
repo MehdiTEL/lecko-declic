@@ -145,7 +145,7 @@ function ContactSection() {
     setErr(null);
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.from("leads") as any).insert({
+      const { error } = await supabase.from("leads").insert({
         nom: `${prenom.trim()} ${nom.trim()}`,
         email: email.trim(),
         message: entreprise.trim() ? `Entreprise : ${entreprise.trim()}` : null,
@@ -251,7 +251,7 @@ export default function Index() {
 
   // Onboarding — show only once for new visitors
   const [showOnboarding, setShowOnboarding] = useState(
-    () => !localStorage.getItem("declic-onboarding-done")
+    () => { try { return !localStorage.getItem("declic-onboarding-done"); } catch { return false; } }
   );
 
   const handleOnboardingComplete = () => {
@@ -437,7 +437,7 @@ export default function Index() {
               {/* Screenshot */}
               <div className="relative">
                 <img
-                  src="/preview-diagnostic.png"
+                  src="/Preview-diagnostic.png"
                   alt="Aperçu du diagnostic DÉCLIC — score, tâches automatisables, plan d'action"
                   className="w-full block"
                   loading="lazy"
