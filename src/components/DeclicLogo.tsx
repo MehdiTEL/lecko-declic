@@ -14,17 +14,17 @@ const HEIGHTS = {
   lg: 72,
 };
 
-// Dot size and position ratios relative to logo height
-// The "i" dot sits at ~73% from left and ~18% from top in the original logo
-const DOT_CONFIG = {
-  sm: { size: 4, topLight: "15%", topDark: "62%", left: "73%" },
-  md: { size: 6, topLight: "15%", topDark: "62%", left: "73%" },
-  lg: { size: 8, topLight: "15%", topDark: "62%", left: "73%" },
+// Single orange dot — matches the "i" dot in the logo
+// In dark mode: drops to the very bottom like a switch turned off
+const DOT = {
+  sm: { size: 6, left: "73%", topLight: "12%", topDark: "78%" },
+  md: { size: 9, left: "73%", topLight: "12%", topDark: "78%" },
+  lg: { size: 13, left: "73%", topLight: "12%", topDark: "78%" },
 };
 
 export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoProps) {
   const h = HEIGHTS[size];
-  const dot = DOT_CONFIG[size];
+  const d = DOT[size];
 
   return (
     <div className={`relative inline-block ${className}`} style={{ height: `${h}px` }}>
@@ -35,30 +35,16 @@ export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoPr
         className="dark:brightness-0 dark:invert"
         style={{ height: `${h}px`, width: "auto", objectFit: "contain" }}
       />
-      {/* Orange dot overlay — in dark mode it "falls" to the bottom of the i like a switch turned off */}
+      {/* Orange dot — only visible in dark mode (the PNG already has the dot in light mode) */}
       <div
-        className="absolute rounded-full pointer-events-none transition-all duration-500 ease-in-out dark:translate-y-0"
+        className="absolute rounded-full pointer-events-none opacity-0 dark:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
         style={{
-          width: `${dot.size}px`,
-          height: `${dot.size}px`,
+          width: `${d.size}px`,
+          height: `${d.size}px`,
           backgroundColor: "#F59E0B",
-          left: dot.left,
-          top: `var(--dot-top, ${dot.topLight})`,
-        }}
-      />
-      <style>{`
-        .dark [data-dot] { --dot-top: ${dot.topDark}; }
-      `}</style>
-      {/* Second dot using CSS for dark mode position switch */}
-      <div
-        data-dot
-        className="absolute rounded-full pointer-events-none opacity-0 dark:opacity-100 transition-all duration-500"
-        style={{
-          width: `${dot.size}px`,
-          height: `${dot.size}px`,
-          backgroundColor: "#F59E0B",
-          left: dot.left,
-          top: dot.topDark,
+          left: d.left,
+          top: d.topDark,
+          boxShadow: "0 0 6px rgba(245, 158, 11, 0.4)",
         }}
       />
     </div>
