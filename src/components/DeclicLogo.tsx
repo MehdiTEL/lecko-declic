@@ -22,7 +22,7 @@ export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoPr
       src="/logo-declic.png"
       alt="DÉCLIC"
       height={h}
-      className={className}
+      className={`dark:brightness-0 dark:invert ${className}`}
       style={{ height: `${h}px`, width: "auto", objectFit: "contain" }}
     />
   );
