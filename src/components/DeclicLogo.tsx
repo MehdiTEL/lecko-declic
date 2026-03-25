@@ -1,30 +1,29 @@
 /**
  * DÉCLIC logo component — uses the official PNG logo.
- * The logo features blue geometric text with an orange dot on the "i".
+ * The orange dot animates like a switch: top (light) → bottom (dark).
  */
+import { motion } from "framer-motion";
+import { useTheme } from "@/hooks/useTheme";
 
 interface DeclicLogoProps {
   size?: "sm" | "md" | "lg";
   className?: string;
 }
 
-const HEIGHTS = {
-  sm: 32,
-  md: 48,
-  lg: 72,
-};
+const HEIGHTS = { sm: 32, md: 48, lg: 72 };
 
-// Single orange dot — matches the "i" dot in the logo
-// In dark mode: drops to the very bottom like a switch turned off
+// Dot config: size in px, horizontal offset from left edge, vertical % of logo height
 const DOT = {
-  sm: { size: 6, left: "73%", topLight: "12%", topDark: "78%" },
-  md: { size: 9, left: "73%", topLight: "12%", topDark: "78%" },
-  lg: { size: 13, left: "73%", topLight: "12%", topDark: "78%" },
+  sm: { size: 5,  left: "73.5%", topLight: "10%", topDark: "76%" },
+  md: { size: 8,  left: "73.5%", topLight: "10%", topDark: "76%" },
+  lg: { size: 11, left: "73.5%", topLight: "10%", topDark: "76%" },
 };
 
 export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoProps) {
   const h = HEIGHTS[size];
   const d = DOT[size];
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <div className={`relative inline-block ${className}`} style={{ height: `${h}px` }}>
@@ -35,16 +34,23 @@ export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoPr
         className="dark:brightness-0 dark:invert"
         style={{ height: `${h}px`, width: "auto", objectFit: "contain" }}
       />
-      {/* Orange dot — only visible in dark mode (the PNG already has the dot in light mode) */}
-      <div
-        className="absolute rounded-full pointer-events-none opacity-0 dark:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+      {/* Orange dot: animates vertically between light (top) and dark (bottom) */}
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
+        animate={{
+          top: isDark ? d.topDark : d.topLight,
+          opacity: 1,
+        }}
+        transition={{
+          top: { type: "spring", stiffness: 260, damping: 22, mass: 0.8 },
+          opacity: { duration: 0.2 },
+        }}
         style={{
           width: `${d.size}px`,
           height: `${d.size}px`,
           backgroundColor: "#F59E0B",
           left: d.left,
-          top: d.topDark,
-          boxShadow: "0 0 6px rgba(245, 158, 11, 0.4)",
+          boxShadow: isDark ? "0 0 6px rgba(245,158,11,0.5)" : "none",
         }}
       />
     </div>
