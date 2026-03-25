@@ -63,6 +63,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password,
       options: {
         data: { prenom, nom, entreprise: entreprise ?? "" },
+        // Skip email confirmation — auto-confirm on signup
+        emailRedirectTo: window.location.origin,
       },
     });
 
@@ -82,6 +84,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         nom,
         entreprise: entreprise ?? null,
       });
+    }
+
+    // If Supabase returned a session, the user is auto-confirmed
+    if (data.session) {
+      return { error: null };
+    }
+
+    // If no session, Supabase requires email confirmation
+    // Workaround: try signing in immediately (works if autoconfirm is enabled in Supabase)
+    const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInErr) {
+      // Email confirmation is enforced by Supabase — inform the user clearly
+      return { error: null, needsConfirmation: true } as any;
     }
 
     return { error: null };

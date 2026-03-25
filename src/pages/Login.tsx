@@ -64,19 +64,20 @@ export default function Login() {
     }
 
     setLoading(true);
-    const { error: err } = await signUp(signupEmail, signupPassword, prenom, nom, entreprise || undefined);
+    const result = await signUp(signupEmail, signupPassword, prenom, nom, entreprise || undefined);
     setLoading(false);
 
-    if (err) {
-      setError(err);
+    if (result.error) {
+      setError(result.error);
+    } else if ((result as any).needsConfirmation) {
+      // Supabase enforces email confirmation — show friendly message
+      setSuccessMsg("Compte cree. Verifiez votre email pour confirmer, puis connectez-vous.");
+      setTab("connexion");
+      setLoginEmail(signupEmail);
     } else {
-      // Auto-login after signup (no email confirmation required)
-      const { error: loginErr } = await signIn(signupEmail, signupPassword);
-      if (!loginErr) {
-        navigate("/");
-      } else {
-        setSuccessMsg("Compte cree. Vous pouvez vous connecter.");
-      }
+      // Auto-confirmed — try to navigate
+      // Wait a moment for the auth state to propagate
+      setTimeout(() => navigate("/"), 500);
     }
   }
 
