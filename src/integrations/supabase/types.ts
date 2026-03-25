@@ -74,6 +74,170 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          anon_id: string
+          count: number
+          id: string
+          joined_at: string
+          metier: string
+          result: Json | null
+          session_id: string
+        }
+        Insert: {
+          anon_id: string
+          count?: number
+          id?: string
+          joined_at?: string
+          metier: string
+          result?: Json | null
+          session_id: string
+        }
+        Update: {
+          anon_id?: string
+          count?: number
+          id?: string
+          joined_at?: string
+          metier?: string
+          result?: Json | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "team_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_sessions: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string
+          id: string
+          nom: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by: string
+          id?: string
+          nom: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          nom?: string
+        }
+        Relationships: []
+      }
+      user_actions: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          metier: string
+          notes: string | null
+          priority: number
+          started_at: string | null
+          status: string
+          task_category: string
+          task_name: string
+          task_tool_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          metier: string
+          notes?: string | null
+          priority?: number
+          started_at?: string | null
+          status?: string
+          task_category: string
+          task_name: string
+          task_tool_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          metier?: string
+          notes?: string | null
+          priority?: number
+          started_at?: string | null
+          status?: string
+          task_category?: string
+          task_name?: string
+          task_tool_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          created_at: string
+          email: string
+          entreprise: string | null
+          id: string
+          nom: string
+          prenom: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          entreprise?: string | null
+          id: string
+          nom: string
+          prenom: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          entreprise?: string | null
+          id?: string
+          nom?: string
+          prenom?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          anon_id: string
+          created_at: string
+          id: string
+          progress_data: Json
+          updated_at: string
+        }
+        Insert: {
+          anon_id: string
+          created_at?: string
+          id?: string
+          progress_data?: Json
+          updated_at?: string
+        }
+        Update: {
+          anon_id?: string
+          created_at?: string
+          id?: string
+          progress_data?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
