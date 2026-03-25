@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Users, Sparkles, Trophy } from "lucide-react";
+import { Sun, Moon, Menu, X, History, Users, Sparkles, Trophy, CheckSquare } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { useChatContext } from "@/context/ChatContext";
@@ -21,7 +21,7 @@ export default function Navbar() {
     { to: "/methode", label: "Méthode" },
     { to: "/equipe", label: "Équipe", icon: <Users size={15} strokeWidth={1.5} /> },
     { to: "/historique", label: "Mes diagnostics", icon: <History size={15} strokeWidth={1.5} /> },
-    ...(hasProgress ? [{ to: "/mon-parcours", label: "Mon parcours", icon: <Trophy size={15} strokeWidth={1.5} /> }] : []),
+    ...(hasProgress ? [{ to: "/mes-automations", label: "Mes automations", icon: <CheckSquare size={15} strokeWidth={1.5} /> }] : []),
     { to: "/notre-histoire", label: "Notre histoire" },
   ];
 

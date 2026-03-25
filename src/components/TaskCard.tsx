@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
-import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info, Sparkles, Users, Wrench } from "lucide-react";
+import { ChevronDown, Clock, Brain, Zap, ArrowRight, Info, Sparkles, Users, Wrench, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { AnalysisTask, TaskCategory, ToolType, computeScoreCriteres, getScoreBadgeClass, ACCOMPAGNEMENT_CONFIG, COMPLEXITE_CONFIG, ECOSYSTEM_LABELS, PERIMETRE_IMPACT_CONFIG, NIVEAU_CHANGEMENT_CONFIG, RISQUE_ADOPTION_CONFIG } from "@/types/analysis";
 import ConsultantContactForm from "@/components/ConsultantContactForm";
 import WorkflowPreview from "@/components/WorkflowPreview";
@@ -462,6 +463,18 @@ export default function TaskCard({ task, index, roiPerWeek, metier, analysisId, 
                 <Sparkles size={12} />
                 Poser une question au Consultant IA
               </button>
+
+              {/* Link to Mes Automations if tracked */}
+              {trackedStatus && (trackedStatus === "in_progress" || trackedStatus === "done") && (
+                <Link
+                  to="/mes-automations"
+                  className="inline-flex items-center gap-1 text-xs text-foreground-muted hover:text-primary transition-colors mt-1"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ExternalLink size={10} />
+                  Voir dans mes automations
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
