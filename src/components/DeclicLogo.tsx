@@ -14,12 +14,13 @@ const HEIGHTS = {
   lg: 72,
 };
 
-// Single orange dot — matches the "i" dot in the logo
-// In dark mode: drops to the very bottom like a switch turned off
+// Orange dot position — calibrated to the "i" in DÉCLIC
+// The "i" stem center is at ~74.5% horizontal in the original PNG (2222x612)
+// In dark mode the dot drops to the bottom of the letter
 const DOT = {
-  sm: { size: 6, left: "73%", topLight: "12%", topDark: "78%" },
-  md: { size: 9, left: "73%", topLight: "12%", topDark: "78%" },
-  lg: { size: 13, left: "73%", topLight: "12%", topDark: "78%" },
+  sm: { size: 5, left: "74.5%", topDark: "75%" },
+  md: { size: 7, left: "74.5%", topDark: "75%" },
+  lg: { size: 10, left: "74.5%", topDark: "75%" },
 };
 
 export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoProps) {
@@ -35,7 +36,7 @@ export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoPr
         className="dark:brightness-0 dark:invert"
         style={{ height: `${h}px`, width: "auto", objectFit: "contain" }}
       />
-      {/* Orange dot — only visible in dark mode (the PNG already has the dot in light mode) */}
+      {/* Orange dot — only visible in dark mode, centered on the "i" stem */}
       <div
         className="absolute rounded-full pointer-events-none opacity-0 dark:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
         style={{
@@ -44,6 +45,7 @@ export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoPr
           backgroundColor: "#F59E0B",
           left: d.left,
           top: d.topDark,
+          transform: "translateX(-50%)",
           boxShadow: "0 0 6px rgba(245, 158, 11, 0.4)",
         }}
       />
