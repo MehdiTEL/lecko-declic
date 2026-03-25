@@ -23,6 +23,7 @@ const MesAutomations = lazy(() => import("./pages/MesAutomations"));
 const DiagnosticForm = lazy(() => import("./pages/DiagnosticForm"));
 const ConfigurerApi = lazy(() => import("./pages/ConfigurerApi"));
 const NotreHistoire = lazy(() => import("./pages/NotreHistoire"));
+const Profil = lazy(() => import("./pages/Profil"));
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
 import { ProgressProvider } from "./context/ProgressContext";
