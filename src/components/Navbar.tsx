@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Sun, Moon, Menu, X, History, Users, Sparkles, CheckSquare, LogOut, User } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
