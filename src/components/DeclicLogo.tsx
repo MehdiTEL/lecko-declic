@@ -14,13 +14,12 @@ const HEIGHTS = {
   lg: 72,
 };
 
-// Orange dot position — calibrated to the "i" in DÉCLIC
-// The "i" stem center is at ~74.5% horizontal in the original PNG (2222x612)
-// In dark mode the dot drops to the bottom of the letter
+// Orange dot — matches the exact size of the dot in the PNG (12% of logo height)
+// Centered on the "i" stem at 74.5% horizontal
 const DOT = {
-  sm: { size: 5, left: "74.5%", topDark: "75%" },
-  md: { size: 7, left: "74.5%", topDark: "75%" },
-  lg: { size: 10, left: "74.5%", topDark: "75%" },
+  sm: { size: 4, left: "74.5%", topDark: "76%" },   // 32px × 12% ≈ 4px
+  md: { size: 6, left: "74.5%", topDark: "76%" },   // 48px × 12% ≈ 6px
+  lg: { size: 9, left: "74.5%", topDark: "76%" },   // 72px × 12% ≈ 9px
 };
 
 export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoProps) {
