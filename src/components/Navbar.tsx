@@ -95,16 +95,20 @@ export default function Navbar() {
             {/* User avatar or login link */}
             {profile ? (
               <div className="flex items-center gap-1 pl-1 border-l border-border/60 ml-1">
-                <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-muted transition-colors">
-                  <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                <Link
+                  to="/profil"
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-muted transition-colors group"
+                  title="Mon profil"
+                >
+                  <div className="w-7 h-7 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center transition-colors">
                     <span className="text-xs font-bold text-primary">
                       {profile.prenom?.charAt(0).toUpperCase()}{profile.nom?.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-sm font-medium text-foreground-secondary">
+                  <span className="text-sm font-medium text-foreground-secondary group-hover:text-foreground transition-colors">
                     {profile.prenom}
                   </span>
-                </div>
+                </Link>
                 <button
                   onClick={signOut}
                   className="w-8 h-8 flex items-center justify-center rounded-lg text-foreground-muted hover:text-foreground hover:bg-muted transition-all duration-200"
