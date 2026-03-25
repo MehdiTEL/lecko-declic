@@ -154,14 +154,28 @@ export function getApiErrorMessage(
   return { message: `Erreur API OpenAI (${status}). Veuillez réessayer.`, showSettings: false };
 }
 
+// ─── Edge Function proxy (server-side API call, no user key needed) ────────
+
+import { supabase } from "@/integrations/supabase/client";
+
+export async function analyzeJobViaEdge(metier: string): Promise<string> {
+  const { data, error } = await supabase.functions.invoke("analyze-job", {
+    body: { metier },
+  });
+  if (error) throw new Error(error.message ?? "Erreur du serveur d'analyse.");
+  return typeof data === "string" ? data : JSON.stringify(data);
+}
+
 // ─── Unified analyzeJob function ───────────────────────────────────────────
+// Priority: user's own key (direct call) > Edge Function (server-side key)
 
 export async function analyzeJob(metier: string): Promise<string> {
   const provider = getProvider();
   const apiKey = getApiKey();
 
+  // If no user key configured, try the Edge Function (uses server-side key)
   if (!apiKey || !provider) {
-    throw Object.assign(new Error("Aucune clé API configurée."), { requireKey: true });
+    return analyzeJobViaEdge(metier);
   }
 
   if (provider === "anthropic") {

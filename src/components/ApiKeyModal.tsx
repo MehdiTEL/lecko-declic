@@ -166,8 +166,7 @@ export default function ApiKeyModal({
           </button>
 
           <p className="text-xs text-foreground-muted leading-relaxed bg-muted/50 rounded-lg px-3 py-2.5">
-            Votre clé est stockée localement dans votre navigateur (localStorage). Elle n'est jamais
-            transmise à DÉCLIC ni à aucun tiers.
+            Votre clé est stockée localement et utilisée directement depuis votre navigateur. Pour une utilisation sans clé personnelle, le diagnostic express est disponible sans configuration.
           </p>
         </div>
       </DialogContent>
