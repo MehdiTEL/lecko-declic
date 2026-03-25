@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Download, Share2, Settings, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Download, Share2, Settings, AlertTriangle, Info } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import LoadingScreen from "@/components/LoadingScreen";
 import TaskCard from "@/components/TaskCard";
@@ -412,11 +412,23 @@ export default function Results() {
       {/* ═══════════ ZONE B — Les tâches ═══════════ */}
       <main className="max-w-4xl mx-auto px-4 py-8">
 
-        {/* Source notice for local */}
+        {/* Source notice */}
         {analysisSource === "local" && !isDemo && (
           <p className="text-xs text-foreground-muted mb-6">
-            Diagnostic générique. <Link to="/" className="text-primary hover:underline">Lancez un diagnostic personnalisé</Link> pour des résultats basés sur votre quotidien réel.
+            Diagnostic generique. <Link to="/" className="text-primary hover:underline">Lancez un diagnostic personnalise</Link> pour des resultats bases sur votre quotidien reel.
           </p>
+        )}
+        {analysisSource === "api" && (
+          <div className="flex items-start gap-2 p-3 rounded-xl bg-muted/40 border border-border/50 text-xs text-foreground-muted mb-6">
+            <Info size={13} className="shrink-0 mt-0.5" strokeWidth={1.5} />
+            <span>
+              Analyse generee par IA selon la methodologie DECLIC.
+              Les resultats refletent les tendances generales du metier — votre contexte reel peut varier.
+              <Link to="/methode" className="underline hover:text-foreground transition-colors ml-1">
+                En savoir plus sur la methode
+              </Link>
+            </span>
+          </div>
         )}
 
         {/* Title + inline filters */}
