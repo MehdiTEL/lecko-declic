@@ -22,6 +22,7 @@ export default function ConsultantCTA({ metier, score, heures, topTasks }: Consu
     setSending(true);
     setError(null);
     try {
+      // 1. Insert lead in Supabase
       await (supabase.from("leads") as any).insert({
         nom: prenom.trim() || null,
         email: email.trim(),
@@ -31,6 +32,19 @@ export default function ConsultantCTA({ metier, score, heures, topTasks }: Consu
         source: "cta_resultats_principal",
         type_analyse: "individuel",
       });
+      // 2. Trigger email (user recap + consultant brief)
+      supabase.functions.invoke("send-results-email", {
+        body: {
+          to: email.trim(),
+          nom: prenom.trim(),
+          metier,
+          score,
+          heures,
+          topTasks,
+          totalTasks: topTasks.length,
+          source: "cta_resultats_principal",
+        },
+      }).catch(() => {}); // fire-and-forget
       setSent(true);
     } catch {
       setError("Une erreur est survenue. Reessayez.");
