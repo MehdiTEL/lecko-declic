@@ -383,27 +383,15 @@ export default function Results() {
             )}
           </div>
 
-          {/* KPIs grid — 2 rows */}
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6">
-            <div className="col-span-1 md:col-span-2 text-center md:text-left">
-              <p className="text-4xl md:text-5xl font-bold text-primary leading-none">{result.score_global}%</p>
-              <p className="text-xs text-foreground-muted mt-1.5 font-medium">Score d'automatisation</p>
-            </div>
+          {/* KPIs grid */}
+          <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-xs">
             <div className="text-center md:text-left">
               <p className="text-2xl md:text-3xl font-bold text-foreground leading-none">{result.taches.length}</p>
               <p className="text-xs text-foreground-muted mt-1.5">taches analysées</p>
             </div>
             <div className="text-center md:text-left">
-              <p className="text-2xl md:text-3xl font-bold text-foreground leading-none">{automatisables + partiels}</p>
+              <p className="text-2xl md:text-3xl font-bold text-primary leading-none">{automatisables + partiels}</p>
               <p className="text-xs text-foreground-muted mt-1.5">automatisables</p>
-            </div>
-            <div className="text-center md:text-left">
-              <p className="text-2xl md:text-3xl font-bold text-lecko-orange leading-none">{result.heures_economisees_semaine}h</p>
-              <p className="text-xs text-foreground-muted mt-1.5">par semaine</p>
-            </div>
-            <div className="text-center md:text-left">
-              <p className="text-2xl md:text-3xl font-bold text-foreground leading-none">~{annualSaving.toLocaleString("fr-FR")}€</p>
-              <p className="text-xs text-foreground-muted mt-1.5">par an</p>
             </div>
           </div>
 
