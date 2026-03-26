@@ -184,7 +184,19 @@ export default function Results() {
       setLoading(true);
       const startTime = Date.now();
       const responseText = await analyzeJobPersonalized(formData);
-      const parsed = JSON.parse(responseText) as AnalysisResult;
+      // Clean LLM response — strip markdown backticks if present
+      let cleanJson = responseText.trim();
+      if (cleanJson.startsWith("```")) {
+        cleanJson = cleanJson.replace(/^```(?:json)?\s*/, "").replace(/\s*```\s*$/, "");
+      }
+      let parsed: AnalysisResult;
+      try {
+        parsed = JSON.parse(cleanJson);
+      } catch {
+        const match = cleanJson.match(/\{[\s\S]*\}/);
+        if (!match) throw new Error("Reponse IA invalide. Veuillez reessayer.");
+        parsed = JSON.parse(match[0]);
+      }
       const elapsed = Date.now() - startTime;
       if (elapsed < minLoadMs) await new Promise((r) => setTimeout(r, minLoadMs - elapsed));
       setResult(parsed);

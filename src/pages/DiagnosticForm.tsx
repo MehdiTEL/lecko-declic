@@ -157,30 +157,35 @@ export default function DiagnosticForm() {
       case 0:
         return (
           <div className="space-y-5">
+            <p className="text-sm text-foreground-muted">
+              Ces informations permettent de personnaliser le diagnostic a votre situation reelle.
+            </p>
+
             {/* Metier */}
             <div>
               <label className={labelCls}>
-                Votre m&eacute;tier <span className="text-red-500">*</span>
+                Quel est votre metier ou poste actuel ? <span className="text-red-500">*</span>
               </label>
               <input
                 className={inputCls}
                 type="text"
-                placeholder="Chef de projet, Comptable..."
+                placeholder="Ex : Chef de projet IT, Responsable RH, Comptable fournisseurs..."
                 value={form.metier}
                 onChange={(e) => update("metier", e.target.value)}
               />
+              <p className="text-xs text-foreground-muted mt-1">Soyez precis : "Chef de projet IT" est mieux que "Chef de projet"</p>
             </div>
 
-            {/* Org size */}
+            {/* Sector */}
             <div>
-              <label className={labelCls}>Taille de l'organisation</label>
+              <label className={labelCls}>Dans quel secteur travaillez-vous ?</label>
               <select
                 className={inputCls}
-                value={form.orgSize}
-                onChange={(e) => update("orgSize", e.target.value as OrgSize | "")}
+                value={form.sector}
+                onChange={(e) => update("sector", e.target.value as Sector | "")}
               >
-                <option value="">-- Choisir --</option>
-                {(Object.entries(ORG_SIZE_LABELS) as [OrgSize, string][]).map(
+                <option value="">Selectionnez votre secteur</option>
+                {(Object.entries(SECTOR_LABELS) as [Sector, string][]).map(
                   ([key, lbl]) => (
                     <option key={key} value={key}>
                       {lbl}
@@ -190,16 +195,16 @@ export default function DiagnosticForm() {
               </select>
             </div>
 
-            {/* Sector */}
+            {/* Org size */}
             <div>
-              <label className={labelCls}>Secteur</label>
+              <label className={labelCls}>Combien de personnes dans votre organisation ?</label>
               <select
                 className={inputCls}
-                value={form.sector}
-                onChange={(e) => update("sector", e.target.value as Sector | "")}
+                value={form.orgSize}
+                onChange={(e) => update("orgSize", e.target.value as OrgSize | "")}
               >
-                <option value="">-- Choisir --</option>
-                {(Object.entries(SECTOR_LABELS) as [Sector, string][]).map(
+                <option value="">Selectionnez une taille</option>
+                {(Object.entries(ORG_SIZE_LABELS) as [OrgSize, string][]).map(
                   ([key, lbl]) => (
                     <option key={key} value={key}>
                       {lbl}
@@ -211,7 +216,7 @@ export default function DiagnosticForm() {
 
             {/* Team size */}
             <div>
-              <label className={labelCls}>Taille de votre &eacute;quipe</label>
+              <label className={labelCls}>Combien de personnes dans votre equipe directe ?</label>
               <input
                 className={inputCls}
                 type="number"
@@ -220,6 +225,7 @@ export default function DiagnosticForm() {
                 value={form.teamSize}
                 onChange={(e) => update("teamSize", e.target.value)}
               />
+              <p className="text-xs text-foreground-muted mt-1">Les personnes qui font le meme type de travail que vous</p>
             </div>
           </div>
         );
@@ -230,7 +236,8 @@ export default function DiagnosticForm() {
           <div className="space-y-6">
             {/* Tool grid */}
             <div>
-              <label className={labelCls}>Quels outils utilisez-vous ?</label>
+              <label className={labelCls}>Quels outils utilisez-vous au quotidien ?</label>
+              <p className="text-xs text-foreground-muted mb-3">Selectionnez tous ceux que vous utilisez, meme occasionnellement. Cela permet de recommander des automatisations compatibles.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {TOOL_OPTIONS.map((opt) => {
                   const selected = form.tools.includes(opt.id);
@@ -373,28 +380,39 @@ export default function DiagnosticForm() {
         const canLaunch = form.taskDescription.trim().length >= 20;
         return (
           <div className="space-y-5">
+            <p className="text-sm text-foreground-muted">
+              C'est l'etape la plus importante. Plus vous etes precis, plus le diagnostic sera pertinent.
+            </p>
+
             <div>
               <label className={labelCls}>
-                D&eacute;crivez une journ&eacute;e type{" "}
+                Decrivez vos taches principales au quotidien{" "}
                 <span className="text-red-500">*</span>
               </label>
+              <p className="text-xs text-foreground-muted mb-2">
+                Listez ce que vous faites chaque jour ou chaque semaine. Pas besoin d'etre formel — ecrivez comme vous parlez.
+              </p>
               <textarea
                 className={textareaCls}
-                rows={5}
-                placeholder="Le matin, je commence par... Ensuite je..."
+                rows={6}
+                placeholder={"Exemples :\n- Je redige des comptes-rendus apres chaque reunion\n- Je mets a jour un fichier Excel de suivi chaque vendredi\n- Je reponds aux memes questions par email 5 fois par jour\n- Je compile des chiffres de 3 outils differents pour le reporting"}
                 value={form.taskDescription}
                 onChange={(e) => update("taskDescription", e.target.value)}
               />
+              <p className="text-xs text-foreground-muted mt-1">{form.taskDescription.length} caracteres — minimum 20 pour un diagnostic precis</p>
             </div>
 
             <div>
               <label className={labelCls}>
-                Qu'est-ce qui vous frustre le plus ?
+                Quelles taches vous pesent le plus ?
               </label>
+              <p className="text-xs text-foreground-muted mb-2">
+                Les taches repetitives, ennuyeuses, ou qui vous donnent l'impression de perdre votre temps.
+              </p>
               <textarea
                 className={textareaCls}
                 rows={3}
-                placeholder="Les tâches répétitives, les allers-retours..."
+                placeholder="Ex : Relancer les gens pour obtenir des infos, copier-coller entre outils, verifier manuellement des donnees..."
                 value={form.painPoints}
                 onChange={(e) => update("painPoints", e.target.value)}
               />
@@ -402,12 +420,12 @@ export default function DiagnosticForm() {
 
             <div>
               <label className={labelCls}>
-                Qu'est-ce qui prend trop de temps ?
+                Qu'est-ce qui prend beaucoup trop de temps par rapport a sa valeur ?
               </label>
               <textarea
                 className={textareaCls}
                 rows={3}
-                placeholder="La saisie de données, les rapports..."
+                placeholder="Ex : Le reporting hebdomadaire (2h pour un document que personne ne lit en entier)..."
                 value={form.timeWasters}
                 onChange={(e) => update("timeWasters", e.target.value)}
               />
@@ -432,14 +450,18 @@ export default function DiagnosticForm() {
       case 3:
         return (
           <div className="space-y-5">
+            <p className="text-sm text-foreground-muted">
+              Ces informations sont optionnelles mais permettent d'affiner les recommandations.
+            </p>
+
             <div>
               <label className={labelCls}>
-                Que souhaitez-vous automatiser en priorit&eacute; ?
+                Si vous pouviez automatiser UNE seule chose demain, ce serait quoi ?
               </label>
               <textarea
                 className={textareaCls}
                 rows={3}
-                placeholder="La gestion des emails, la facturation..."
+                placeholder="Ex : Le reporting hebdomadaire — ca me prend 2h chaque vendredi et c'est toujours la meme chose."
                 value={form.priorities}
                 onChange={(e) => update("priorities", e.target.value)}
               />
@@ -447,23 +469,26 @@ export default function DiagnosticForm() {
 
             <div>
               <label className={labelCls}>
-                Des contraintes techniques ou organisationnelles ?
+                Y a-t-il des contraintes dont on devrait tenir compte ?
               </label>
+              <p className="text-xs text-foreground-muted mb-2">
+                Budget, restrictions de votre DSI, donnees sensibles, resistance au changement dans l'equipe...
+              </p>
               <textarea
                 className={textareaCls}
                 rows={3}
-                placeholder="Budget limité, restrictions IT, RGPD..."
+                placeholder="Ex : Mon responsable est sceptique sur l'IA, on a un budget quasi nul, les donnees sont confidentielles..."
                 value={form.constraints}
                 onChange={(e) => update("constraints", e.target.value)}
               />
             </div>
 
             <div>
-              <label className={labelCls}>Vos objectifs</label>
+              <label className={labelCls}>Qu'attendez-vous de ce diagnostic ?</label>
               <textarea
                 className={textareaCls}
                 rows={3}
-                placeholder="Gagner du temps, réduire les erreurs, monter en compétence..."
+                placeholder="Ex : Identifier 2-3 gains rapides pour convaincre ma direction, avoir un plan d'action concret..."
                 value={form.objectives}
                 onChange={(e) => update("objectives", e.target.value)}
               />
