@@ -162,12 +162,11 @@ export default function Index() {
             className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-5"
             style={{ lineHeight: "1.08", letterSpacing: "-0.03em" }}
           >
-            Votre diagnostic IA<br className="hidden sm:block" />
-            en <span className="text-lecko-blue">30 secondes</span>.
+            Votre premiere{" "}<span className="text-lecko-blue">cartographie IA</span>
           </h1>
           <p className="text-base md:text-lg text-foreground-muted mb-10 max-w-lg mx-auto" style={{ lineHeight: "1.65" }}>
-            Entrez votre métier. Découvrez vos tâches automatisables,
-            le temps récupérable, et un plan d'action structuré.
+            En 30 secondes, identifiez le potentiel d'automatisation de votre metier.
+            Un consultant Lecko vous aide a transformer ce potentiel en realite.
           </p>
 
           {/* Input principal */}
@@ -209,18 +208,44 @@ export default function Index() {
           </div>
 
           {/* CTA personnalisé */}
-          <button
-            onClick={handlePersonalized}
-            className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-lecko-blue transition-colors mt-1"
-          >
-            <Sparkles size={14} />
-            Diagnostic personnalisé — basé sur votre quotidien réel
-            <ArrowRight size={13} />
-          </button>
+          <div className="max-w-xl mx-auto mt-4">
+            <button
+              onClick={handlePersonalized}
+              className="w-full h-14 flex items-center justify-center gap-2 text-sm font-semibold border-2 border-lecko-blue text-lecko-blue rounded-2xl hover:bg-lecko-blue hover:text-white transition-all"
+            >
+              <Users size={16} />
+              Diagnostic approfondi — avec un consultant Lecko
+              <ArrowRight size={14} />
+            </button>
+          </div>
 
           <p className="text-[11px] text-foreground-muted/60 mt-4">
-            Gratuit. Sans inscription. Résultats immédiats.
+            Gratuit — Resultats en 30 secondes — Accompagnement disponible
           </p>
+        </div>
+      </section>
+
+      {/* ═══ COMMENT CA MARCHE ═══ */}
+      <section className="px-4 py-12 md:py-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-4 items-stretch">
+            {[
+              { icon: Search, color: "#F59E0B", title: "Cartographiez", text: "Entrez votre metier. DECLIC identifie vos taches automatisables et estime le temps recuperable." },
+              { icon: BarChart3, color: "#2563EB", title: "Evaluez", text: "Visualisez votre potentiel. Les resultats sont indicatifs — votre situation reelle peut varier selon votre contexte." },
+              { icon: Users, color: "#059669", title: "Passez a l'action avec Lecko", text: "Un consultant analyse vos resultats et construit avec vous un plan d'action realiste." },
+            ].map((s, i) => (
+              <div key={s.title} className="flex-1 flex items-start gap-4">
+                {i > 0 && <div className="hidden md:flex items-center text-foreground-muted/30 text-lg font-light self-center px-2">→</div>}
+                <div className="flex-1 p-5 rounded-2xl bg-card border border-border">
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: `${s.color}12` }}>
+                    <s.icon size={16} style={{ color: s.color }} strokeWidth={2} />
+                  </div>
+                  <p className="text-sm font-bold text-foreground mb-1">{s.title}</p>
+                  <p className="text-xs text-foreground-muted leading-relaxed">{s.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

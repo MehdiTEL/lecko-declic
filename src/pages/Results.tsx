@@ -7,6 +7,7 @@ import TaskCard from "@/components/TaskCard";
 import DeclicCTA from "@/components/DeclicCTA";
 import Footer from "@/components/Footer";
 import ConsultantContactForm from "@/components/ConsultantContactForm";
+import ConsultantCTA from "@/components/ConsultantCTA";
 import EmailResultsForm from "@/components/EmailResultsForm";
 import ActionTracker from "@/components/ActionTracker";
 import ResultsDashboard from "@/components/ResultsDashboard";
@@ -378,6 +379,19 @@ export default function Results() {
         </div>
       )}
 
+      {/* Bandeau cartographie */}
+      <div className="bg-lecko-blue/5 border-b border-lecko-blue/10 px-4 py-3">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-lecko-orange" />
+            <span className="text-sm font-medium text-foreground">
+              Premiere cartographie — <span className="text-foreground-muted font-normal">resultats indicatifs bases sur des tendances generales</span>
+            </span>
+          </div>
+          <span className="text-xs text-foreground-muted whitespace-nowrap hidden sm:block">Votre contexte reel peut varier</span>
+        </div>
+      </div>
+
       {/* ═══════════ ZONE A — Résumé héro ═══════════ */}
       <div ref={resultsRef} className="bg-card border-b border-border px-4 py-8">
         <div className="max-w-4xl mx-auto">
@@ -423,6 +437,33 @@ export default function Results() {
       {/* Email results capture */}
       <div className="max-w-4xl mx-auto px-4 mt-6">
         <EmailResultsForm result={result} />
+      </div>
+
+      {/* Zone d'incertitude */}
+      <div className="max-w-4xl mx-auto px-4 mt-6">
+        <div className="rounded-2xl border border-amber-200 dark:border-amber-800/30 bg-amber-50 dark:bg-amber-900/10 p-4 flex gap-3">
+          <AlertTriangle size={16} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" strokeWidth={1.5} />
+          <div>
+            <p className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">Ces estimations sont indicatives</p>
+            <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed">
+              Le potentiel reel depend de votre stack technique, de votre organisation, et de votre capacite a conduire le changement. Un consultant Lecko peut valider ces chiffres sur votre contexte en 30 minutes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Consultant principal */}
+      <div className="max-w-4xl mx-auto px-4 mt-6">
+        <ConsultantCTA
+          metier={result.metier}
+          score={result.score_global}
+          heures={result.heures_economisees_semaine}
+          topTasks={result.taches
+            .filter(t => t.categorie === "automatisable")
+            .sort((a, b) => b.temps_gagne_heures_semaine - a.temps_gagne_heures_semaine)
+            .slice(0, 3)
+            .map(t => t.nom)}
+        />
       </div>
 
       {/* ═══════════ ZONE B — Les tâches ═══════════ */}

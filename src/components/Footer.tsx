@@ -31,7 +31,7 @@ export default function Footer() {
               <span className="text-[10px] text-slate-500 font-medium">by Lecko</span>
             </div>
             <p className="text-sm leading-relaxed text-slate-400">
-              Plateforme d'automatisation IA par métier. Analysez, priorisez, et passez à l'action.
+              Votre premiere cartographie IA. Identifiez le potentiel, passez a l'action avec Lecko.
             </p>
           </div>
 

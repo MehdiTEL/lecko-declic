@@ -177,8 +177,9 @@ export default function Methode() {
               trop vite, sans comprendre le process, sans mesurer l'impact, sans préparer les équipes.
             </p>
             <p>
-              DÉCLIC est née de 15 ans d'accompagnement de la transformation digitale chez Lecko.
-              Chaque phase répond à un échec que nous avons observé sur le terrain.
+              DECLIC est une cartographie de depart, pas une feuille de route finale.
+              Elle identifie le potentiel — les consultants Lecko transforment ce potentiel
+              en plan d'action reel, adapte a votre organisation.
             </p>
             <p className="font-medium text-foreground">
               Le principe fondateur : on n'automatise jamais un flou. Si vous ne pouvez pas expliquer votre
