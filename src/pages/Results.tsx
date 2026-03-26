@@ -60,7 +60,7 @@ export default function Results() {
   const [toolFilter, setToolFilter] = useState<ToolFilter>("all");
   const [accompFilter, setAccompFilter] = useState<AccompagnementFilter>("all");
   const [showConceptionForm, setShowConceptionForm] = useState(false);
-  const [viewMode, setViewMode] = useState<"simple" | "technique">("simple");
+  const [viewMode, setViewMode] = useState<"simple" | "technique">("technique");
   const { toast, showToast, hideToast } = useToast();
   const resultsRef = useRef<HTMLDivElement>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
