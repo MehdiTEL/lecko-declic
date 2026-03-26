@@ -51,7 +51,7 @@ export default function Navbar() {
                 to={link.to}
                 className={`relative flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 font-medium
                   ${isActive(link.to)
-                    ? "text-foreground bg-muted"
+                    ? "text-primary font-semibold bg-muted"
                     : "text-foreground-muted hover:text-foreground hover:bg-muted/60"
                   }`}
               >
@@ -189,7 +189,7 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               className={`flex items-center gap-2.5 text-sm font-medium px-3 py-2.5 rounded-lg transition-colors
                 ${isActive(link.to)
-                  ? "bg-muted text-foreground"
+                  ? "bg-muted text-primary font-semibold"
                   : "text-foreground-secondary hover:bg-muted/60 hover:text-foreground"
                 }`}
             >

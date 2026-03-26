@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 type Tab = "connexion" | "inscription";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirect") ?? "/";
   const { signIn, signUp } = useAuth();
 
   const [tab, setTab] = useState<Tab>("connexion");
@@ -45,7 +48,7 @@ export default function Login() {
     if (err) {
       setError(err);
     } else {
-      navigate("/");
+      navigate(redirectTo);
     }
   }
 
@@ -55,7 +58,7 @@ export default function Login() {
     setSuccessMsg(null);
 
     if (signupPassword.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caracteres.");
+      setError("Le mot de passe doit contenir au moins 8 caractères.");
       return;
     }
     if (signupPassword !== confirmPassword) {
@@ -71,7 +74,7 @@ export default function Login() {
       setError(result.error);
     } else if ((result as any).needsConfirmation) {
       // Supabase enforces email confirmation — show friendly message
-      setSuccessMsg("Compte cree. Verifiez votre email pour confirmer, puis connectez-vous.");
+      setSuccessMsg("Compte créé. Vérifiez votre email pour confirmer, puis connectez-vous.");
       setTab("connexion");
       setLoginEmail(signupEmail);
     } else {
@@ -140,14 +143,19 @@ export default function Login() {
               className={inputClass}
             />
             <button type="submit" disabled={loading} className={btnClass}>
-              {loading ? "Connexion..." : "Se connecter"}
+              {loading ? "Connexion en cours..." : "Se connecter"}
             </button>
             <button
               type="button"
               className="text-xs text-foreground-muted hover:text-primary transition-colors mt-1"
-              onClick={() => {/* TODO: password reset flow */}}
+              onClick={() => {
+                const email = loginEmail.trim();
+                if (!email) { setError("Entrez votre email pour réinitialiser."); return; }
+                supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/login` })
+                  .then(() => setSuccessMsg("Email de réinitialisation envoyé."));
+              }}
             >
-              Mot de passe oublie ?
+              Mot de passe oublié ?
             </button>
           </form>
         )}
@@ -157,7 +165,7 @@ export default function Login() {
           <form onSubmit={handleSignup} className="flex flex-col gap-4">
             <input
               type="text"
-              placeholder="Prenom"
+              placeholder="Prénom"
               value={prenom}
               onChange={(e) => setPrenom(e.target.value)}
               required
@@ -188,7 +196,7 @@ export default function Login() {
             />
             <input
               type="password"
-              placeholder="Mot de passe (min. 8 caracteres)"
+              placeholder="Mot de passe (min. 8 caractères)"
               value={signupPassword}
               onChange={(e) => setSignupPassword(e.target.value)}
               required
@@ -203,7 +211,7 @@ export default function Login() {
               className={inputClass}
             />
             <button type="submit" disabled={loading} className={btnClass}>
-              {loading ? "Inscription..." : "Creer un compte"}
+              {loading ? "Inscription en cours..." : "Créer un compte"}
             </button>
           </form>
         )}

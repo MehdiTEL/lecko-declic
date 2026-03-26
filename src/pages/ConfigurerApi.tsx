@@ -140,6 +140,9 @@ export default function ConfigurerApi() {
                       isValid ? "border-green-500 focus:border-green-500" : showError ? "border-red-400 focus:border-red-400" : "border-border focus:border-primary"
                     }`}
                   />
+                  {isValid && (
+                    <CheckCircle size={16} className="absolute right-10 top-1/2 -translate-y-1/2 text-emerald-500" />
+                  )}
                   <button onClick={() => setShowKey(!showKey)} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-foreground transition-colors" type="button">
                     {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>

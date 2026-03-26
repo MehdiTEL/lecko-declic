@@ -44,8 +44,7 @@ function saveProgress(state: ProgressState): void {
 async function syncToSupabase(state: ProgressState): Promise<void> {
   const anonId = getOrCreateAnonId();
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabase.from("user_progress") as any).upsert(
+    await supabase.from("user_progress").upsert(
       {
         anon_id: anonId,
         progress_data: state,

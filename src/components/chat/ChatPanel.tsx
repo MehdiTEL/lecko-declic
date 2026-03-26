@@ -153,9 +153,20 @@ export function ChatPanel() {
           onScroll={handleScroll}
           className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
         >
-          {messages.filter((m) => m.role !== "system").map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
+          {!hasApiKey && messages.filter((m) => m.role !== "system").length === 0 ? (
+            <div className="flex flex-col items-center justify-center flex-1 p-6 text-center gap-3">
+              <p className="text-sm text-foreground-muted">
+                Configurez votre clé API pour accéder au Consultant IA interactif.
+              </p>
+              <p className="text-xs text-foreground-muted">
+                En attendant, les guides prédéfinis sont disponibles.
+              </p>
+            </div>
+          ) : (
+            messages.filter((m) => m.role !== "system").map((msg) => (
+              <ChatMessage key={msg.id} message={msg} />
+            ))
+          )}
           <div ref={messagesEndRef} />
         </div>
 

@@ -422,10 +422,10 @@ export default function Index() {
       <section className="px-4 py-16 md:py-20 border-t border-border">
         <div className="max-w-xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3" style={{ letterSpacing: "-0.02em" }}>
-            Identifiez votre potentiel d'automatisation.
+            Pret a cartographier votre potentiel ?
           </h2>
           <p className="text-sm text-foreground-muted mb-8">
-            Gratuit. Aucune inscription. Résultats immédiats.
+            Gratuit — 30 secondes — Accompagnement disponible
           </p>
 
           <div className="max-w-md mx-auto">

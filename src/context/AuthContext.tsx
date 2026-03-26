@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function loadProfile(userId: string) {
     try {
-      const { data } = await (supabase.from("user_profiles") as any)
+      const { data } = await supabase.from("user_profiles")
         .select("*")
         .eq("id", userId)
         .single();
@@ -70,14 +70,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (error) {
       if (error.message.includes("already registered")) {
-        return { error: "Un compte existe deja avec cet email." };
+        return { error: "Un compte existe déjà avec cet email." };
       }
       return { error: error.message };
     }
 
     // Create profile
     if (data.user) {
-      await (supabase.from("user_profiles") as any).insert({
+      await supabase.from("user_profiles").insert({
         id: data.user.id,
         email,
         prenom,
@@ -113,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Link anon_id to profile for email features
     const anonId = localStorage.getItem("declic-anon-id");
     if (anonId && data.user) {
-      (supabase.from("user_profiles") as any)
+      supabase.from("user_profiles")
         .update({ anon_id_link: anonId })
         .eq("id", data.user.id)
         .then(() => {}).catch(() => {});
