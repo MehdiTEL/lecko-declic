@@ -23,6 +23,12 @@ const DiagnosticForm = lazy(() => import("./pages/DiagnosticForm"));
 const ConfigurerApi = lazy(() => import("./pages/ConfigurerApi"));
 const Profil = lazy(() => import("./pages/Profil"));
 const Stats = lazy(() => import("./pages/Stats"));
+// Consultant mode
+const Missions = lazy(() => import("./pages/consultant/Missions"));
+const MissionDetail = lazy(() => import("./pages/consultant/MissionDetail"));
+const EntretienLive = lazy(() => import("./pages/consultant/EntretienLive"));
+const RoadmapPage = lazy(() => import("./pages/consultant/Roadmap"));
+const EntretienAsync = lazy(() => import("./pages/EntretienAsync"));
 import { ChatProvider } from "./context/ChatContext";
 import { PageProvider } from "./context/PageContext";
 import { ProgressProvider } from "./context/ProgressContext";
@@ -89,6 +95,14 @@ const App = () => (
             <Route path="/mon-parcours" element={<ProtectedRoute><MonParcours /></ProtectedRoute>} />
             <Route path="/mes-automations" element={<ProtectedRoute><MesAutomations /></ProtectedRoute>} />
             <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
+
+            {/* Consultant mode */}
+            <Route path="/missions" element={<ProtectedRoute><Missions /></ProtectedRoute>} />
+            <Route path="/missions/:id" element={<ProtectedRoute><MissionDetail /></ProtectedRoute>} />
+            <Route path="/missions/:id/entretien/:entretienId" element={<ProtectedRoute><EntretienLive /></ProtectedRoute>} />
+            <Route path="/missions/:id/roadmap" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
+            {/* Public — entretien async */}
+            <Route path="/entretien/:token" element={<EntretienAsync />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

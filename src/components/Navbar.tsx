@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Users, Sparkles, CheckSquare, LogOut, User, ExternalLink } from "lucide-react";
+import { Sun, Moon, Menu, X, History, Users, Sparkles, CheckSquare, LogOut, User, ExternalLink, Briefcase } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { useChatContext } from "@/context/ChatContext";
@@ -23,6 +23,7 @@ export default function Navbar() {
     { to: "/equipe", label: "Équipe", icon: <Users size={14} strokeWidth={1.5} /> },
     { to: "/historique", label: "Mes diagnostics", icon: <History size={14} strokeWidth={1.5} /> },
     ...(hasProgress ? [{ to: "/mon-parcours", label: "Mon parcours" }] : []),
+    ...(user ? [{ to: "/missions", label: "Mes missions", icon: <Briefcase size={14} strokeWidth={1.5} /> }] : []),
   ];
 
   const isActive = (to: string) => location.pathname === to;
