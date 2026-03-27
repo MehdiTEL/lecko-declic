@@ -15,7 +15,7 @@ export default function Navbar() {
   const location = useLocation();
   const { openChat, hasSeenNew } = useChatContext();
   const { globalProgress, currentMaturity, state: progressState } = useProgress();
-  const { profile, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const hasProgress = globalProgress.total > 0;
 
   const navLinks = [

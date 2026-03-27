@@ -12,6 +12,8 @@ import {
   Trash2,
   Star,
   Circle,
+  Download,
+  Link2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -82,6 +84,16 @@ export default function MissionDetail() {
 
   // Importing chantiers feedback
   const [importingId, setImportingId] = useState<string | null>(null);
+
+  // PDF export
+  const [exporting, setExporting] = useState(false);
+
+  // Toast
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
 
   const loadMission = useCallback(async () => {
     if (!id) return;
@@ -181,6 +193,38 @@ export default function MissionDetail() {
     }
   }
 
+  // ─── PDF Export ──────────────────────────────────────────────────────────
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const { generateConsultantPdf } = await import("@/lib/consultantPdf");
+      await generateConsultantPdf(mission!, mission!.entretiens ?? [], mission!.chantiers ?? []);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  // ─── Async email link ───────────────────────────────────────────────────
+  async function handleSendAsync(entretien: Entretien) {
+    try {
+      const { token } = await generateAsyncLink(entretien.id);
+      const link = `${window.location.origin}/entretien/${token}`;
+      await navigator.clipboard.writeText(link);
+      setCopiedId(entretien.id);
+      setTimeout(() => setCopiedId(null), 2000);
+      await loadMission();
+      const subject = encodeURIComponent(
+        `Questionnaire DECLIC — ${mission!.client_organisation} — ${entretien.service_nom}`,
+      );
+      const body = encodeURIComponent(
+        `Bonjour,\n\nJe vous invite a remplir ce questionnaire (5 min) :\n\n${link}\n\nLien valable 7 jours.\n\nCordialement`,
+      );
+      window.open(`mailto:?subject=${subject}&body=${body}`);
+    } catch {
+      // silently fail
+    }
+  }
+
   // ─── Loading / Error states ───────────────────────────────────────────────
   if (loading) {
     return (
@@ -248,6 +292,21 @@ export default function MissionDetail() {
             >
               {MISSION_STATUT_LABELS[mission.statut]}
             </span>
+            <button
+              onClick={handleExport}
+              disabled={exporting}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-lecko-blue text-white text-sm font-semibold hover:bg-blue-700 transition-all disabled:opacity-60"
+            >
+              {exporting ? (
+                <>
+                  <Loader2 size={14} className="animate-spin" /> Generation...
+                </>
+              ) : (
+                <>
+                  <Download size={14} /> Exporter PDF
+                </>
+              )}
+            </button>
           </div>
           {mission.client_organisation && (
             <p className="text-sm text-foreground-muted mt-1">{mission.client_organisation}</p>
@@ -436,13 +495,13 @@ export default function MissionDetail() {
                         <ExternalLink size={12} /> Lancer
                       </button>
                       <button
-                        onClick={() => handleGenerateLink(ent.id)}
+                        onClick={() => handleSendAsync(ent)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-surface-alt transition-colors"
                       >
                         {copiedId === ent.id ? (
                           <Check size={12} />
                         ) : (
-                          <Copy size={12} />
+                          <Link2 size={12} />
                         )}
                         Envoyer lien async
                       </button>
@@ -638,6 +697,13 @@ export default function MissionDetail() {
         )}
       </main>
       <Footer />
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-foreground text-background text-sm font-medium shadow-lg animate-in fade-in slide-in-from-bottom-2">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
