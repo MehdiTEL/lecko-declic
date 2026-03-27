@@ -2,6 +2,7 @@ import { CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CALENDLY_URL = "https://calendly.com/lecko/decouverte";
+const VITRINE_URL = import.meta.env.VITE_VITRINE_URL ?? "https://lecko.fr";
 
 declare global {
   interface Window {
@@ -42,18 +43,12 @@ export default function Footer() {
                 Produit
               </p>
               <div className="space-y-2.5">
-                {[
-                  { label: "Diagnostic métier", href: "/" },
-                  { label: "Méthode DÉCLIC", href: "/methode" },
-                  { label: "Notre histoire", href: "/notre-histoire" },
-                  { label: "Mode équipe", href: "/equipe" },
-                  { label: "Impact collectif", href: "/stats" },
-                ].map((l) => (
-                  <Link key={l.label} to={l.href}
-                    className="block text-sm text-slate-300 transition-colors hover:text-white">
-                    {l.label}
-                  </Link>
-                ))}
+                <Link to="/" className="block text-sm text-slate-300 transition-colors hover:text-white">Diagnostic métier</Link>
+                <a href={`${VITRINE_URL}/methode`} target="_blank" rel="noopener noreferrer" className="block text-sm text-slate-300 transition-colors hover:text-white">La méthode DÉCLIC</a>
+                <a href={`${VITRINE_URL}/notre-histoire`} target="_blank" rel="noopener noreferrer" className="block text-sm text-slate-300 transition-colors hover:text-white">Notre histoire</a>
+                <a href={`${VITRINE_URL}/faq`} target="_blank" rel="noopener noreferrer" className="block text-sm text-slate-300 transition-colors hover:text-white">FAQ</a>
+                <Link to="/equipe" className="block text-sm text-slate-300 transition-colors hover:text-white">Mode équipe</Link>
+                <Link to="/historique" className="block text-sm text-slate-300 transition-colors hover:text-white">Mes diagnostics</Link>
               </div>
             </div>
             <div>
@@ -61,15 +56,8 @@ export default function Footer() {
                 Ressources
               </p>
               <div className="space-y-2.5">
-                {[
-                  { label: "Comment ça marche", href: "/methode" },
-                  { label: "Paramètres", href: "/parametres" },
-                ].map((l) => (
-                  <Link key={l.label} to={l.href}
-                    className="block text-sm text-slate-300 transition-colors hover:text-white">
-                    {l.label}
-                  </Link>
-                ))}
+                <a href={`${VITRINE_URL}/methode`} target="_blank" rel="noopener noreferrer" className="block text-sm text-slate-300 transition-colors hover:text-white">Comment ça marche</a>
+                <Link to="/parametres" className="block text-sm text-slate-300 transition-colors hover:text-white">Paramètres</Link>
               </div>
             </div>
             <div>
@@ -91,7 +79,10 @@ export default function Footer() {
         </div>
 
         {/* Divider + copyright */}
-        <div className="border-t border-slate-700/60 pt-6">
+        <div className="border-t border-slate-700/60 pt-6 flex flex-col gap-2">
+          <a href={VITRINE_URL} className="text-xs text-slate-500 hover:text-slate-400 transition-colors">
+            Retour sur lecko.fr
+          </a>
           <p className="text-xs text-slate-500">
             © {new Date().getFullYear()} DÉCLIC by Lecko
           </p>

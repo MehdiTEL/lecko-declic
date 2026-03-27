@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -17,12 +17,10 @@ const Settings = lazy(() => import("./pages/Settings"));
 const Equipe = lazy(() => import("./pages/Equipe"));
 const EquipeRejoindre = lazy(() => import("./pages/EquipeRejoindre"));
 const EquipeResultats = lazy(() => import("./pages/EquipeResultats"));
-const Methode = lazy(() => import("./pages/Methode"));
 const MonParcours = lazy(() => import("./pages/MonParcours"));
 const MesAutomations = lazy(() => import("./pages/MesAutomations"));
 const DiagnosticForm = lazy(() => import("./pages/DiagnosticForm"));
 const ConfigurerApi = lazy(() => import("./pages/ConfigurerApi"));
-const NotreHistoire = lazy(() => import("./pages/NotreHistoire"));
 const Profil = lazy(() => import("./pages/Profil"));
 const Stats = lazy(() => import("./pages/Stats"));
 import { ChatProvider } from "./context/ChatContext";
@@ -34,6 +32,13 @@ import CelebrationOverlay from "./components/CelebrationOverlay";
 import { ProfileProvider } from "./context/ProfileContext";
 
 const queryClient = new QueryClient();
+
+const VITRINE_URL = import.meta.env.VITE_VITRINE_URL ?? "https://lecko.fr";
+
+function ExternalRedirect({ to }: { to: string }) {
+  useEffect(() => { window.location.replace(to); }, [to]);
+  return null;
+}
 
 function AppCelebration() {
   const { celebration, dismissCelebration } = useProgress();
@@ -69,8 +74,8 @@ const App = () => (
             {/* Public — accessible sans inscription */}
             <Route path="/" element={<Index />} />
             <Route path="/resultats" element={<Results />} />
-            <Route path="/methode" element={<Methode />} />
-            <Route path="/notre-histoire" element={<NotreHistoire />} />
+            <Route path="/methode" element={<ExternalRedirect to={`${VITRINE_URL}/methode`} />} />
+            <Route path="/notre-histoire" element={<ExternalRedirect to={`${VITRINE_URL}/notre-histoire`} />} />
             <Route path="/stats" element={<Stats />} />
 
             {/* Premium — inscription requise */}

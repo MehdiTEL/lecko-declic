@@ -1,11 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Sun, Moon, Menu, X, History, Users, Sparkles, CheckSquare, LogOut, User } from "lucide-react";
+import { Sun, Moon, Menu, X, History, Users, Sparkles, CheckSquare, LogOut, User, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { useChatContext } from "@/context/ChatContext";
 import { useProgress } from "@/context/ProgressContext";
 import { useAuth } from "@/context/AuthContext";
 import DeclicLogo from "@/components/DeclicLogo";
+
+const VITRINE_URL = import.meta.env.VITE_VITRINE_URL ?? "https://lecko.fr";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -18,11 +20,9 @@ export default function Navbar() {
 
   const navLinks = [
     { to: "/", label: "Accueil" },
-    { to: "/methode", label: "Méthode" },
     { to: "/equipe", label: "Équipe", icon: <Users size={14} strokeWidth={1.5} /> },
-    { to: "/historique", label: "Historiques", icon: <History size={14} strokeWidth={1.5} /> },
-    ...(hasProgress ? [{ to: "/mes-automations", label: "Automations", icon: <CheckSquare size={14} strokeWidth={1.5} /> }] : []),
-    { to: "/notre-histoire", label: "Notre histoire" },
+    { to: "/historique", label: "Mes diagnostics", icon: <History size={14} strokeWidth={1.5} /> },
+    ...(hasProgress ? [{ to: "/mon-parcours", label: "Mon parcours" }] : []),
   ];
 
   const isActive = (to: string) => location.pathname === to;
@@ -62,6 +62,10 @@ export default function Navbar() {
                 )}
               </Link>
             ))}
+            <a href={`${VITRINE_URL}/methode`} target="_blank" rel="noopener noreferrer"
+               className="text-sm font-medium text-foreground-secondary hover:text-primary transition-colors flex items-center gap-1">
+              Méthode <ExternalLink size={11} className="opacity-50" />
+            </a>
           </nav>
 
           {/* Right actions */}
@@ -197,6 +201,11 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          <a href={`${VITRINE_URL}/methode`} target="_blank" rel="noopener noreferrer"
+             onClick={() => setMenuOpen(false)}
+             className="flex items-center gap-2.5 text-sm font-medium px-3 py-2.5 rounded-lg text-foreground-secondary hover:bg-muted/60 hover:text-foreground transition-colors">
+            Méthode <ExternalLink size={11} className="opacity-50" />
+          </a>
           <button
             onClick={() => { setMenuOpen(false); openChat(); }}
             className="flex items-center gap-2.5 text-sm font-semibold px-3 py-2.5 rounded-lg text-primary hover:bg-primary/5 transition-colors text-left mt-1"
