@@ -1,7 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Loader2, CheckCircle, AlertTriangle } from "lucide-react";
-import DeclicLogo from "@/components/DeclicLogo";
 import { getEntretienByToken, updateEntretien } from "@/lib/consultantDb";
 import type { Entretien } from "@/types/consultant";
 
@@ -152,7 +151,7 @@ export default function EntretienAsync() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="border-b border-slate-200 px-6 py-4">
-        <DeclicLogo size="sm" />
+        <img src="/logo-declic.png" alt="DÉCLIC" style={{ height: "28px" }} />
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-10">

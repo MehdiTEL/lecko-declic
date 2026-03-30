@@ -7,21 +7,20 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
-import Navbar from "./components/Navbar";
+import NotFound from "./pages/NotFound";
 
-// ── Pages consultant (protégées) ──────────────────────────────────
-const Missions          = lazy(() => import("./pages/consultant/Missions"));
-const MissionDetail     = lazy(() => import("./pages/consultant/MissionDetail"));
-const EntretienLive     = lazy(() => import("./pages/consultant/EntretienLive"));
-const RoadmapPage       = lazy(() => import("./pages/consultant/Roadmap"));
-const Bibliotheque      = lazy(() => import("./pages/consultant/Bibliotheque"));
-const Settings          = lazy(() => import("./pages/Settings"));
-const NotFound          = lazy(() => import("./pages/NotFound"));
+// ── Pages consultant — protégées ─────────────────────────
+const Missions            = lazy(() => import("./pages/consultant/Missions"));
+const MissionDetail       = lazy(() => import("./pages/consultant/MissionDetail"));
+const EntretienLive       = lazy(() => import("./pages/consultant/EntretienLive"));
+const RoadmapPage         = lazy(() => import("./pages/consultant/Roadmap"));
+const Bibliotheque        = lazy(() => import("./pages/consultant/Bibliotheque"));
+const Settings            = lazy(() => import("./pages/Settings"));
 const QuestionnaireEditor = lazy(() => import("./pages/consultant/QuestionnaireEditor"));
 
-// ── Pages client (publiques — accès par token uniquement) ─────────
-const EntretienAsync    = lazy(() => import("./pages/EntretienAsync"));
-const PortailClient     = lazy(() => import("./pages/PortailClient"));
+// ── Pages client — publiques via token ───────────────────
+const EntretienAsync = lazy(() => import("./pages/EntretienAsync"));
+const PortailClient  = lazy(() => import("./pages/PortailClient"));
 
 const queryClient = new QueryClient();
 
@@ -31,7 +30,7 @@ const Spinner = () => (
   </div>
 );
 
-function AppProviders({ children }: { children: React.ReactNode }) {
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -39,48 +38,41 @@ function AppProviders({ children }: { children: React.ReactNode }) {
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
-            {children}
+            <Suspense fallback={<Spinner />}>
+              <Routes>
+                {/* Auth */}
+                <Route path="/login" element={<Login />} />
+
+                {/* Accès client via token — sans auth */}
+                <Route path="/entretien/:token" element={<EntretienAsync />} />
+                <Route path="/client/:token"    element={<PortailClient />} />
+
+                {/* Espace consultant — auth Lecko requise */}
+                <Route path="/missions"
+                  element={<ProtectedRoute><Missions /></ProtectedRoute>} />
+                <Route path="/missions/:id"
+                  element={<ProtectedRoute><MissionDetail /></ProtectedRoute>} />
+                <Route path="/missions/:id/entretien/:entretienId"
+                  element={<ProtectedRoute><EntretienLive /></ProtectedRoute>} />
+                <Route path="/missions/:id/roadmap"
+                  element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
+                <Route path="/bibliotheque"
+                  element={<ProtectedRoute><Bibliotheque /></ProtectedRoute>} />
+                <Route path="/bibliotheque/questionnaire/nouveau"
+                  element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
+                <Route path="/bibliotheque/questionnaire/:id"
+                  element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
+                <Route path="/parametres"
+                  element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+
+                {/* Redirections */}
+                <Route path="/" element={<Navigate to="/missions" replace />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
-  );
-}
-
-export default function App() {
-  return (
-    <AppProviders>
-      <Navbar />
-      <Suspense fallback={<Spinner />}>
-        <Routes>
-          {/* ── Accès public uniquement pour les clients via token ── */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/entretien/:token" element={<EntretienAsync />} />
-          <Route path="/client/:token" element={<PortailClient />} />
-
-          {/* ── Espace consultant (authentification Lecko requise) ── */}
-          <Route path="/missions"
-            element={<ProtectedRoute><Missions /></ProtectedRoute>} />
-          <Route path="/missions/:id"
-            element={<ProtectedRoute><MissionDetail /></ProtectedRoute>} />
-          <Route path="/missions/:id/entretien/:entretienId"
-            element={<ProtectedRoute><EntretienLive /></ProtectedRoute>} />
-          <Route path="/missions/:id/roadmap"
-            element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
-          <Route path="/bibliotheque"
-            element={<ProtectedRoute><Bibliotheque /></ProtectedRoute>} />
-          <Route path="/bibliotheque/questionnaire/nouveau"
-            element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
-          <Route path="/bibliotheque/questionnaire/:id"
-            element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
-          <Route path="/parametres"
-            element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-
-          {/* ── Redirections ── */}
-          <Route path="/" element={<Navigate to="/missions" replace />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </AppProviders>
   );
 }

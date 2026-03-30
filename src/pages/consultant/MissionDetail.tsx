@@ -228,7 +228,7 @@ export default function MissionDetail() {
     return (
       <ConsultantLayout activeSection="overview">
         <div className="px-8 py-12">
-          <div className="rounded-2xl border border-mission-border p-8 text-center max-w-md mx-auto">
+          <div className="rounded-2xl border border-border p-8 text-center max-w-md mx-auto">
             <AlertCircle className="mx-auto mb-3 text-red-500" size={28} />
             <p className="text-foreground font-medium">{error || "Mission introuvable"}</p>
             <Link
@@ -251,7 +251,7 @@ export default function MissionDetail() {
   const totalHeuresSem = chantiers.reduce((s, c) => s + c.temps_gagne_heures_semaine, 0);
 
   const inputCls =
-    "w-full bg-white border-2 border-mission-border rounded-xl px-4 py-3 text-sm outline-none focus:border-lecko-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
+    "w-full bg-card border-2 border-border rounded-xl px-4 py-3 text-sm outline-none focus:border-lecko-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
 
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
@@ -291,7 +291,7 @@ export default function MissionDetail() {
         />
 
         {/* Tab navigation — inside content */}
-        <div className="flex gap-1 mt-8 mb-6 border-b border-mission-border pb-4">
+        <div className="flex gap-1 mt-8 mb-6 border-b border-border pb-4">
           {(
             [
               { key: "overview" as Tab, label: "Vue d'ensemble" },
@@ -317,7 +317,7 @@ export default function MissionDetail() {
         {/* ─── Tab: Vue d'ensemble ────────────────────────────────────────── */}
         {activeTab === "overview" && (
           <div className="space-y-6">
-            <div className="bg-white border border-mission-border rounded-2xl p-5 space-y-4">
+            <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
               <SectionHeader title="Contexte client" />
               {mission.objectif_mission && (
                 <div>
@@ -337,12 +337,12 @@ export default function MissionDetail() {
               )}
               <div className="flex flex-wrap gap-2">
                 {mission.client_secteur && (
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-mission-alt text-foreground-muted border border-mission-border">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-muted/50 text-foreground-muted border border-border">
                     {SECTOR_LABELS[mission.client_secteur as Sector] ?? mission.client_secteur}
                   </span>
                 )}
                 {mission.client_taille && (
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-mission-alt text-foreground-muted border border-mission-border">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-muted/50 text-foreground-muted border border-border">
                     {ORG_SIZE_LABELS[mission.client_taille as OrgSize] ?? mission.client_taille}
                   </span>
                 )}
@@ -390,7 +390,7 @@ export default function MissionDetail() {
             />
 
             {entretiens.length === 0 && (
-              <div className="rounded-2xl border border-dashed border-mission-border p-8 text-center">
+              <div className="rounded-2xl border border-dashed border-border p-8 text-center">
                 <p className="text-foreground-muted text-sm">
                   Aucun entretien pour le moment.
                 </p>
@@ -400,7 +400,7 @@ export default function MissionDetail() {
             {entretiens.map((ent) => (
               <div
                 key={ent.id}
-                className="bg-white border border-mission-border rounded-xl p-4 space-y-3 hover:border-lecko-blue/20 transition-colors"
+                className="bg-card border border-border rounded-xl p-4 space-y-3 hover:border-lecko-blue/20 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -437,7 +437,7 @@ export default function MissionDetail() {
                     {ent.metiers.map((m, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-mission-alt text-foreground-muted"
+                        className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-muted/50 text-foreground-muted"
                       >
                         {m}
                       </span>
@@ -469,7 +469,7 @@ export default function MissionDetail() {
                       </button>
                       <button
                         onClick={() => handleSendAsync(ent)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-mission-border text-foreground hover:bg-mission-alt transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-muted/50 transition-colors"
                       >
                         {copiedId === ent.id ? <Check size={12} /> : <Link2 size={12} />}
                         Envoyer lien async
@@ -479,7 +479,7 @@ export default function MissionDetail() {
                   {ent.statut === "lien_envoye" && ent.async_token && (
                     <button
                       onClick={() => copyAsyncLink(ent)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-mission-border text-foreground hover:bg-mission-alt transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-muted/50 transition-colors"
                     >
                       {copiedId === ent.id ? <Check size={12} /> : <Copy size={12} />}
                       Copier le lien
@@ -512,7 +512,7 @@ export default function MissionDetail() {
 
         {/* ─── Tab: Feuille de route ──────────────────────────────────────── */}
         {activeTab === "roadmap" && (
-          <div className="rounded-2xl border border-mission-border p-8 text-center">
+          <div className="rounded-2xl border border-border p-8 text-center">
             <p className="text-foreground-muted text-sm mb-4">
               Consultez la feuille de route complète de cette mission.
             </p>
@@ -529,7 +529,7 @@ export default function MissionDetail() {
       {/* ── Entretien Modal ──────────────────────────────────────────────── */}
       {showEntretienModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+          <div className="bg-card rounded-2xl shadow-xl w-full max-w-md p-6 relative">
             <button
               onClick={() => setShowEntretienModal(false)}
               className="absolute top-4 right-4 text-foreground-muted hover:text-foreground"
@@ -634,7 +634,7 @@ export default function MissionDetail() {
                       className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border-2 transition-all ${
                         entretienForm.mode === mode
                           ? "border-lecko-blue bg-lecko-blue/5 text-lecko-blue"
-                          : "border-mission-border text-foreground-muted hover:text-foreground"
+                          : "border-border text-foreground-muted hover:text-foreground"
                       }`}
                     >
                       {mode === "live" ? "Live" : "Async"}

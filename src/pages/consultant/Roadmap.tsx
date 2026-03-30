@@ -55,7 +55,7 @@ function ChantierCard({ chantier }: { chantier: Chantier }) {
     <div
       draggable
       onDragStart={handleDragStart}
-      className="bg-white rounded-xl border border-mission-border p-3 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md hover:border-lecko-blue/20 transition-all"
+      className="bg-card rounded-xl border border-mission-border p-3 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md hover:border-lecko-blue/20 transition-all"
     >
       <h4 className="text-sm font-consultant font-medium text-foreground line-clamp-2 leading-snug mb-1">
         {chantier.titre}

@@ -44,7 +44,7 @@ export default function ConsultantLayout({
   };
 
   return (
-    <div className="h-screen flex overflow-hidden bg-mission-surface font-consultant">
+    <div className="h-screen flex overflow-hidden bg-background font-consultant">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -67,7 +67,7 @@ export default function ConsultantLayout({
             <img
               src="/logo-declic.png"
               alt="DÉCLIC"
-              style={{ height: "22px", filter: "brightness(0) invert(1)" }}
+              style={{ height: "22px", filter: "brightness(0) invert(1)", opacity: 0.9 }}
             />
           </Link>
           <Link
@@ -208,7 +208,7 @@ export default function ConsultantLayout({
       {/* ── CONTENU PRINCIPAL ── */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile header */}
-        <div className="lg:hidden h-14 flex items-center px-4 border-b border-mission-border bg-white">
+        <div className="lg:hidden h-14 flex items-center px-4 border-b border-border bg-card">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 -ml-2 rounded-lg hover:bg-slate-100 transition-colors"

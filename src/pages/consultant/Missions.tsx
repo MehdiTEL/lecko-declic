@@ -124,7 +124,7 @@ export default function Missions() {
   }
 
   const inputCls =
-    "w-full bg-white border-2 border-mission-border rounded-xl px-4 py-3 text-sm outline-none focus:border-lecko-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
+    "w-full bg-card border-2 border-border rounded-xl px-4 py-3 text-sm outline-none focus:border-lecko-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
 
   return (
     <ConsultantLayout activeSection="missions">
@@ -243,7 +243,7 @@ export default function Missions() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 onClick={() => navigate(`/missions/${mission.id}`)}
-                className="group relative bg-white border border-mission-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:border-lecko-blue/30 hover:shadow-lg hover:shadow-lecko-blue/5 hover:-translate-y-0.5"
+                className="group relative bg-card border border-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:border-lecko-blue/30 hover:shadow-lg hover:shadow-lecko-blue/5 hover:-translate-y-0.5"
               >
                 {/* Indicateur statut — barre colorée en haut */}
                 <div
@@ -349,7 +349,7 @@ export default function Missions() {
             if (e.target === e.currentTarget) setCreateOpen(false);
           }}
         >
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+          <div className="bg-card rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-consultant font-bold text-foreground">
                 Nouvelle mission
