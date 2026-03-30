@@ -82,6 +82,36 @@
     --shadow-card-hover: 0 8px 24px -4px hsl(221 83% 53% / 0.10), 0 2px 8px -2px hsl(222 47% 11% / 0.06);
     --shadow-elevated: 0 4px 24px -4px hsl(222 47% 11% / 0.08);
     --shadow-float: 0 12px 40px -8px hsl(221 83% 53% / 0.15);
+
+    /* ── Espace consultant ── */
+    --consultant-sidebar-bg: 222 47% 5%;
+    --consultant-sidebar-border: 220 13% 15%;
+    --consultant-sidebar-text: 213 31% 91%;
+    --consultant-sidebar-muted: 215 20% 55%;
+    --consultant-sidebar-active: 221 83% 53%;
+    --consultant-sidebar-hover: 222 47% 11%;
+
+    /* ── Surfaces mission ── */
+    --mission-surface: 0 0% 100%;
+    --mission-surface-alt: 210 40% 98%;
+    --mission-border: 214 32% 91%;
+    --mission-border-strong: 214 32% 82%;
+
+    /* ── Statuts chantiers ── */
+    --statut-critique-bg: 0 86% 97%;
+    --statut-critique: 0 84% 55%;
+    --statut-haute-bg: 38 100% 96%;
+    --statut-haute: 32 95% 44%;
+    --statut-normale-bg: 214 100% 97%;
+    --statut-normale: 221 83% 53%;
+    --statut-basse-bg: 220 9% 96%;
+    --statut-basse: 220 9% 46%;
+
+    /* ── Validations portail ── */
+    --validation-valide: 160 84% 39%;
+    --validation-rejete: 0 84% 60%;
+    --validation-revoir: 38 92% 50%;
+    --validation-attente: 215 16% 47%;
   }
 
   .dark {

@@ -9,6 +9,7 @@ import {
   Clock,
   Target,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -80,66 +81,31 @@ export default function DiagnosticForm() {
 
   /* ── step indicator ─────────────────────────────────── */
   const StepIndicator = () => (
-    <div className="flex items-center justify-center gap-0 mb-10">
-      {STEP_LABELS.map((label, i) => {
-        const completed = i < step;
-        const active = i === step;
-        const Icon = STEP_ICONS[i];
-        return (
-          <div key={label} className="flex items-center">
-            {/* connector line */}
-            {i > 0 && (
-              <div
-                className={`h-0.5 w-8 sm:w-12 transition-colors ${
-                  i <= step ? "bg-primary" : "bg-border"
-                }`}
-              />
-            )}
-
-            <div className="flex flex-col items-center gap-1.5">
-              {/* dot */}
-              <div
-                className={`flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all text-sm font-semibold
-                  ${
-                    completed
-                      ? "bg-green-500 border-green-500 text-white"
-                      : active
-                        ? "bg-primary border-primary text-white"
-                        : "bg-background border-border text-muted-foreground"
-                  }`}
-              >
-                {completed ? (
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                ) : (
-                  <Icon className="w-4 h-4" />
-                )}
-              </div>
-              {/* label */}
-              <span
-                className={`text-xs font-medium whitespace-nowrap ${
-                  active
-                    ? "text-primary"
-                    : completed
-                      ? "text-green-600"
-                      : "text-muted-foreground"
-                }`}
-              >
-                {label}
-              </span>
-            </div>
-          </div>
-        );
-      })}
+    <div className="mb-10">
+      {/* Barre de progression */}
+      <div className="relative h-1 bg-border rounded-full mb-4">
+        <div
+          className="absolute h-full bg-lecko-blue rounded-full transition-all duration-500"
+          style={{ width: `${((step + 1) / STEP_LABELS.length) * 100}%` }}
+        />
+      </div>
+      {/* Labels des étapes */}
+      <div className="flex justify-between">
+        {STEP_LABELS.map((label, i) => (
+          <span
+            key={label}
+            className={`text-xs font-mono transition-colors ${
+              i === step
+                ? "text-lecko-blue font-medium"
+                : i < step
+                  ? "text-foreground-muted"
+                  : "text-foreground-muted/40"
+            }`}
+          >
+            {label}
+          </span>
+        ))}
+      </div>
     </div>
   );
 
@@ -436,10 +402,11 @@ export default function DiagnosticForm() {
               <button
                 type="button"
                 onClick={handleLaunch}
-                className="w-full h-12 rounded-full bg-primary text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                className="w-full h-14 rounded-2xl bg-lecko-blue text-white font-semibold text-base flex items-center justify-center gap-3 hover:bg-blue-700 transition-all shadow-lg shadow-lecko-blue/20 hover:shadow-xl hover:shadow-lecko-blue/25 hover:-translate-y-0.5 active:translate-y-0"
               >
-                Lancer le diagnostic
-                <ChevronRight className="w-5 h-5" />
+                <Sparkles size={18} strokeWidth={1.5} />
+                Lancer l'analyse personnalisée
+                <ArrowRight size={18} strokeWidth={1.5} />
               </button>
             )}
           </div>
@@ -497,10 +464,11 @@ export default function DiagnosticForm() {
             <button
               type="button"
               onClick={handleLaunch}
-              className="w-full h-12 rounded-full bg-primary text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+              className="w-full h-14 rounded-2xl bg-lecko-blue text-white font-semibold text-base flex items-center justify-center gap-3 hover:bg-blue-700 transition-all shadow-lg shadow-lecko-blue/20 hover:shadow-xl hover:shadow-lecko-blue/25 hover:-translate-y-0.5 active:translate-y-0"
             >
-              Lancer le diagnostic
-              <ChevronRight className="w-5 h-5" />
+              <Sparkles size={18} strokeWidth={1.5} />
+              Lancer l'analyse personnalisée
+              <ArrowRight size={18} strokeWidth={1.5} />
             </button>
           </div>
         );

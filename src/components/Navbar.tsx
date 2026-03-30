@@ -18,6 +18,12 @@ export default function Navbar() {
   const { user, profile, signOut } = useAuth();
   const hasProgress = globalProgress.total > 0;
 
+  // Hide navbar on consultant/client routes (they have their own layouts)
+  const hideNavbar = ["/missions", "/client", "/bibliotheque"]
+    .some(p => location.pathname.startsWith(p))
+    || location.pathname.includes("/entretien/");
+  if (hideNavbar) return null;
+
   const navLinks = [
     { to: "/", label: "Accueil" },
     { to: "/equipe", label: "Équipe", icon: <Users size={14} strokeWidth={1.5} /> },

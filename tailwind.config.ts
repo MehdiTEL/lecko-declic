@@ -16,6 +16,9 @@ export default {
         // sans: Source Sans 3 — charte Lecko, corps de texte
         sans: ["'Source Sans 3'", "Calibri", "sans-serif"],
         heading: ["'Inter'", "system-ui", "sans-serif"],
+        // Espace consultant
+        consultant: ["'DM Sans'", "system-ui", "sans-serif"],
+        mono: ["'DM Mono'", "monospace"],
       },
       fontSize: {
         "display": ["3.75rem", { lineHeight: "1.08", letterSpacing: "-0.03em", fontWeight: "800" }],
@@ -104,6 +107,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        consultant: {
+          sidebar: "hsl(var(--consultant-sidebar-bg))",
+          border: "hsl(var(--consultant-sidebar-border))",
+          text: "hsl(var(--consultant-sidebar-text))",
+          muted: "hsl(var(--consultant-sidebar-muted))",
+          active: "hsl(var(--consultant-sidebar-active))",
+          hover: "hsl(var(--consultant-sidebar-hover))",
+        },
+        mission: {
+          surface: "hsl(var(--mission-surface))",
+          alt: "hsl(var(--mission-surface-alt))",
+          border: "hsl(var(--mission-border))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -157,6 +173,18 @@ export default {
           from: { opacity: "0", transform: "scale(0.95)" },
           to: { opacity: "1", transform: "scale(1)" },
         },
+        "pulse-ring": {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "100%": { transform: "scale(1.4)", opacity: "0" },
+        },
+        "slide-up-fade": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "count-up": {
+          "0%": { opacity: "0", transform: "translateY(4px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -168,6 +196,9 @@ export default {
         "slide-out-right": "slide-out-right 0.25s ease-in forwards",
         "pulse-subtle": "pulse-subtle 2s ease-in-out infinite",
         "scale-in": "scale-in 0.2s ease-out forwards",
+        "pulse-ring": "pulse-ring 1.5s ease-out infinite",
+        "slide-up-fade": "slide-up-fade 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        "count-up": "count-up 0.5s ease-out forwards",
       },
     },
   },

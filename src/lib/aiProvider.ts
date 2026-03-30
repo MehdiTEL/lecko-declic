@@ -17,8 +17,13 @@ function migrateLegacy() {
 export function getProvider(): AIProvider | null {
   try {
     migrateLegacy();
-    return (localStorage.getItem(PROVIDER_KEY) as AIProvider) || null;
+    const stored = localStorage.getItem(PROVIDER_KEY) as AIProvider;
+    if (stored) return stored;
+    // Fallback: if env key is set, default to anthropic
+    if (import.meta.env.VITE_ANTHROPIC_API_KEY) return "anthropic";
+    return null;
   } catch {
+    if (import.meta.env.VITE_ANTHROPIC_API_KEY) return "anthropic";
     return null;
   }
 }
@@ -26,9 +31,9 @@ export function getProvider(): AIProvider | null {
 export function getApiKey(): string | null {
   try {
     migrateLegacy();
-    return localStorage.getItem(API_KEY_STORAGE);
+    return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || null;
   } catch {
-    return null;
+    return import.meta.env.VITE_ANTHROPIC_API_KEY || null;
   }
 }
 

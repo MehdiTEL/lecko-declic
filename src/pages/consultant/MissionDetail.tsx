@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  ArrowLeft,
   Loader2,
   AlertCircle,
   Plus,
@@ -9,14 +8,16 @@ import {
   Copy,
   Check,
   ExternalLink,
-  Trash2,
-  Star,
-  Circle,
   Download,
   Link2,
+  MessageSquare,
+  Layers,
+  Clock,
+  Users,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import ConsultantLayout from "@/components/consultant/ConsultantLayout";
+import { KpiStrip } from "@/components/consultant/KpiStrip";
+import { SectionHeader } from "@/components/consultant/SectionHeader";
 import ChantiersView from "./ChantiersView";
 import {
   getMission,
@@ -29,26 +30,18 @@ import {
   MISSION_STATUT_LABELS,
   MISSION_STATUT_COLORS,
 } from "@/types/consultant";
-import { SECTOR_LABELS } from "@/types/diagnostic";
-import { ORG_SIZE_LABELS } from "@/types/diagnostic";
+import { SECTOR_LABELS, ORG_SIZE_LABELS } from "@/types/diagnostic";
 import type { Sector, OrgSize } from "@/types/diagnostic";
 
 // ─── Tab types ──────────────────────────────────────────────────────────────
 type Tab = "overview" | "entretiens" | "chantiers" | "roadmap";
 
-const TAB_LABELS: Record<Tab, string> = {
-  overview: "Vue d'ensemble",
-  entretiens: "Entretiens",
-  chantiers: "Chantiers",
-  roadmap: "Feuille de route",
-};
-
 // ─── Entretien statut labels/colors ─────────────────────────────────────────
 const ENTRETIEN_STATUT_LABELS: Record<EntretienStatut, string> = {
-  a_planifier: "A planifier",
-  lien_envoye: "Lien envoye",
+  a_planifier: "À planifier",
+  lien_envoye: "Lien envoyé",
   en_cours: "En cours",
-  termine: "Termine",
+  termine: "Terminé",
 };
 const ENTRETIEN_STATUT_COLORS: Record<EntretienStatut, { color: string; bg: string }> = {
   a_planifier: { color: "#6B7280", bg: "#F3F4F6" },
@@ -61,11 +54,22 @@ const ENTRETIEN_STATUT_COLORS: Record<EntretienStatut, { color: string; bg: stri
 export default function MissionDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [mission, setMission] = useState<Mission | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>("overview");
+
+  // Derive activeTab from searchParams
+  const tabParam = searchParams.get("tab") as Tab | null;
+  const activeTab: Tab = tabParam && ["overview", "entretiens", "chantiers", "roadmap"].includes(tabParam) ? tabParam : "overview";
+  const setActiveTab = (tab: Tab) => {
+    if (tab === "overview") {
+      navigate(`/missions/${id}`, { replace: true });
+    } else {
+      navigate(`/missions/${id}?tab=${tab}`, { replace: true });
+    }
+  };
 
   // Entretien modal
   const [showEntretienModal, setShowEntretienModal] = useState(false);
@@ -78,22 +82,8 @@ export default function MissionDetail() {
     mode: "live" as EntretienMode,
   });
   const [submitting, setSubmitting] = useState(false);
-
-  // Clipboard feedback
   const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  // Importing chantiers feedback
   const [importingId, setImportingId] = useState<string | null>(null);
-
-  // PDF export
-  const [exporting, setExporting] = useState(false);
-
-  // Toast
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) {
-    setToast(msg);
-    setTimeout(() => setToast(null), 3000);
-  }
 
   const loadMission = useCallback(async () => {
     if (!id) return;
@@ -102,7 +92,7 @@ export default function MissionDetail() {
       setError(null);
       const data = await getMission(id);
       setMission(data);
-    } catch (err) {
+    } catch {
       setError("Mission introuvable.");
     } finally {
       setLoading(false);
@@ -193,18 +183,6 @@ export default function MissionDetail() {
     }
   }
 
-  // ─── PDF Export ──────────────────────────────────────────────────────────
-  const handleExport = async () => {
-    setExporting(true);
-    try {
-      const { generateConsultantPdf } = await import("@/lib/consultantPdf");
-      await generateConsultantPdf(mission!, mission!.entretiens ?? [], mission!.chantiers ?? []);
-    } finally {
-      setExporting(false);
-    }
-  };
-
-  // ─── Async email link ───────────────────────────────────────────────────
   async function handleSendAsync(entretien: Entretien) {
     try {
       const { token } = await generateAsyncLink(entretien.id);
@@ -214,10 +192,10 @@ export default function MissionDetail() {
       setTimeout(() => setCopiedId(null), 2000);
       await loadMission();
       const subject = encodeURIComponent(
-        `Questionnaire DECLIC — ${mission!.client_organisation} — ${entretien.service_nom}`,
+        `Questionnaire DÉCLIC — ${mission!.client_organisation} — ${entretien.service_nom}`
       );
       const body = encodeURIComponent(
-        `Bonjour,\n\nJe vous invite a remplir ce questionnaire (5 min) :\n\n${link}\n\nLien valable 7 jours.\n\nCordialement`,
+        `Bonjour,\n\nJe vous invite à remplir ce questionnaire (5 min) :\n\n${link}\n\nLien valable 7 jours.\n\nCordialement`
       );
       window.open(`mailto:?subject=${subject}&body=${body}`);
     } catch {
@@ -225,37 +203,43 @@ export default function MissionDetail() {
     }
   }
 
+  // ─── Determine active section for sidebar ──────────────────────────────────
+  const sidebarSection =
+    activeTab === "overview"
+      ? "overview"
+      : activeTab === "entretiens"
+      ? "entretiens"
+      : activeTab === "chantiers"
+      ? "chantiers"
+      : "overview";
+
   // ─── Loading / Error states ───────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <Navbar />
-        <main className="flex-1 flex items-center justify-center">
+      <ConsultantLayout activeSection="overview">
+        <div className="flex-1 flex items-center justify-center py-20">
           <Loader2 className="animate-spin text-foreground-muted" size={32} />
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </ConsultantLayout>
     );
   }
 
   if (error || !mission) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <Navbar />
-        <main className="flex-1 max-w-4xl mx-auto px-4 py-8 w-full">
-          <Link
-            to="/missions"
-            className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground transition-colors mb-6"
-          >
-            <ArrowLeft size={14} /> Mes missions
-          </Link>
-          <div className="rounded-2xl border border-border p-8 text-center">
+      <ConsultantLayout activeSection="overview">
+        <div className="px-8 py-12">
+          <div className="rounded-2xl border border-mission-border p-8 text-center max-w-md mx-auto">
             <AlertCircle className="mx-auto mb-3 text-red-500" size={28} />
             <p className="text-foreground font-medium">{error || "Mission introuvable"}</p>
+            <Link
+              to="/missions"
+              className="text-sm text-lecko-blue hover:underline mt-3 inline-block"
+            >
+              Retour aux missions
+            </Link>
           </div>
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </ConsultantLayout>
     );
   }
 
@@ -266,85 +250,66 @@ export default function MissionDetail() {
   const servicesCouverts = new Set(entretiens.map((e) => e.service_nom)).size;
   const totalHeuresSem = chantiers.reduce((s, c) => s + c.temps_gagne_heures_semaine, 0);
 
+  const inputCls =
+    "w-full bg-white border-2 border-mission-border rounded-xl px-4 py-3 text-sm outline-none focus:border-lecko-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
+
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Navbar />
-      <main className="flex-1 max-w-4xl mx-auto px-4 py-8 w-full">
-        {/* Back link */}
-        <Link
-          to="/missions"
-          className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground transition-colors mb-6"
-        >
-          <ArrowLeft size={14} /> Mes missions
-        </Link>
+    <ConsultantLayout mission={mission} activeSection={sidebarSection}>
+      <div className="px-8 py-8">
+        {/* KPI Strip */}
+        <KpiStrip
+          kpis={[
+            {
+              label: "Entretiens",
+              value: `${entretiensDone}/${entretiens.length}`,
+              sublabel: `${servicesCouverts} service${servicesCouverts > 1 ? "s" : ""}`,
+              color: "#2563EB",
+              icon: MessageSquare,
+            },
+            {
+              label: "Chantiers",
+              value: String(chantiers.length),
+              icon: Layers,
+            },
+            {
+              label: "Impact",
+              value: `${totalHeuresSem}h`,
+              sublabel: "par semaine",
+              color: "#10B981",
+              icon: Clock,
+            },
+            {
+              label: "Personnes",
+              value: String(
+                new Set(chantiers.map((c) => c.nb_personnes_impactees)).size || entretiens.reduce((s, e) => s + e.nb_personnes, 0)
+              ),
+              sublabel: "impactées",
+              icon: Users,
+            },
+          ]}
+        />
 
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-start gap-3 flex-wrap">
-            <h1 className="text-2xl font-bold text-foreground">{mission.client_nom}</h1>
-            <span
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
-              style={{
-                color: MISSION_STATUT_COLORS[mission.statut],
-                backgroundColor: MISSION_STATUT_COLORS[mission.statut] + "18",
-              }}
-            >
-              {MISSION_STATUT_LABELS[mission.statut]}
-            </span>
+        {/* Tab navigation — inside content */}
+        <div className="flex gap-1 mt-8 mb-6 border-b border-mission-border pb-4">
+          {(
+            [
+              { key: "overview" as Tab, label: "Vue d'ensemble" },
+              { key: "entretiens" as Tab, label: "Entretiens" },
+              { key: "chantiers" as Tab, label: "Chantiers" },
+              { key: "roadmap" as Tab, label: "Feuille de route" },
+            ] as const
+          ).map(({ key, label }) => (
             <button
-              onClick={handleExport}
-              disabled={exporting}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-lecko-blue text-white text-sm font-semibold hover:bg-blue-700 transition-all disabled:opacity-60"
-            >
-              {exporting ? (
-                <>
-                  <Loader2 size={14} className="animate-spin" /> Generation...
-                </>
-              ) : (
-                <>
-                  <Download size={14} /> Exporter PDF
-                </>
-              )}
-            </button>
-          </div>
-          {mission.client_organisation && (
-            <p className="text-sm text-foreground-muted mt-1">{mission.client_organisation}</p>
-          )}
-
-          {/* Metadata pills */}
-          <div className="flex flex-wrap gap-2 mt-3">
-            {mission.client_secteur && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-surface-alt text-foreground-muted">
-                {SECTOR_LABELS[mission.client_secteur as Sector] ?? mission.client_secteur}
-              </span>
-            )}
-            {mission.client_taille && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-surface-alt text-foreground-muted">
-                {ORG_SIZE_LABELS[mission.client_taille as OrgSize] ?? mission.client_taille}
-              </span>
-            )}
-            {mission.date_livraison_prevue && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-surface-alt text-foreground-muted">
-                Livraison : {new Date(mission.date_livraison_prevue).toLocaleDateString("fr-FR")}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Tab navigation */}
-        <div className="flex gap-1 mb-6 overflow-x-auto">
-          {(Object.keys(TAB_LABELS) as Tab[]).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${
-                activeTab === tab
-                  ? "bg-lecko-blue text-white"
-                  : "bg-surface-alt text-foreground-muted hover:text-foreground"
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === key
+                  ? "bg-foreground text-background font-semibold"
+                  : "text-foreground-muted hover:text-foreground hover:bg-slate-50"
               }`}
             >
-              {TAB_LABELS[tab]}
+              {label}
             </button>
           ))}
         </div>
@@ -352,54 +317,53 @@ export default function MissionDetail() {
         {/* ─── Tab: Vue d'ensemble ────────────────────────────────────────── */}
         {activeTab === "overview" && (
           <div className="space-y-6">
-            {/* KPI cards */}
-            <div className="grid grid-cols-2 gap-4">
-              <KpiCard label="Entretiens" value={`${entretiensDone}/${entretiens.length}`} />
-              <KpiCard label="Services couverts" value={String(servicesCouverts)} />
-              <KpiCard label="Chantiers" value={String(chantiers.length)} />
-              <KpiCard label="Heures/sem total" value={`${totalHeuresSem}h`} />
-            </div>
-
-            {/* Contexte client */}
-            <div className="rounded-2xl border border-border p-5 space-y-4">
-              <h2 className="text-base font-semibold text-foreground">Contexte client</h2>
+            <div className="bg-white border border-mission-border rounded-2xl p-5 space-y-4">
+              <SectionHeader title="Contexte client" />
               {mission.objectif_mission && (
                 <div>
-                  <p className="text-xs font-medium text-foreground-muted mb-1">Objectif</p>
+                  <p className="text-[11px] font-mono text-foreground-muted uppercase tracking-wide mb-1">
+                    Objectif
+                  </p>
                   <p className="text-sm text-foreground">{mission.objectif_mission}</p>
                 </div>
               )}
               {mission.contexte_si && (
                 <div>
-                  <p className="text-xs font-medium text-foreground-muted mb-1">Contexte SI</p>
+                  <p className="text-[11px] font-mono text-foreground-muted uppercase tracking-wide mb-1">
+                    Contexte SI
+                  </p>
                   <p className="text-sm text-foreground">{mission.contexte_si}</p>
                 </div>
               )}
+              <div className="flex flex-wrap gap-2">
+                {mission.client_secteur && (
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-mission-alt text-foreground-muted border border-mission-border">
+                    {SECTOR_LABELS[mission.client_secteur as Sector] ?? mission.client_secteur}
+                  </span>
+                )}
+                {mission.client_taille && (
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-mission-alt text-foreground-muted border border-mission-border">
+                    {ORG_SIZE_LABELS[mission.client_taille as OrgSize] ?? mission.client_taille}
+                  </span>
+                )}
+                {mission.date_livraison_prevue && (
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-100">
+                    Livraison : {new Date(mission.date_livraison_prevue).toLocaleDateString("fr-FR")}
+                  </span>
+                )}
+              </div>
               {mission.contraintes.length > 0 && (
                 <div>
-                  <p className="text-xs font-medium text-foreground-muted mb-1">Contraintes</p>
+                  <p className="text-[11px] font-mono text-foreground-muted uppercase tracking-wide mb-1">
+                    Contraintes
+                  </p>
                   <div className="flex flex-wrap gap-1.5">
                     {mission.contraintes.map((c, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 rounded-md text-xs bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                        className="px-2 py-0.5 rounded-md text-xs bg-red-50 text-red-700"
                       >
                         {c}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {mission.outils_actuels.length > 0 && (
-                <div>
-                  <p className="text-xs font-medium text-foreground-muted mb-1">Outils actuels</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {mission.outils_actuels.map((o, i) => (
-                      <span
-                        key={i}
-                        className="px-2 py-0.5 rounded-md text-xs bg-surface-alt text-foreground-muted"
-                      >
-                        {o}
                       </span>
                     ))}
                   </div>
@@ -412,57 +376,68 @@ export default function MissionDetail() {
         {/* ─── Tab: Entretiens ────────────────────────────────────────────── */}
         {activeTab === "entretiens" && (
           <div className="space-y-4">
-            <button
-              onClick={() => setShowEntretienModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:opacity-90 transition-opacity"
-            >
-              <Plus size={15} /> Ajouter un entretien
-            </button>
+            <SectionHeader
+              title="Entretiens"
+              count={entretiens.length}
+              action={
+                <button
+                  onClick={() => setShowEntretienModal(true)}
+                  className="flex items-center gap-2 h-9 px-4 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:bg-blue-700 transition-all"
+                >
+                  <Plus size={14} /> Ajouter
+                </button>
+              }
+            />
 
             {entretiens.length === 0 && (
-              <div className="rounded-2xl border border-dashed border-border p-8 text-center">
-                <p className="text-foreground-muted text-sm">Aucun entretien pour le moment.</p>
+              <div className="rounded-2xl border border-dashed border-mission-border p-8 text-center">
+                <p className="text-foreground-muted text-sm">
+                  Aucun entretien pour le moment.
+                </p>
               </div>
             )}
 
             {entretiens.map((ent) => (
-              <div key={ent.id} className="rounded-2xl border border-border p-4 space-y-3">
+              <div
+                key={ent.id}
+                className="bg-white border border-mission-border rounded-xl p-4 space-y-3 hover:border-lecko-blue/20 transition-colors"
+              >
                 <div className="flex items-start justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-sm text-foreground">
+                    <span className="font-consultant font-semibold text-sm text-foreground">
                       {ent.service_nom}
                     </span>
-                    {/* Mode badge */}
                     <span
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold"
                       style={{
                         color: ent.mode === "live" ? "#2563EB" : "#F59E0B",
-                        backgroundColor:
-                          ent.mode === "live" ? "#EFF6FF" : "#FFFBEB",
+                        backgroundColor: ent.mode === "live" ? "#EFF6FF" : "#FFFBEB",
                       }}
                     >
                       {ent.mode === "live" ? "Live" : "Async"}
                     </span>
-                    {/* Statut badge */}
                     <span
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold"
                       style={{
                         color: ENTRETIEN_STATUT_COLORS[ent.statut].color,
                         backgroundColor: ENTRETIEN_STATUT_COLORS[ent.statut].bg,
                       }}
                     >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: ENTRETIEN_STATUT_COLORS[ent.statut].color }}
+                      />
                       {ENTRETIEN_STATUT_LABELS[ent.statut]}
                     </span>
                   </div>
                 </div>
 
-                {/* Metiers pills */}
                 {ent.metiers.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {ent.metiers.map((m, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 rounded-md text-xs bg-surface-alt text-foreground-muted"
+                        className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-mission-alt text-foreground-muted"
                       >
                         {m}
                       </span>
@@ -470,63 +445,51 @@ export default function MissionDetail() {
                   </div>
                 )}
 
-                {/* Meta row */}
-                <div className="flex items-center gap-3 text-xs text-foreground-muted">
+                <div className="flex items-center gap-3 text-xs font-mono text-foreground-muted">
                   {ent.date_entretien && (
                     <span>
                       {new Date(ent.date_entretien).toLocaleDateString("fr-FR")}
                     </span>
                   )}
                   {ent.nb_personnes > 0 && (
-                    <span>{ent.nb_personnes} personne{ent.nb_personnes > 1 ? "s" : ""}</span>
+                    <span>
+                      {ent.nb_personnes} personne{ent.nb_personnes > 1 ? "s" : ""}
+                    </span>
                   )}
                 </div>
 
-                {/* Actions per statut */}
                 <div className="flex flex-wrap gap-2">
                   {ent.statut === "a_planifier" && (
                     <>
                       <button
-                        onClick={() =>
-                          navigate(`/missions/${id}/entretien/${ent.id}`)
-                        }
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-lecko-blue text-white hover:opacity-90 transition-opacity"
+                        onClick={() => navigate(`/missions/${id}/entretien/${ent.id}`)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-lecko-blue text-white hover:bg-blue-700 transition-all"
                       >
                         <ExternalLink size={12} /> Lancer
                       </button>
                       <button
                         onClick={() => handleSendAsync(ent)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-surface-alt transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-mission-border text-foreground hover:bg-mission-alt transition-colors"
                       >
-                        {copiedId === ent.id ? (
-                          <Check size={12} />
-                        ) : (
-                          <Link2 size={12} />
-                        )}
+                        {copiedId === ent.id ? <Check size={12} /> : <Link2 size={12} />}
                         Envoyer lien async
                       </button>
                     </>
                   )}
-
                   {ent.statut === "lien_envoye" && ent.async_token && (
                     <button
                       onClick={() => copyAsyncLink(ent)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-surface-alt transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-mission-border text-foreground hover:bg-mission-alt transition-colors"
                     >
-                      {copiedId === ent.id ? (
-                        <Check size={12} />
-                      ) : (
-                        <Copy size={12} />
-                      )}
+                      {copiedId === ent.id ? <Check size={12} /> : <Copy size={12} />}
                       Copier le lien
                     </button>
                   )}
-
                   {ent.statut === "termine" && ent.resultats && ent.resultats.length > 0 && (
                     <button
                       onClick={() => handleImportChantiers(ent)}
                       disabled={importingId === ent.id}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-600 text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gr33t-600 text-white hover:bg-gr33t-700 transition-all disabled:opacity-50"
                     >
                       {importingId === ent.id ? (
                         <Loader2 size={12} className="animate-spin" />
@@ -539,181 +502,157 @@ export default function MissionDetail() {
                 </div>
               </div>
             ))}
-
-            {/* Entretien modal */}
-            {showEntretienModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-                <div className="bg-background rounded-2xl border border-border shadow-xl w-full max-w-md p-6 relative">
-                  <button
-                    onClick={() => setShowEntretienModal(false)}
-                    className="absolute top-4 right-4 text-foreground-muted hover:text-foreground"
-                  >
-                    <X size={18} />
-                  </button>
-                  <h2 className="text-lg font-semibold text-foreground mb-4">
-                    Nouvel entretien
-                  </h2>
-                  <form onSubmit={handleCreateEntretien} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-medium text-foreground-muted mb-1">
-                        Service *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={entretienForm.service_nom}
-                        onChange={(e) =>
-                          setEntretienForm((f) => ({ ...f, service_nom: e.target.value }))
-                        }
-                        className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-lecko-blue/40"
-                        placeholder="ex: Direction Marketing"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-foreground-muted mb-1">
-                        Metiers (separes par des virgules)
-                      </label>
-                      <input
-                        type="text"
-                        value={entretienForm.metiers}
-                        onChange={(e) =>
-                          setEntretienForm((f) => ({ ...f, metiers: e.target.value }))
-                        }
-                        className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-lecko-blue/40"
-                        placeholder="ex: Chef de projet, Charge de com"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-medium text-foreground-muted mb-1">
-                          Nb personnes
-                        </label>
-                        <input
-                          type="number"
-                          min={1}
-                          value={entretienForm.nb_personnes}
-                          onChange={(e) =>
-                            setEntretienForm((f) => ({
-                              ...f,
-                              nb_personnes: parseInt(e.target.value, 10) || 1,
-                            }))
-                          }
-                          className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-lecko-blue/40"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-foreground-muted mb-1">
-                          Date
-                        </label>
-                        <input
-                          type="date"
-                          value={entretienForm.date_entretien}
-                          onChange={(e) =>
-                            setEntretienForm((f) => ({
-                              ...f,
-                              date_entretien: e.target.value,
-                            }))
-                          }
-                          className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-lecko-blue/40"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-foreground-muted mb-1">
-                        Interlocuteur
-                      </label>
-                      <input
-                        type="text"
-                        value={entretienForm.interlocuteur_nom}
-                        onChange={(e) =>
-                          setEntretienForm((f) => ({
-                            ...f,
-                            interlocuteur_nom: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-lecko-blue/40"
-                        placeholder="ex: Marie Dupont"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-foreground-muted mb-1">
-                        Mode
-                      </label>
-                      <div className="flex gap-2">
-                        {(["live", "async"] as EntretienMode[]).map((mode) => (
-                          <button
-                            key={mode}
-                            type="button"
-                            onClick={() =>
-                              setEntretienForm((f) => ({ ...f, mode }))
-                            }
-                            className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border transition-colors ${
-                              entretienForm.mode === mode
-                                ? "border-lecko-blue bg-lecko-blue/10 text-lecko-blue"
-                                : "border-border text-foreground-muted hover:text-foreground"
-                            }`}
-                          >
-                            {mode === "live" ? "Live" : "Async"}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="w-full py-2.5 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:opacity-90 transition-opacity disabled:opacity-50"
-                    >
-                      {submitting ? "Ajout..." : "Ajouter l'entretien"}
-                    </button>
-                  </form>
-                </div>
-              </div>
-            )}
           </div>
         )}
 
         {/* ─── Tab: Chantiers ─────────────────────────────────────────────── */}
         {activeTab === "chantiers" && (
-          <ChantiersView
-            missionId={id!}
-            chantiers={mission.chantiers}
-            onUpdate={loadMission}
-          />
+          <ChantiersView missionId={id!} chantiers={mission.chantiers} onUpdate={loadMission} />
         )}
 
         {/* ─── Tab: Feuille de route ──────────────────────────────────────── */}
         {activeTab === "roadmap" && (
-          <div className="rounded-2xl border border-border p-8 text-center">
+          <div className="rounded-2xl border border-mission-border p-8 text-center">
             <p className="text-foreground-muted text-sm mb-4">
-              Consultez la feuille de route complete de cette mission.
+              Consultez la feuille de route complète de cette mission.
             </p>
             <Link
               to={`/missions/${id}/roadmap`}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:bg-blue-700 transition-all"
             >
               <ExternalLink size={14} /> Ouvrir la feuille de route
             </Link>
           </div>
         )}
-      </main>
-      <Footer />
+      </div>
 
-      {/* Toast */}
-      {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-foreground text-background text-sm font-medium shadow-lg animate-in fade-in slide-in-from-bottom-2">
-          {toast}
+      {/* ── Entretien Modal ──────────────────────────────────────────────── */}
+      {showEntretienModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+            <button
+              onClick={() => setShowEntretienModal(false)}
+              className="absolute top-4 right-4 text-foreground-muted hover:text-foreground"
+            >
+              <X size={18} />
+            </button>
+            <h2 className="text-lg font-consultant font-bold text-foreground mb-4">
+              Nouvel entretien
+            </h2>
+            <form onSubmit={handleCreateEntretien} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono font-medium text-foreground-muted mb-1">
+                  Service *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={entretienForm.service_nom}
+                  onChange={(e) =>
+                    setEntretienForm((f) => ({ ...f, service_nom: e.target.value }))
+                  }
+                  className={inputCls}
+                  placeholder="ex: Direction Marketing"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-mono font-medium text-foreground-muted mb-1">
+                  Métiers (séparés par des virgules)
+                </label>
+                <input
+                  type="text"
+                  value={entretienForm.metiers}
+                  onChange={(e) =>
+                    setEntretienForm((f) => ({ ...f, metiers: e.target.value }))
+                  }
+                  className={inputCls}
+                  placeholder="ex: Chef de projet, Chargé de com"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-mono font-medium text-foreground-muted mb-1">
+                    Nb personnes
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={entretienForm.nb_personnes}
+                    onChange={(e) =>
+                      setEntretienForm((f) => ({
+                        ...f,
+                        nb_personnes: parseInt(e.target.value, 10) || 1,
+                      }))
+                    }
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-mono font-medium text-foreground-muted mb-1">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    value={entretienForm.date_entretien}
+                    onChange={(e) =>
+                      setEntretienForm((f) => ({
+                        ...f,
+                        date_entretien: e.target.value,
+                      }))
+                    }
+                    className={inputCls}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-mono font-medium text-foreground-muted mb-1">
+                  Interlocuteur
+                </label>
+                <input
+                  type="text"
+                  value={entretienForm.interlocuteur_nom}
+                  onChange={(e) =>
+                    setEntretienForm((f) => ({
+                      ...f,
+                      interlocuteur_nom: e.target.value,
+                    }))
+                  }
+                  className={inputCls}
+                  placeholder="ex: Marie Dupont"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-mono font-medium text-foreground-muted mb-1">
+                  Mode
+                </label>
+                <div className="flex gap-2">
+                  {(["live", "async"] as EntretienMode[]).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setEntretienForm((f) => ({ ...f, mode }))}
+                      className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border-2 transition-all ${
+                        entretienForm.mode === mode
+                          ? "border-lecko-blue bg-lecko-blue/5 text-lecko-blue"
+                          : "border-mission-border text-foreground-muted hover:text-foreground"
+                      }`}
+                    >
+                      {mode === "live" ? "Live" : "Async"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-2.5 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:bg-blue-700 transition-all disabled:opacity-50"
+              >
+                {submitting ? "Ajout..." : "Ajouter l'entretien"}
+              </button>
+            </form>
+          </div>
         </div>
       )}
-    </div>
-  );
-}
-
-// ─── KPI Card ───────────────────────────────────────────────────────────────
-function KpiCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-border p-4">
-      <p className="text-xs font-medium text-foreground-muted mb-1">{label}</p>
-      <p className="text-xl font-bold text-foreground">{value}</p>
-    </div>
+    </ConsultantLayout>
   );
 }
