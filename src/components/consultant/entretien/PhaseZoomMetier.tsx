@@ -31,10 +31,10 @@ interface Props {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const FREQUENCE_OPTIONS = [
-  { value: "quotidien" as const, label: "Quotidien", short: "1×/j", color: "#EF4444" },
+  { value: "quotidien" as const, label: "Quotidien", short: "1×/j", color: "hsl(var(--destructive))" },
   { value: "hebdo" as const, label: "Hebdo", short: "1×/sem", color: "#F59E0B" },
   { value: "mensuel" as const, label: "Mensuel", short: "1×/mois", color: "#2563EB" },
-  { value: "ponctuel" as const, label: "Ponctuel", short: "~", color: "#6B7280" },
+  { value: "ponctuel" as const, label: "Ponctuel", short: "~", color: "hsl(var(--foreground-muted))" },
 ];
 
 const PENIBILITE_LEVELS = [

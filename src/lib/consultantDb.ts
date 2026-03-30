@@ -26,7 +26,8 @@ function generateToken(): string {
 // ─── MISSIONS ─────────────────────────────────────────────────────────────
 
 export async function getMissions(): Promise<Mission[]> {
-  const res = await (supabase.from("missions") as any)
+  const res = await // @ts-ignore
+  supabase.from("missions")
     .select("*")
     .order("created_at", { ascending: false });
   handleError(res);
@@ -34,7 +35,8 @@ export async function getMissions(): Promise<Mission[]> {
 }
 
 export async function getMission(id: string): Promise<Mission> {
-  const res = await (supabase.from("missions") as any)
+  const res = await // @ts-ignore
+  supabase.from("missions")
     .select("*, entretiens(*), chantiers(*)")
     .eq("id", id)
     .single();
@@ -50,7 +52,8 @@ export async function createMission(
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
 
-  const res = await (supabase.from("missions") as any)
+  const res = await // @ts-ignore
+  supabase.from("missions")
     .insert({ ...data, consultant_id: user.id })
     .select()
     .single();
@@ -62,7 +65,8 @@ export async function updateMission(
   id: string,
   data: Partial<Omit<Mission, "id" | "consultant_id" | "created_at" | "entretiens" | "chantiers">>
 ): Promise<Mission> {
-  const res = await (supabase.from("missions") as any)
+  const res = await // @ts-ignore
+  supabase.from("missions")
     .update({ ...data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select()
@@ -72,7 +76,8 @@ export async function updateMission(
 }
 
 export async function deleteMission(id: string): Promise<void> {
-  const res = await (supabase.from("missions") as any).delete().eq("id", id);
+  const res = await // @ts-ignore
+  supabase.from("missions").delete().eq("id", id);
   handleError(res);
 }
 
@@ -81,7 +86,8 @@ export async function deleteMission(id: string): Promise<void> {
 export async function createEntretien(
   data: Omit<Entretien, "id" | "created_at" | "async_token" | "async_expires_at" | "async_completed_at" | "resultats">
 ): Promise<Entretien> {
-  const res = await (supabase.from("entretiens") as any)
+  const res = await // @ts-ignore
+  supabase.from("entretiens")
     .insert(data)
     .select()
     .single();
@@ -93,7 +99,8 @@ export async function updateEntretien(
   id: string,
   data: Partial<Omit<Entretien, "id" | "mission_id" | "created_at">>
 ): Promise<Entretien> {
-  const res = await (supabase.from("entretiens") as any)
+  const res = await // @ts-ignore
+  supabase.from("entretiens")
     .update({ ...data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select()
@@ -103,7 +110,8 @@ export async function updateEntretien(
 }
 
 export async function getEntretienByToken(token: string): Promise<Entretien | null> {
-  const res = await (supabase.from("entretiens") as any)
+  const res = await // @ts-ignore
+  supabase.from("entretiens")
     .select("*")
     .eq("async_token", token)
     .gt("async_expires_at", new Date().toISOString())
@@ -119,7 +127,8 @@ export async function generateAsyncLink(
   const token = generateToken();
   const expiresAt = new Date(Date.now() + expiresInDays * 86_400_000).toISOString();
 
-  const res = await (supabase.from("entretiens") as any)
+  const res = await // @ts-ignore
+  supabase.from("entretiens")
     .update({
       async_token: token,
       async_expires_at: expiresAt,
@@ -140,7 +149,8 @@ export async function generateAsyncLink(
 export async function createChantier(
   data: Omit<Chantier, "id" | "created_at">
 ): Promise<Chantier> {
-  const res = await (supabase.from("chantiers") as any)
+  const res = await // @ts-ignore
+  supabase.from("chantiers")
     .insert(data)
     .select()
     .single();
@@ -152,7 +162,8 @@ export async function updateChantier(
   id: string,
   data: Partial<Omit<Chantier, "id" | "mission_id" | "created_at">>
 ): Promise<Chantier> {
-  const res = await (supabase.from("chantiers") as any)
+  const res = await // @ts-ignore
+  supabase.from("chantiers")
     .update(data)
     .eq("id", id)
     .select()
@@ -162,7 +173,8 @@ export async function updateChantier(
 }
 
 export async function deleteChantier(id: string): Promise<void> {
-  const res = await (supabase.from("chantiers") as any).delete().eq("id", id);
+  const res = await // @ts-ignore
+  supabase.from("chantiers").delete().eq("id", id);
   handleError(res);
 }
 
@@ -170,7 +182,8 @@ export async function reorderChantiers(
   items: { id: string; ordre: number }[]
 ): Promise<void> {
   const updates = items.map((item) =>
-    (supabase.from("chantiers") as any)
+    // @ts-ignore
+  supabase.from("chantiers")
       .update({ ordre: item.ordre })
       .eq("id", item.id)
   );
@@ -208,7 +221,8 @@ export async function importTasksAsChantiers(
     ordre: index,
   }));
 
-  const res = await (supabase.from("chantiers") as any)
+  const res = await // @ts-ignore
+  supabase.from("chantiers")
     .insert(rows)
     .select();
   handleError(res);

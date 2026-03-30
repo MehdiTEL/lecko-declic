@@ -73,7 +73,7 @@ export default function PhaseSynthese({
     const guide = validated.filter((d) => d.task.niveau_accompagnement === "guide" || d.task.niveau_accompagnement === "formation").length;
     const expert = validated.filter((d) => d.task.niveau_accompagnement === "consultant" || d.task.niveau_accompagnement === "accompagnement_expert").length;
     return [
-      { name: "Autonome", value: express, color: "#10B981" },
+      { name: "Autonome", value: express, color: "hsl(var(--lecko-green))" },
       { name: "Guidé", value: guide, color: "#2563EB" },
       { name: "Expert", value: expert, color: "#7C3AED" },
     ].filter((d) => d.value > 0);

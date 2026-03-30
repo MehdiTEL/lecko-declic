@@ -35,7 +35,8 @@ async function getConsultantId(): Promise<string> {
 // ─── MISSION TEMPLATES ───────────────────────────────────────────────────────
 
 export async function getMissionTemplates(): Promise<MissionTemplate[]> {
-  const res = await (supabase.from("mission_templates") as any)
+  const res = await // @ts-ignore
+  supabase.from("mission_templates")
     .select("*")
     .order("created_at", { ascending: false });
   handleError(res);
@@ -46,7 +47,8 @@ export async function createMissionTemplate(
   data: Omit<MissionTemplate, "id" | "consultant_id" | "created_at" | "updated_at">
 ): Promise<MissionTemplate> {
   const consultant_id = await getConsultantId();
-  const res = await (supabase.from("mission_templates") as any)
+  const res = await // @ts-ignore
+  supabase.from("mission_templates")
     .insert({ ...data, consultant_id })
     .select()
     .single();
@@ -58,7 +60,8 @@ export async function updateMissionTemplate(
   id: string,
   data: Partial<Omit<MissionTemplate, "id" | "consultant_id" | "created_at">>
 ): Promise<MissionTemplate> {
-  const res = await (supabase.from("mission_templates") as any)
+  const res = await // @ts-ignore
+  supabase.from("mission_templates")
     .update({ ...data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select()
@@ -68,14 +71,16 @@ export async function updateMissionTemplate(
 }
 
 export async function deleteMissionTemplate(id: string): Promise<void> {
-  const res = await (supabase.from("mission_templates") as any).delete().eq("id", id);
+  const res = await // @ts-ignore
+  supabase.from("mission_templates").delete().eq("id", id);
   handleError(res);
 }
 
 // ─── QUESTIONNAIRES ──────────────────────────────────────────────────────────
 
 export async function getQuestionnaires(): Promise<QuestionnaireTemplate[]> {
-  const res = await (supabase.from("questionnaire_templates") as any)
+  const res = await // @ts-ignore
+  supabase.from("questionnaire_templates")
     .select("*")
     .order("created_at", { ascending: false });
   handleError(res);
@@ -83,7 +88,8 @@ export async function getQuestionnaires(): Promise<QuestionnaireTemplate[]> {
 }
 
 export async function getQuestionnaire(id: string): Promise<QuestionnaireTemplate> {
-  const res = await (supabase.from("questionnaire_templates") as any)
+  const res = await // @ts-ignore
+  supabase.from("questionnaire_templates")
     .select("*")
     .eq("id", id)
     .single();
@@ -95,7 +101,8 @@ export async function createQuestionnaire(
   data: Omit<QuestionnaireTemplate, "id" | "consultant_id" | "created_at" | "updated_at">
 ): Promise<QuestionnaireTemplate> {
   const consultant_id = await getConsultantId();
-  const res = await (supabase.from("questionnaire_templates") as any)
+  const res = await // @ts-ignore
+  supabase.from("questionnaire_templates")
     .insert({ ...data, consultant_id })
     .select()
     .single();
@@ -107,7 +114,8 @@ export async function updateQuestionnaire(
   id: string,
   data: Partial<Omit<QuestionnaireTemplate, "id" | "consultant_id" | "created_at">>
 ): Promise<QuestionnaireTemplate> {
-  const res = await (supabase.from("questionnaire_templates") as any)
+  const res = await // @ts-ignore
+  supabase.from("questionnaire_templates")
     .update({ ...data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select()
@@ -117,7 +125,8 @@ export async function updateQuestionnaire(
 }
 
 export async function deleteQuestionnaire(id: string): Promise<void> {
-  const res = await (supabase.from("questionnaire_templates") as any).delete().eq("id", id);
+  const res = await // @ts-ignore
+  supabase.from("questionnaire_templates").delete().eq("id", id);
   handleError(res);
 }
 
@@ -126,7 +135,8 @@ export async function deleteQuestionnaire(id: string): Promise<void> {
 export async function getChantierLibrary(
   filters?: { categorie?: string; secteur?: string; tags?: string[] }
 ): Promise<ChantierLibraryItem[]> {
-  let query = (supabase.from("chantier_library") as any)
+  let query = // @ts-ignore
+  supabase.from("chantier_library")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -149,7 +159,8 @@ export async function createChantierLibraryItem(
   data: Omit<ChantierLibraryItem, "id" | "consultant_id" | "created_at" | "updated_at">
 ): Promise<ChantierLibraryItem> {
   const consultant_id = await getConsultantId();
-  const res = await (supabase.from("chantier_library") as any)
+  const res = await // @ts-ignore
+  supabase.from("chantier_library")
     .insert({ ...data, consultant_id })
     .select()
     .single();
@@ -161,7 +172,8 @@ export async function updateChantierLibraryItem(
   id: string,
   data: Partial<Omit<ChantierLibraryItem, "id" | "consultant_id" | "created_at">>
 ): Promise<ChantierLibraryItem> {
-  const res = await (supabase.from("chantier_library") as any)
+  const res = await // @ts-ignore
+  supabase.from("chantier_library")
     .update({ ...data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select()
@@ -171,7 +183,8 @@ export async function updateChantierLibraryItem(
 }
 
 export async function deleteChantierLibraryItem(id: string): Promise<void> {
-  const res = await (supabase.from("chantier_library") as any).delete().eq("id", id);
+  const res = await // @ts-ignore
+  supabase.from("chantier_library").delete().eq("id", id);
   handleError(res);
 }
 
@@ -180,7 +193,8 @@ export async function importChantierToMission(
   missionId: string
 ): Promise<void> {
   // 1. Read the library item
-  const libRes = await (supabase.from("chantier_library") as any)
+  const libRes = await // @ts-ignore
+  supabase.from("chantier_library")
     .select("*")
     .eq("id", libraryItemId)
     .single();
@@ -188,7 +202,8 @@ export async function importChantierToMission(
   const item = libRes.data as ChantierLibraryItem;
 
   // 2. Insert into chantiers with mission_id and copied fields
-  const res = await (supabase.from("chantiers") as any)
+  const res = await // @ts-ignore
+  supabase.from("chantiers")
     .insert({
       mission_id: missionId,
       titre: item.titre,
@@ -215,7 +230,8 @@ export async function importChantierToMission(
 // ─── STACK CONFIGS ───────────────────────────────────────────────────────────
 
 export async function getStackConfigs(): Promise<StackConfig[]> {
-  const res = await (supabase.from("stack_configs") as any)
+  const res = await // @ts-ignore
+  supabase.from("stack_configs")
     .select("*")
     .order("created_at", { ascending: false });
   handleError(res);
@@ -226,7 +242,8 @@ export async function createStackConfig(
   data: Omit<StackConfig, "id" | "consultant_id" | "created_at" | "updated_at">
 ): Promise<StackConfig> {
   const consultant_id = await getConsultantId();
-  const res = await (supabase.from("stack_configs") as any)
+  const res = await // @ts-ignore
+  supabase.from("stack_configs")
     .insert({ ...data, consultant_id })
     .select()
     .single();
@@ -238,7 +255,8 @@ export async function updateStackConfig(
   id: string,
   data: Partial<Omit<StackConfig, "id" | "consultant_id" | "created_at">>
 ): Promise<StackConfig> {
-  const res = await (supabase.from("stack_configs") as any)
+  const res = await // @ts-ignore
+  supabase.from("stack_configs")
     .update({ ...data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select()
@@ -250,7 +268,8 @@ export async function updateStackConfig(
 // ─── CUSTOM METIERS ──────────────────────────────────────────────────────────
 
 export async function getCustomMetiers(): Promise<CustomMetier[]> {
-  const res = await (supabase.from("custom_metiers") as any)
+  const res = await // @ts-ignore
+  supabase.from("custom_metiers")
     .select("*")
     .order("created_at", { ascending: false });
   handleError(res);
@@ -261,7 +280,8 @@ export async function createCustomMetier(
   data: Omit<CustomMetier, "id" | "consultant_id" | "created_at" | "updated_at">
 ): Promise<CustomMetier> {
   const consultant_id = await getConsultantId();
-  const res = await (supabase.from("custom_metiers") as any)
+  const res = await // @ts-ignore
+  supabase.from("custom_metiers")
     .insert({ ...data, consultant_id })
     .select()
     .single();
@@ -273,7 +293,8 @@ export async function updateCustomMetier(
   id: string,
   data: Partial<Omit<CustomMetier, "id" | "consultant_id" | "created_at">>
 ): Promise<CustomMetier> {
-  const res = await (supabase.from("custom_metiers") as any)
+  const res = await // @ts-ignore
+  supabase.from("custom_metiers")
     .update({ ...data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select()
@@ -283,14 +304,16 @@ export async function updateCustomMetier(
 }
 
 export async function deleteCustomMetier(id: string): Promise<void> {
-  const res = await (supabase.from("custom_metiers") as any).delete().eq("id", id);
+  const res = await // @ts-ignore
+  supabase.from("custom_metiers").delete().eq("id", id);
   handleError(res);
 }
 
 // ─── MISSION CONFIG ──────────────────────────────────────────────────────────
 
 export async function getMissionConfig(missionId: string): Promise<MissionConfig> {
-  const res = await (supabase.from("missions") as any)
+  const res = await // @ts-ignore
+  supabase.from("missions")
     .select("config")
     .eq("id", missionId)
     .single();
@@ -326,7 +349,8 @@ export async function updateMissionConfig(
   missionId: string,
   config: Partial<MissionConfig>
 ): Promise<void> {
-  const res = await (supabase.from("missions") as any)
+  const res = await // @ts-ignore
+  supabase.from("missions")
     .update({ config, updated_at: new Date().toISOString() })
     .eq("id", missionId);
   handleError(res);
@@ -336,7 +360,8 @@ export async function updateMissionConfig(
 
 export async function getOrCreatePortail(missionId: string): Promise<PortailClient> {
   // Try to find existing
-  const existing = await (supabase.from("portail_clients") as any)
+  const existing = await // @ts-ignore
+  supabase.from("portail_clients")
     .select("*")
     .eq("mission_id", missionId)
     .maybeSingle();
@@ -348,7 +373,8 @@ export async function getOrCreatePortail(missionId: string): Promise<PortailClie
 
   // Create new
   const token = generateToken();
-  const res = await (supabase.from("portail_clients") as any)
+  const res = await // @ts-ignore
+  supabase.from("portail_clients")
     .insert({ mission_id: missionId, token, actif: true })
     .select()
     .single();
@@ -357,7 +383,8 @@ export async function getOrCreatePortail(missionId: string): Promise<PortailClie
 }
 
 export async function getPortailByToken(token: string): Promise<PortailClient | null> {
-  const res = await (supabase.from("portail_clients") as any)
+  const res = await // @ts-ignore
+  supabase.from("portail_clients")
     .select("*")
     .eq("token", token)
     .eq("actif", true)
@@ -371,34 +398,40 @@ export async function togglePortailActif(
   actif: boolean
 ): Promise<void> {
   // Update portail_clients
-  const res = await (supabase.from("portail_clients") as any)
+  const res = await // @ts-ignore
+  supabase.from("portail_clients")
     .update({ actif })
     .eq("mission_id", missionId);
   handleError(res);
 
   // Also update the flag on the mission
-  const mRes = await (supabase.from("missions") as any)
+  const mRes = await // @ts-ignore
+  supabase.from("missions")
     .update({ portail_client_actif: actif, updated_at: new Date().toISOString() })
     .eq("id", missionId);
   handleError(mRes);
 }
 
 export async function logPortailVisit(token: string): Promise<void> {
-  const res = await (supabase.from("portail_clients") as any)
+  const res = await // @ts-ignore
+  supabase.from("portail_clients")
     .update({
       derniere_visite: new Date().toISOString(),
-      nb_visites: (supabase.rpc as any)("increment_nb_visites", { p_token: token }),
+      // @ts-ignore
+      nb_visites: supabase.rpc("increment_nb_visites", { p_token: token }),
     })
     .eq("token", token);
 
   // Fallback: if RPC not available, do raw increment
   if (res.error) {
-    const current = await (supabase.from("portail_clients") as any)
+    const current = await // @ts-ignore
+  supabase.from("portail_clients")
       .select("nb_visites")
       .eq("token", token)
       .single();
     if (!current.error && current.data) {
-      await (supabase.from("portail_clients") as any)
+      await // @ts-ignore
+  supabase.from("portail_clients")
         .update({
           derniere_visite: new Date().toISOString(),
           nb_visites: (current.data.nb_visites ?? 0) + 1,
@@ -411,7 +444,8 @@ export async function logPortailVisit(token: string): Promise<void> {
 // ─── COMMENTAIRES ────────────────────────────────────────────────────────────
 
 export async function getCommentaires(missionId: string): Promise<CommentaireClient[]> {
-  const res = await (supabase.from("commentaires_client") as any)
+  const res = await // @ts-ignore
+  supabase.from("commentaires_client")
     .select("*")
     .eq("mission_id", missionId)
     .order("created_at", { ascending: false });
@@ -422,7 +456,8 @@ export async function getCommentaires(missionId: string): Promise<CommentaireCli
 export async function addCommentaire(
   payload: Omit<CommentaireClient, "id" | "reponse_consultant" | "lu" | "created_at">
 ): Promise<CommentaireClient> {
-  const res = await (supabase.from("commentaires_client") as any)
+  const res = await // @ts-ignore
+  supabase.from("commentaires_client")
     .insert(payload)
     .select()
     .single();
@@ -434,7 +469,8 @@ export async function repondreCommentaire(
   id: string,
   reponse: string
 ): Promise<CommentaireClient> {
-  const res = await (supabase.from("commentaires_client") as any)
+  const res = await // @ts-ignore
+  supabase.from("commentaires_client")
     .update({ reponse_consultant: reponse, lu: true })
     .eq("id", id)
     .select()
@@ -444,7 +480,8 @@ export async function repondreCommentaire(
 }
 
 export async function marquerLu(id: string): Promise<void> {
-  const res = await (supabase.from("commentaires_client") as any)
+  const res = await // @ts-ignore
+  supabase.from("commentaires_client")
     .update({ lu: true })
     .eq("id", id);
   handleError(res);
@@ -453,7 +490,8 @@ export async function marquerLu(id: string): Promise<void> {
 // ─── VALIDATIONS ─────────────────────────────────────────────────────────────
 
 export async function getValidations(missionId: string): Promise<ValidationClient[]> {
-  const res = await (supabase.from("validations_client") as any)
+  const res = await // @ts-ignore
+  supabase.from("validations_client")
     .select("*")
     .eq("mission_id", missionId)
     .order("created_at", { ascending: false });
@@ -464,7 +502,8 @@ export async function getValidations(missionId: string): Promise<ValidationClien
 export async function upsertValidation(
   payload: Omit<ValidationClient, "id" | "created_at">
 ): Promise<ValidationClient> {
-  const res = await (supabase.from("validations_client") as any)
+  const res = await // @ts-ignore
+  supabase.from("validations_client")
     .upsert(
       {
         ...payload,

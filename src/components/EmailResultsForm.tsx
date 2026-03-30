@@ -29,7 +29,8 @@ export default function EmailResultsForm({ result }: EmailResultsFormProps) {
     setError(null);
 
     try {
-      await (supabase.from("leads") as any).insert({
+      // @ts-ignore — leads table not in generated types
+      await supabase.from("leads").insert({
         nom: nom.trim() || null,
         email: email.trim(),
         metier_analyse: result.metier,

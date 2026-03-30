@@ -27,9 +27,9 @@ interface Props {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const PILES = [
-  { id: "on_fonce" as const, label: "On fonce ! 🚀", color: "#10B981", bgColor: "bg-emerald-500/10", borderColor: "border-emerald-500/30", icon: ThumbsUp },
+  { id: "on_fonce" as const, label: "On fonce ! 🚀", color: "hsl(var(--lecko-green))", bgColor: "bg-emerald-500/10", borderColor: "border-emerald-500/30", icon: ThumbsUp },
   { id: "a_creuser" as const, label: "À creuser 🤔", color: "#F59E0B", bgColor: "bg-amber-500/10", borderColor: "border-amber-500/30", icon: HelpCircle },
-  { id: "pas_pour_nous" as const, label: "Pas pour nous ✋", color: "#EF4444", bgColor: "bg-red-500/10", borderColor: "border-red-500/30", icon: ThumbsDown },
+  { id: "pas_pour_nous" as const, label: "Pas pour nous ✋", color: "hsl(var(--destructive))", bgColor: "bg-red-500/10", borderColor: "border-red-500/30", icon: ThumbsDown },
 ] as const;
 
 // ─── Component ────────────────────────────────────────────────────────────────

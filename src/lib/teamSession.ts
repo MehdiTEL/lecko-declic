@@ -15,7 +15,8 @@ function getAnonId(): string {
 
 export async function createTeamSession(nom: string): Promise<string> {
   const code = generateSessionCode();
-  const { error } = await (supabase.from("team_sessions") as any).insert({
+  const { error } = await // @ts-ignore
+  supabase.from("team_sessions").insert({
     code, nom, created_by: getAnonId(),
   });
   if (error) throw new Error(error.message);
@@ -24,12 +25,14 @@ export async function createTeamSession(nom: string): Promise<string> {
 
 export async function joinTeamSession(code: string, metier: string, count: number): Promise<string> {
   // Get session
-  const { data: session, error: sErr } = await (supabase.from("team_sessions") as any)
+  const { data: session, error: sErr } = await // @ts-ignore
+  supabase.from("team_sessions")
     .select("id").eq("code", code.toUpperCase().trim()).single();
   if (sErr || !session) throw new Error("Session introuvable. Verifiez le code.");
 
   // Insert member
-  const { data: member, error: mErr } = await (supabase.from("team_members") as any)
+  const { data: member, error: mErr } = await // @ts-ignore
+  supabase.from("team_members")
     .insert({ session_id: session.id, metier, count, anon_id: getAnonId() })
     .select("id").single();
   if (mErr) throw new Error(mErr.message);
@@ -37,11 +40,13 @@ export async function joinTeamSession(code: string, metier: string, count: numbe
 }
 
 export async function loadTeamSession(code: string): Promise<{ session: any; members: any[] }> {
-  const { data: session, error: sErr } = await (supabase.from("team_sessions") as any)
+  const { data: session, error: sErr } = await // @ts-ignore
+  supabase.from("team_sessions")
     .select("*").eq("code", code.toUpperCase().trim()).single();
   if (sErr || !session) throw new Error("Session introuvable.");
 
-  const { data: members, error: mErr } = await (supabase.from("team_members") as any)
+  const { data: members, error: mErr } = await // @ts-ignore
+  supabase.from("team_members")
     .select("*").eq("session_id", session.id).order("joined_at", { ascending: true });
   if (mErr) throw new Error(mErr.message);
 
@@ -49,7 +54,8 @@ export async function loadTeamSession(code: string): Promise<{ session: any; mem
 }
 
 export async function updateMemberResult(memberId: string, result: object): Promise<void> {
-  const { error } = await (supabase.from("team_members") as any)
+  const { error } = await // @ts-ignore
+  supabase.from("team_members")
     .update({ result }).eq("id", memberId);
   if (error) throw new Error(error.message);
 }

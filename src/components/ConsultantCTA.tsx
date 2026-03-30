@@ -23,7 +23,8 @@ export default function ConsultantCTA({ metier, score, heures, topTasks }: Consu
     setError(null);
     try {
       // 1. Insert lead in Supabase
-      await (supabase.from("leads") as any).insert({
+      // @ts-ignore — leads table not in generated types
+      await supabase.from("leads").insert({
         nom: prenom.trim() || null,
         email: email.trim(),
         metier_analyse: metier,

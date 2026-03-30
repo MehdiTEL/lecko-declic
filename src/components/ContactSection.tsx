@@ -17,7 +17,8 @@ export default function ContactSection() {
     setSending(true);
     setErr(null);
     try {
-      const { error } = await (supabase.from("leads") as any).insert({
+      // @ts-ignore — leads table not in generated types
+      const { error } = await supabase.from("leads").insert({
         nom: `${prenom.trim()} ${nom.trim()}`,
         email: email.trim(),
         message: entreprise.trim() ? `Entreprise : ${entreprise.trim()}` : null,

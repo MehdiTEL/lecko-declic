@@ -5,13 +5,15 @@ export async function incrementGlobalCounter(
   amount = 1
 ): Promise<void> {
   try {
-    await supabase.rpc("increment_counter", { counter_key: key, amount } as any);
+    // @ts-ignore
+    await supabase.rpc("increment_counter", { counter_key: key, amount });
   } catch { /* fire-and-forget */ }
 }
 
 export async function loadGlobalCounters(): Promise<Record<string, number>> {
   try {
-    const { data } = await (supabase.from("global_counters") as any).select("key, value");
+    // @ts-ignore
+    const { data } = await supabase.from("global_counters").select("key, value");
     return Object.fromEntries((data ?? []).map((r: any) => [r.key, Number(r.value)]));
   } catch { return {}; }
 }
@@ -20,7 +22,8 @@ export async function loadTopMetiers(): Promise<Array<{
   metier: string; count: number; avg_score: number; avg_hours: number;
 }>> {
   try {
-    const { data } = await (supabase.from("stats_metiers") as any).select("*").limit(10);
+    // @ts-ignore
+    const { data } = await supabase.from("stats_metiers").select("*").limit(10);
     return (data ?? []).map((r: any) => ({
       metier: r.metier,
       count: Number(r.count),
