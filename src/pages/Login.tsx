@@ -1,221 +1,93 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-
-type Tab = "connexion" | "inscription";
+import { Loader2, Lock, Mail } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirect") ?? "/";
-  const { signIn, signUp } = useAuth();
+  const redirectTo = searchParams.get("redirect") ?? "/missions";
+  const { signIn } = useAuth();
 
-  const [tab, setTab] = useState<Tab>("connexion");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Connexion fields
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-
-  // Inscription fields
-  const [prenom, setPrenom] = useState("");
-  const [nom, setNom] = useState("");
-  const [signupEmail, setSignupEmail] = useState("");
-  const [entreprise, setEntreprise] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const inputClass =
-    "w-full h-11 px-4 text-sm bg-background border border-border rounded-xl outline-none focus:border-primary transition-all";
-  const btnClass =
-    "w-full h-11 font-semibold text-sm text-white rounded-xl bg-primary hover:opacity-90 transition-opacity disabled:opacity-40";
-
-  function switchTab(t: Tab) {
-    setTab(t);
-    setError(null);
-    setSuccessMsg(null);
-  }
-
-  async function handleLogin(e: React.FormEvent) {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error: err } = await signIn(loginEmail, loginPassword);
+    const { error: err } = await signIn(email.trim(), password);
     setLoading(false);
-    if (err) {
-      setError(err);
-    } else {
-      navigate(redirectTo);
-    }
-  }
-
-  async function handleSignup(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setSuccessMsg(null);
-
-    if (signupPassword.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caractères.");
-      return;
-    }
-    if (signupPassword !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.");
-      return;
-    }
-
-    setLoading(true);
-    const result = await signUp(signupEmail, signupPassword, prenom, nom, entreprise || undefined);
-    setLoading(false);
-
-    if (result.error) {
-      setError(result.error);
-    } else if ((result as any).needsConfirmation) {
-      // Supabase enforces email confirmation — show friendly message
-      setSuccessMsg("Compte créé. Vérifiez votre email pour confirmer, puis connectez-vous.");
-      setTab("connexion");
-      setLoginEmail(signupEmail);
-    } else {
-      // Auto-confirmed — try to navigate
-      // Wait a moment for the auth state to propagate
-      setTimeout(() => navigate("/"), 500);
-    }
-  }
-
-  const tabBtnClass = (active: boolean) =>
-    `flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all ${
-      active
-        ? "bg-primary text-white"
-        : "text-foreground-secondary hover:text-foreground"
-    }`;
+    if (err) { setError(err); return; }
+    navigate(redirectTo);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-[400px]">
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <img src="/logo-declic.png" alt="DECLIC" style={{ height: "40px" }} />
-        </div>
+    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center px-4">
+      {/* Logo */}
+      <div className="mb-10 flex flex-col items-center gap-3">
+        <img src="/logo-declic.png" alt="DÉCLIC" style={{ height: "36px", filter: "brightness(0) invert(1)" }} />
+        <p className="text-slate-400 text-sm font-mono">Espace consultant Lecko</p>
+      </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 p-1 bg-muted rounded-xl mb-6">
-          <button className={tabBtnClass(tab === "connexion")} onClick={() => switchTab("connexion")}>
-            Connexion
-          </button>
-          <button className={tabBtnClass(tab === "inscription")} onClick={() => switchTab("inscription")}>
-            Inscription
-          </button>
-        </div>
+      {/* Card */}
+      <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-8">
+        <h1 className="text-white font-bold text-xl mb-1">Connexion</h1>
+        <p className="text-slate-400 text-sm mb-6">Réservé aux consultants Lecko</p>
 
-        {/* Error */}
         {error && (
-          <div className="mb-4 p-3 rounded-xl bg-red-50 dark:bg-red-950/30 text-red-500 text-sm">
+          <div className="mb-4 p-3 rounded-xl bg-red-950/50 border border-red-900/50 text-red-400 text-sm flex items-start gap-2">
+            <Lock size={14} className="shrink-0 mt-0.5" />
             {error}
           </div>
         )}
 
-        {/* Success */}
-        {successMsg && (
-          <div className="mb-4 p-3 rounded-xl bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 text-sm">
-            {successMsg}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="text-xs font-mono text-slate-400 block mb-1.5">Email Lecko</label>
+            <div className="relative">
+              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="email" required value={email} onChange={e => setEmail(e.target.value)}
+                placeholder="prenom.nom@lecko.fr"
+                className="w-full h-11 pl-9 pr-3 bg-slate-800 border border-slate-700 rounded-xl
+                           text-white text-sm placeholder:text-slate-600 outline-none
+                           focus:border-lecko-blue transition-colors"
+              />
+            </div>
           </div>
-        )}
 
-        {/* Connexion form */}
-        {tab === "connexion" && (
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <div>
+            <label className="text-xs font-mono text-slate-400 block mb-1.5">Mot de passe</label>
             <input
-              type="email"
-              placeholder="Email"
-              value={loginEmail}
-              onChange={(e) => setLoginEmail(e.target.value)}
-              required
-              className={inputClass}
+              type="password" required value={password} onChange={e => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full h-11 px-3 bg-slate-800 border border-slate-700 rounded-xl
+                         text-white text-sm placeholder:text-slate-600 outline-none
+                         focus:border-lecko-blue transition-colors"
             />
-            <input
-              type="password"
-              placeholder="Mot de passe"
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-              required
-              className={inputClass}
-            />
-            <button type="submit" disabled={loading} className={btnClass}>
-              {loading ? "Connexion en cours..." : "Se connecter"}
-            </button>
-            <button
-              type="button"
-              className="text-xs text-foreground-muted hover:text-primary transition-colors mt-1"
-              onClick={() => {
-                const email = loginEmail.trim();
-                if (!email) { setError("Entrez votre email pour réinitialiser."); return; }
-                supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/login` })
-                  .then(() => setSuccessMsg("Email de réinitialisation envoyé."));
-              }}
-            >
-              Mot de passe oublié ?
-            </button>
-          </form>
-        )}
+          </div>
 
-        {/* Inscription form */}
-        {tab === "inscription" && (
-          <form onSubmit={handleSignup} className="flex flex-col gap-4">
-            <input
-              type="text"
-              placeholder="Prénom"
-              value={prenom}
-              onChange={(e) => setPrenom(e.target.value)}
-              required
-              className={inputClass}
-            />
-            <input
-              type="text"
-              placeholder="Nom"
-              value={nom}
-              onChange={(e) => setNom(e.target.value)}
-              required
-              className={inputClass}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={signupEmail}
-              onChange={(e) => setSignupEmail(e.target.value)}
-              required
-              className={inputClass}
-            />
-            <input
-              type="text"
-              placeholder="Entreprise (optionnel)"
-              value={entreprise}
-              onChange={(e) => setEntreprise(e.target.value)}
-              className={inputClass}
-            />
-            <input
-              type="password"
-              placeholder="Mot de passe (min. 8 caractères)"
-              value={signupPassword}
-              onChange={(e) => setSignupPassword(e.target.value)}
-              required
-              className={inputClass}
-            />
-            <input
-              type="password"
-              placeholder="Confirmer le mot de passe"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className={inputClass}
-            />
-            <button type="submit" disabled={loading} className={btnClass}>
-              {loading ? "Inscription en cours..." : "Créer un compte"}
-            </button>
-          </form>
-        )}
+          <button type="submit" disabled={loading}
+            className="w-full h-11 rounded-xl bg-lecko-blue text-white font-semibold text-sm
+                       hover:bg-blue-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+            {loading ? <><Loader2 size={15} className="animate-spin" />Connexion...</> : "Se connecter"}
+          </button>
+        </form>
+
+        <p className="text-center text-xs text-slate-600 mt-6">
+          Pas encore de compte ?{" "}
+          <a href="mailto:contact@lecko.fr" className="text-slate-400 hover:text-slate-200 transition-colors">
+            Contactez votre administrateur Lecko
+          </a>
+        </p>
       </div>
+
+      <p className="text-slate-600 text-xs mt-8 font-mono">
+        DÉCLIC by Lecko — Outil interne
+      </p>
     </div>
   );
 }
