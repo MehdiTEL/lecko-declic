@@ -1,4 +1,5 @@
-import { useParams, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { getPortailByToken, logPortailVisit, getCommentaires, addCommentaire, getValidations, upsertValidation } from "@/lib/modulableDb";
 import { getMission } from "@/lib/consultantDb";
 import type { PortailClient as TPortail, CommentaireClient, ValidationClient, ValidationStatut } from "@/types/modulable";
