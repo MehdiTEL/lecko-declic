@@ -352,7 +352,7 @@ export default function MissionDetail() {
                   </span>
                 )}
               </div>
-              {mission.contraintes.length > 0 && (
+              {mission.contraintes && mission.contraintes.length > 0 && (
                 <div>
                   <p className="text-[11px] font-mono text-foreground-muted uppercase tracking-wide mb-1">
                     Contraintes
