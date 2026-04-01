@@ -10,6 +10,7 @@ import {
   ExternalLink,
   Download,
   Link2,
+  Globe,
   MessageSquare,
   Layers,
   Clock,
@@ -25,6 +26,7 @@ import {
   generateAsyncLink,
   importTasksAsChantiers,
 } from "@/lib/consultantDb";
+import { getOrCreatePortail } from "@/lib/modulableDb";
 import type { Mission, Entretien, EntretienMode, EntretienStatut } from "@/types/consultant";
 import {
   MISSION_STATUT_LABELS,
@@ -84,6 +86,8 @@ export default function MissionDetail() {
   const [submitting, setSubmitting] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [importingId, setImportingId] = useState<string | null>(null);
+  const [portalUrl, setPortalUrl] = useState<string | null>(null);
+  const [portalCopied, setPortalCopied] = useState(false);
 
   const loadMission = useCallback(async () => {
     if (!id) return;
@@ -203,6 +207,20 @@ export default function MissionDetail() {
     }
   }
 
+  async function handlePortalLink() {
+    if (!id) return;
+    try {
+      const portail = await getOrCreatePortail(id);
+      const url = `${window.location.origin}/client/${portail.token}`;
+      setPortalUrl(url);
+      await navigator.clipboard.writeText(url);
+      setPortalCopied(true);
+      setTimeout(() => setPortalCopied(false), 2000);
+    } catch {
+      // silently fail
+    }
+  }
+
   // ─── Determine active section for sidebar ──────────────────────────────────
   const sidebarSection =
     activeTab === "overview"
@@ -290,8 +308,24 @@ export default function MissionDetail() {
           ]}
         />
 
+        {/* Portail client link */}
+        <div className="flex items-center gap-3 mt-6">
+          <button
+            onClick={handlePortalLink}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-border text-foreground hover:bg-muted/50 transition-colors"
+          >
+            <Globe size={14} />
+            {portalCopied ? "Lien copié !" : "Portail client"}
+          </button>
+          {portalUrl && (
+            <span className="text-xs text-foreground-muted font-mono truncate max-w-md">
+              {portalUrl}
+            </span>
+          )}
+        </div>
+
         {/* Tab navigation — inside content */}
-        <div className="flex gap-1 mt-8 mb-6 border-b border-border pb-4">
+        <div className="flex gap-1 mt-6 mb-6 border-b border-border pb-4">
           {(
             [
               { key: "overview" as Tab, label: "Vue d'ensemble" },

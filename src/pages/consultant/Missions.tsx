@@ -12,7 +12,6 @@ import ConsultantLayout from "@/components/consultant/ConsultantLayout";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import { getMissions, createMission } from "@/lib/consultantDb";
-import { seedDemoMission } from "@/lib/seedDemo";
 import type { Mission, MissionStatut } from "@/types/consultant";
 import { MISSION_STATUT_LABELS, MISSION_STATUT_COLORS } from "@/types/consultant";
 import { SECTOR_LABELS, ORG_SIZE_LABELS } from "@/types/diagnostic";
@@ -204,21 +203,6 @@ export default function Missions() {
           >
             <Plus size={15} />
             Créer une mission
-          </button>
-          {/* DEV ONLY — Seed demo data */}
-          <button
-            onClick={async () => {
-              try {
-                const mId = await seedDemoMission();
-                alert("Mission démo créée : " + mId);
-                window.location.reload();
-              } catch (e: any) {
-                alert("Erreur seed: " + e.message);
-              }
-            }}
-            className="mt-3 text-xs text-foreground-muted underline hover:text-foreground transition-colors"
-          >
-            🧪 Injecter données démo
           </button>
         </div>
       )}

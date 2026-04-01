@@ -14,6 +14,7 @@ const MissionDetail       = lazy(() => import("./pages/consultant/MissionDetail"
 const EntretienLive       = lazy(() => import("./pages/consultant/EntretienLive"));
 const RoadmapPage         = lazy(() => import("./pages/consultant/Roadmap"));
 const Bibliotheque        = lazy(() => import("./pages/consultant/Bibliotheque"));
+const QuestionnaireEditor = lazy(() => import("./pages/consultant/QuestionnaireEditor"));
 const Settings            = lazy(() => import("./pages/Settings"));
 const EntretienAsync      = lazy(() => import("./pages/EntretienAsync"));
 const PortailClient       = lazy(() => import("./pages/PortailClient"));
@@ -48,6 +49,8 @@ export default function App() {
                   element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
                 <Route path="/bibliotheque"
                   element={<ProtectedRoute><Bibliotheque /></ProtectedRoute>} />
+                <Route path="/bibliotheque/questionnaire/:id"
+                  element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
                 <Route path="/parametres"
                   element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                 <Route path="/" element={<Navigate to="/missions" replace />} />

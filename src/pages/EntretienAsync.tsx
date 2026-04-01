@@ -51,7 +51,7 @@ export default function EntretienAsync() {
     if (!entretien) return;
 
     if (!taches.trim()) {
-      setError("Veuillez decrire les taches quotidiennes.");
+      setError("Veuillez décrire les tâches quotidiennes.");
       return;
     }
 
@@ -68,7 +68,7 @@ export default function EntretienAsync() {
       });
       setSubmitted(true);
     } catch {
-      setError("Erreur lors de l'envoi. Veuillez reessayer.");
+      setError("Erreur lors de l'envoi. Veuillez réessayer.");
     } finally {
       setSubmitting(false);
     }
@@ -92,17 +92,17 @@ export default function EntretienAsync() {
         <div className="text-center space-y-4 max-w-md px-4">
           <AlertTriangle size={48} className="mx-auto text-amber-500" />
           <h1 className="text-xl font-semibold text-slate-800">
-            Ce lien est expire ou invalide
+            Ce lien est expiré ou invalide
           </h1>
           <p className="text-sm text-slate-500">
-            Le lien que vous avez utilise n'est plus valide. Contactez votre
+            Le lien que vous avez utilisé n'est plus valide. Contactez votre
             consultant pour obtenir un nouveau lien.
           </p>
           <Link
             to="/"
             className="inline-block text-blue-600 hover:text-blue-700 text-sm underline"
           >
-            Retour a l'accueil
+            Retour à l'accueil
           </Link>
         </div>
       </div>
@@ -117,10 +117,10 @@ export default function EntretienAsync() {
         <div className="text-center space-y-4 max-w-md px-4">
           <CheckCircle size={48} className="mx-auto text-emerald-500" />
           <h1 className="text-xl font-semibold text-slate-800">
-            Vous avez deja soumis vos reponses. Merci !
+            Vous avez déjà soumis vos réponses. Merci !
           </h1>
           <p className="text-sm text-slate-500">
-            Votre consultant traitera vos reponses prochainement.
+            Votre consultant traitera vos réponses prochainement.
           </p>
         </div>
       </div>
@@ -135,10 +135,10 @@ export default function EntretienAsync() {
         <div className="text-center space-y-4 max-w-md px-4">
           <CheckCircle size={56} className="mx-auto text-emerald-500" />
           <h1 className="text-xl font-semibold text-slate-800">
-            Merci ! Vos reponses ont ete transmises.
+            Merci ! Vos réponses ont été transmises.
           </h1>
           <p className="text-sm text-slate-500">
-            Votre consultant analysera vos reponses et reviendra vers vous.
+            Votre consultant analysera vos réponses et reviendra vers vous.
           </p>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default function EntretienAsync() {
             Questionnaire d'analyse
           </h1>
           <p className="text-sm text-slate-500">
-            Ce formulaire vous est envoye par votre consultant Lecko
+            Ce formulaire vous est envoyé par votre consultant Lecko
           </p>
           {entretien?.service_nom && (
             <span className="inline-block bg-blue-100 text-blue-700 text-xs font-medium px-3 py-1 rounded-full">
@@ -172,14 +172,14 @@ export default function EntretienAsync() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
-              Taches quotidiennes <span className="text-red-500">*</span>
+              Tâches quotidiennes <span className="text-red-500">*</span>
             </label>
             <textarea
               rows={6}
               value={taches}
               onChange={(e) => setTaches(e.target.value)}
               className="w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              placeholder="Decrivez les principales taches que vous ou votre equipe realisez au quotidien..."
+              placeholder="Décrivez les principales tâches que vous ou votre équipe réalisez au quotidien..."
               required
             />
           </div>

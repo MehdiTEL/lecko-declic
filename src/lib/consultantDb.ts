@@ -28,7 +28,7 @@ function generateToken(): string {
 export async function getMissions(): Promise<Mission[]> {
   const res = await // @ts-ignore
   supabase.from("missions")
-    .select("*")
+    .select("*, entretiens(*), chantiers(*)")
     .order("created_at", { ascending: false });
   handleError(res);
   return res.data as Mission[];
