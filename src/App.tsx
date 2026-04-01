@@ -9,24 +9,20 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
-// ── Pages consultant — protégées ─────────────────────────
 const Missions            = lazy(() => import("./pages/consultant/Missions"));
 const MissionDetail       = lazy(() => import("./pages/consultant/MissionDetail"));
 const EntretienLive       = lazy(() => import("./pages/consultant/EntretienLive"));
 const RoadmapPage         = lazy(() => import("./pages/consultant/Roadmap"));
 const Bibliotheque        = lazy(() => import("./pages/consultant/Bibliotheque"));
 const Settings            = lazy(() => import("./pages/Settings"));
-const QuestionnaireEditor = lazy(() => import("./pages/consultant/QuestionnaireEditor"));
-
-// ── Pages client — publiques via token ───────────────────
-const EntretienAsync = lazy(() => import("./pages/EntretienAsync"));
-const PortailClient  = lazy(() => import("./pages/PortailClient"));
+const EntretienAsync      = lazy(() => import("./pages/EntretienAsync"));
+const PortailClient       = lazy(() => import("./pages/PortailClient"));
 
 const queryClient = new QueryClient();
 
 const Spinner = () => (
   <div className="min-h-screen flex items-center justify-center bg-slate-950">
-    <div className="w-6 h-6 border-2 border-lecko-blue border-t-transparent rounded-full animate-spin" />
+    <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
   </div>
 );
 
@@ -34,20 +30,14 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
+        <Toaster /><Sonner />
         <BrowserRouter>
           <AuthProvider>
             <Suspense fallback={<Spinner />}>
               <Routes>
-                {/* Auth */}
                 <Route path="/login" element={<Login />} />
-
-                {/* Accès client via token — sans auth */}
                 <Route path="/entretien/:token" element={<EntretienAsync />} />
-                <Route path="/client/:token"    element={<PortailClient />} />
-
-                {/* Espace consultant — auth Lecko requise */}
+                <Route path="/client/:token" element={<PortailClient />} />
                 <Route path="/missions"
                   element={<ProtectedRoute><Missions /></ProtectedRoute>} />
                 <Route path="/missions/:id"
@@ -58,14 +48,8 @@ export default function App() {
                   element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
                 <Route path="/bibliotheque"
                   element={<ProtectedRoute><Bibliotheque /></ProtectedRoute>} />
-                <Route path="/bibliotheque/questionnaire/nouveau"
-                  element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
-                <Route path="/bibliotheque/questionnaire/:id"
-                  element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
                 <Route path="/parametres"
                   element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-
-                {/* Redirections */}
                 <Route path="/" element={<Navigate to="/missions" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
