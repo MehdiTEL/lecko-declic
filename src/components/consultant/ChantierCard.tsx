@@ -22,7 +22,7 @@ export function ChantierCard({
     <div
       className={cn(
         "group bg-card border rounded-xl p-4 transition-all duration-200",
-        "hover:border-lecko-blue/20 hover:shadow-sm",
+        "hover:border-brand-blue/20 hover:shadow-sm",
         isDragging && "opacity-50 scale-[0.98] rotate-1"
       )}
     >

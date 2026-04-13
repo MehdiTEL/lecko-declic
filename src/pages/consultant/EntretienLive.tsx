@@ -268,7 +268,7 @@ export default function EntretienLive() {
         <div className="text-center space-y-3">
           <AlertTriangle size={40} className="mx-auto text-amber-400" />
           <p>{error}</p>
-          <button onClick={() => navigate(`/missions/${missionId}`)} className="text-lecko-blue underline text-sm">
+          <button onClick={() => navigate(`/missions/${missionId}`)} className="text-brand-blue underline text-sm">
             Retour à la mission
           </button>
         </div>
@@ -434,7 +434,7 @@ export default function EntretienLive() {
           {currentStep === 2 && !analysisStarted && (
             <button
               onClick={runAnalysis}
-              className="flex items-center gap-2 h-11 px-8 rounded-xl bg-gradient-to-r from-lecko-blue to-blue-500 text-white text-sm font-semibold hover:shadow-lg hover:shadow-lecko-blue/25 hover:-translate-y-0.5 transition-all"
+              className="flex items-center gap-2 h-11 px-8 rounded-xl bg-gradient-to-r from-brand-blue to-blue-500 text-white text-sm font-semibold hover:shadow-lg hover:shadow-brand-blue/25 hover:-translate-y-0.5 transition-all"
             >
               <Sparkles size={16} strokeWidth={1.5} />
               Lancer l'analyse IA

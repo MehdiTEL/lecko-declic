@@ -242,7 +242,7 @@ function drawPageHeader(pdf: jsPDF) {
   drawLine(pdf, MARGIN_LEFT, 12, PAGE_W - MARGIN_RIGHT, 12, C.blue, 0.6);
 }
 
-/** Footer: "Lecko — Diagnostic DECLIC" left + "Page X / Y" right */
+/** Footer: "DÉCLIC — Diagnostic DECLIC" left + "Page X / Y" right */
 function drawPageFooter(
   pdf: jsPDF,
   pageNum: number,
@@ -251,7 +251,7 @@ function drawPageFooter(
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(8);
   setTextColor(pdf, C.grey);
-  pdf.text("Lecko \u2014 Diagnostic D\u00c9CLIC", MARGIN_LEFT, PAGE_H - 14);
+  pdf.text("D\u00c9CLIC \u2014 Cartographie IA", MARGIN_LEFT, PAGE_H - 14);
   pdf.text(
     `Page ${pageNum} / ${totalPages}`,
     PAGE_W - MARGIN_RIGHT,
@@ -562,11 +562,11 @@ function drawCoverPage(
   setTextColor(pdf, C.blue);
   pdf.text("D\u00c9CLIC", MARGIN_LEFT, 30);
 
-  // "par Lecko" in grey 10pt below
+  // "par DÉCLIC" in grey 10pt below
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(10);
   setTextColor(pdf, C.grey);
-  pdf.text("par Lecko", MARGIN_LEFT, 37);
+  pdf.text("par DÉCLIC", MARGIN_LEFT, 37);
 
   // Centered: "DIAGNOSTIC IA" in black bold 28pt
   const centerY = 120;
@@ -1652,9 +1652,9 @@ function drawCtaPage(cursor: PdfCursor, score: number): void {
   pdf.setFontSize(10);
   setTextColor(pdf, C.darkGrey);
   const contacts = [
-    "calendly.com/lecko/decouverte",
-    "contact@lecko.fr",
-    "lecko.fr",
+    "calendly.com/declic/decouverte",
+    "contact@declic.fr",
+    "declic.fr",
   ];
   for (const c of contacts) {
     pdf.text(c, rightX, rY);

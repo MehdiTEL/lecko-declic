@@ -10,7 +10,7 @@ export default function NotFound() {
       </p>
       <Link
         to="/missions"
-        className="h-10 px-5 rounded-xl bg-lecko-blue text-white text-sm font-semibold
+        className="h-10 px-5 rounded-xl bg-brand-blue text-white text-sm font-semibold
                    hover:bg-blue-600 transition-all inline-flex items-center gap-2"
       >
         Retour aux missions

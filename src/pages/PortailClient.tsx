@@ -540,7 +540,7 @@ export default function PortailClient() {
             <div className="space-y-6 max-w-xl">
               <div>
                 <h1 className="text-2xl font-bold text-slate-900">Échanges</h1>
-                <p className="text-sm text-slate-500 mt-1">Communiquez avec votre consultant Lecko</p>
+                <p className="text-sm text-slate-500 mt-1">Communiquez avec votre consultant DÉCLIC</p>
               </div>
 
               {/* Formulaire */}
@@ -594,8 +594,8 @@ export default function PortailClient() {
                       <div className="ml-6 rounded-xl p-4 border shadow-sm"
                         style={{ backgroundColor: clientPrimary + "06", borderColor: clientPrimary + "20" }}>
                         <div className="flex items-center gap-2 mb-2">
-                          <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-white">L</div>
-                          <span className="text-xs font-semibold" style={{ color: clientPrimary }}>Consultant Lecko</span>
+                          <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-white">D</div>
+                          <span className="text-xs font-semibold" style={{ color: clientPrimary }}>Consultant DÉCLIC</span>
                         </div>
                         <p className="text-sm text-slate-700 leading-relaxed">{c.reponse_consultant}</p>
                       </div>

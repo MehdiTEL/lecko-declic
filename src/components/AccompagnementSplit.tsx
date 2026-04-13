@@ -28,7 +28,7 @@ export default function AccompagnementSplit({ tasks }: AccompagnementSplitProps)
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
-      className="lecko-card p-5 md:p-6"
+      className="brand-card p-5 md:p-6"
     >
       <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
         Parcours d'accompagnement
@@ -128,7 +128,7 @@ export default function AccompagnementSplit({ tasks }: AccompagnementSplitProps)
             déploiement.
           </p>
           <a
-            href="https://calendly.com/lecko/decouverte"
+            href="https://calendly.com/declic/decouverte"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors hover:underline"

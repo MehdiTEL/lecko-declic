@@ -73,7 +73,7 @@ export default function PhaseSynthese({
     const guide = validated.filter((d) => d.task.niveau_accompagnement === "guide" || d.task.niveau_accompagnement === "formation").length;
     const expert = validated.filter((d) => d.task.niveau_accompagnement === "consultant" || d.task.niveau_accompagnement === "accompagnement_expert").length;
     return [
-      { name: "Autonome", value: express, color: "hsl(var(--lecko-green))" },
+      { name: "Autonome", value: express, color: "hsl(var(--brand-green))" },
       { name: "Guidé", value: guide, color: "#2563EB" },
       { name: "Expert", value: expert, color: "#7C3AED" },
     ].filter((d) => d.value > 0);
@@ -91,7 +91,7 @@ export default function PhaseSynthese({
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-br from-slate-900 via-slate-900 to-lecko-blue/10 border border-slate-800 rounded-3xl p-10"
+        className="bg-gradient-to-br from-slate-900 via-slate-900 to-brand-blue/10 border border-slate-800 rounded-3xl p-10"
       >
         <div className="text-center mb-8">
           <p className="text-slate-400 text-xs font-mono uppercase tracking-[0.3em] mb-2">
@@ -135,10 +135,10 @@ export default function PhaseSynthese({
             transition={{ delay: 0.6 }}
             className="text-center"
           >
-            <div className="w-14 h-14 rounded-2xl bg-lecko-blue/15 flex items-center justify-center mx-auto mb-3">
-              <TrendingUp size={24} className="text-lecko-blue" />
+            <div className="w-14 h-14 rounded-2xl bg-brand-blue/15 flex items-center justify-center mx-auto mb-3">
+              <TrendingUp size={24} className="text-brand-blue" />
             </div>
-            <AnimatedNumber value={heuresAn} className="text-4xl font-bold text-lecko-blue block" />
+            <AnimatedNumber value={heuresAn} className="text-4xl font-bold text-brand-blue block" />
             <span className="text-slate-400 text-sm font-mono">heures/an équipe</span>
           </motion.div>
 
@@ -287,14 +287,14 @@ export default function PhaseSynthese({
         className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4"
       >
         <div className="flex items-center gap-2">
-          <Calendar size={18} className="text-lecko-blue" />
+          <Calendar size={18} className="text-brand-blue" />
           <h3 className="text-lg font-bold text-white">Prochaines étapes</h3>
         </div>
         <textarea
           rows={3}
           value={prochaines}
           onChange={(e) => onProchainesChange(e.target.value)}
-          className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white text-base placeholder:text-slate-600 outline-none focus:border-lecko-blue transition-colors resize-none leading-relaxed"
+          className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white text-base placeholder:text-slate-600 outline-none focus:border-brand-blue transition-colors resize-none leading-relaxed"
           placeholder="1. Valider le budget avec la DG&#10;2. Déployer les quick wins dès la semaine prochaine&#10;3. Planifier un atelier approfondi pour les chantiers 'à creuser'"
         />
       </motion.div>

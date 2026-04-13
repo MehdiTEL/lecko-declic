@@ -27,7 +27,7 @@ interface Props {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const PILES = [
-  { id: "on_fonce" as const, label: "On fonce ! 🚀", color: "hsl(var(--lecko-green))", bgColor: "bg-emerald-500/10", borderColor: "border-emerald-500/30", icon: ThumbsUp },
+  { id: "on_fonce" as const, label: "On fonce ! 🚀", color: "hsl(var(--brand-green))", bgColor: "bg-emerald-500/10", borderColor: "border-emerald-500/30", icon: ThumbsUp },
   { id: "a_creuser" as const, label: "À creuser 🤔", color: "#F59E0B", bgColor: "bg-amber-500/10", borderColor: "border-amber-500/30", icon: HelpCircle },
   { id: "pas_pour_nous" as const, label: "Pas pour nous ✋", color: "hsl(var(--destructive))", bgColor: "bg-red-500/10", borderColor: "border-red-500/30", icon: ThumbsDown },
 ] as const;
@@ -115,7 +115,7 @@ export default function PhaseTriCollab({ results, decisions, onDecisionsChange }
             <button
               onClick={() => setMode("swipe")}
               className={cn("px-3 py-1.5 rounded-md text-xs font-mono transition-all",
-                mode === "swipe" ? "bg-lecko-blue text-white" : "text-slate-400"
+                mode === "swipe" ? "bg-brand-blue text-white" : "text-slate-400"
               )}
             >
               Swipe
@@ -123,7 +123,7 @@ export default function PhaseTriCollab({ results, decisions, onDecisionsChange }
             <button
               onClick={() => setMode("overview")}
               className={cn("px-3 py-1.5 rounded-md text-xs font-mono transition-all",
-                mode === "overview" ? "bg-lecko-blue text-white" : "text-slate-400"
+                mode === "overview" ? "bg-brand-blue text-white" : "text-slate-400"
               )}
             >
               Vue d'ensemble
@@ -217,7 +217,7 @@ export default function PhaseTriCollab({ results, decisions, onDecisionsChange }
                       <span className="text-[10px] text-slate-400 font-mono">par semaine</span>
                     </div>
                     <div className="bg-slate-800 rounded-xl p-3 text-center">
-                      <Target size={16} className="text-lecko-blue mx-auto mb-1" />
+                      <Target size={16} className="text-brand-blue mx-auto mb-1" />
                       <span className="text-xl font-bold text-white block">
                         {currentCard.task.ecosysteme?.replace(/_/g, " ").substring(0, 12) ?? "—"}
                       </span>

@@ -50,7 +50,7 @@ function drawFooter(pdf: jsPDF, pageNum: number, totalPages: number) {
   pdf.setFontSize(8);
   setColor(pdf, LIGHT_GREY);
   pdf.text(`Page ${pageNum} / ${totalPages}`, MARGIN, PAGE_H - 10);
-  pdf.text("DECLIC by Lecko", PAGE_W - MARGIN, PAGE_H - 10, { align: "right" });
+  pdf.text("DECLIC Cartographie IA", PAGE_W - MARGIN, PAGE_H - 10, { align: "right" });
 }
 
 function drawCover(pdf: jsPDF, template: PhaseTemplate) {
@@ -62,7 +62,7 @@ function drawCover(pdf: jsPDF, template: PhaseTemplate) {
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(9);
   setColor(pdf, LIGHT_GREY);
-  pdf.text("by Lecko", MARGIN + 38, 25);
+  pdf.text("Cartographie IA", MARGIN + 38, 25);
 
   // Orange bar
   setFill(pdf, ORANGE);

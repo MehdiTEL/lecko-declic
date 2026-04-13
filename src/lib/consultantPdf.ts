@@ -93,7 +93,7 @@ export async function generateConsultantPdf(
   doc.text("DÉCLIC", marginL, 30);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("by Lecko", marginL, 38);
+  doc.text("Cartographie IA", marginL, 38);
 
   // Date top-right
   doc.setFontSize(9);
@@ -392,7 +392,7 @@ export async function generateConsultantPdf(
 
   addFooter();
 
-  // ── PAGE 5 — Accompagnement Lecko ──────────────────────────────────────────
+  // ── PAGE 5 — Accompagnement DÉCLIC ──────────────────────────────────────────
 
   newPage();
   y = 0;
@@ -403,7 +403,7 @@ export async function generateConsultantPdf(
   doc.setTextColor(...WHITE);
   doc.setFontSize(20);
   doc.setFont("helvetica", "bold");
-  doc.text("Accompagnement Lecko", pageW / 2, 25, { align: "center" });
+  doc.text("Accompagnement DÉCLIC", pageW / 2, 25, { align: "center" });
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
   doc.text("Nos offres pour accélérer votre transformation IA", pageW / 2, 34, {
@@ -472,12 +472,12 @@ export async function generateConsultantPdf(
   doc.setTextColor(...DARK);
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
-  doc.text("Lecko", pageW / 2, y, { align: "center" });
+  doc.text("DÉCLIC", pageW / 2, y, { align: "center" });
   y += 6;
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(...GRAY);
-  doc.text("lecko.fr  |  contact@lecko.fr", pageW / 2, y, { align: "center" });
+  doc.text("declic.fr  |  contact@declic.fr", pageW / 2, y, { align: "center" });
 
   addFooter();
 

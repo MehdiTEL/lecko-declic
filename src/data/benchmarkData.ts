@@ -1,7 +1,7 @@
 /**
- * Benchmark data — based on Referentiel Lecko analysis.
+ * Benchmark data — based on DÉCLIC methodology benchmarks.
  * 312 organisations analysed across 20 years of consulting (2005-2025).
- * Source: referentiel.lecko.fr
+ * Source: referentiel.declic.fr
  */
 
 export interface SectorData {

@@ -82,7 +82,7 @@ export default function ChantiersView({ missionId, chantiers: initialChantiers, 
               onClick={() => setHorizonFilter(f.value)}
               className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                 horizonFilter === f.value
-                  ? "bg-lecko-blue text-white"
+                  ? "bg-brand-blue text-white"
                   : "bg-surface-alt text-foreground-muted hover:text-foreground"
               }`}
             >
@@ -99,7 +99,7 @@ export default function ChantiersView({ missionId, chantiers: initialChantiers, 
               onClick={() => setPrioriteFilter(f.value)}
               className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                 prioriteFilter === f.value
-                  ? "bg-lecko-blue text-white"
+                  ? "bg-brand-blue text-white"
                   : "bg-surface-alt text-foreground-muted hover:text-foreground"
               }`}
             >

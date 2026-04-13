@@ -32,12 +32,12 @@ export default function InsightKiller({ result }: InsightKillerProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
       className="rounded-2xl p-6 md:p-8 relative overflow-hidden"
-      style={{ backgroundColor: "hsl(var(--lecko-blue))" }}
+      style={{ backgroundColor: "hsl(var(--brand-blue))" }}
     >
       {/* Deco — orange circle */}
       <div
         className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20"
-        style={{ backgroundColor: "hsl(var(--lecko-orange))" }}
+        style={{ backgroundColor: "hsl(var(--brand-orange))" }}
         aria-hidden
       />
 

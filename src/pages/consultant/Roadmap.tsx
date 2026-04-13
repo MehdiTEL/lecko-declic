@@ -55,7 +55,7 @@ function ChantierCard({ chantier }: { chantier: Chantier }) {
     <div
       draggable
       onDragStart={handleDragStart}
-      className="bg-card rounded-xl border border-mission-border p-3 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md hover:border-lecko-blue/20 transition-all"
+      className="bg-card rounded-xl border border-mission-border p-3 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md hover:border-brand-blue/20 transition-all"
     >
       <h4 className="text-sm font-consultant font-medium text-foreground line-clamp-2 leading-snug mb-1">
         {chantier.titre}
@@ -111,7 +111,7 @@ function KanbanColumn({ col, chantiers, onDrop, dragOver, onDragOverColumn }: Ka
   return (
     <div
       className={`flex flex-col rounded-xl border transition-colors min-w-0 overflow-hidden ${
-        isOver ? "border-lecko-blue ring-2 ring-lecko-blue/20" : "border-mission-border"
+        isOver ? "border-brand-blue ring-2 ring-brand-blue/20" : "border-mission-border"
       }`}
       style={{ backgroundColor: col.bg }}
       onDragOver={handleDragOver}
@@ -147,8 +147,8 @@ function SummaryTable({ chantiers }: { chantiers: Chantier[] }) {
     const items = chantiers.filter((c) => columnForChantier(c) === col.key);
     const totalHours = items.reduce((s, c) => s + (c.impact_total_heures_an ?? 0), 0);
     const hoursPerWeek = items.reduce((s, c) => s + c.temps_gagne_heures_semaine, 0);
-    const leckoCount = items.filter((c) => c.niveau_accompagnement).length;
-    return { label: col.label, color: col.color, count: items.length, hoursPerWeek: Math.round(hoursPerWeek * 10) / 10, totalHoursYear: Math.round(totalHours), leckoCount };
+    const accompCount = items.filter((c) => c.niveau_accompagnement).length;
+    return { label: col.label, color: col.color, count: items.length, hoursPerWeek: Math.round(hoursPerWeek * 10) / 10, totalHoursYear: Math.round(totalHours), accompCount };
   });
 
   const totals = rows.reduce(
@@ -156,9 +156,9 @@ function SummaryTable({ chantiers }: { chantiers: Chantier[] }) {
       count: acc.count + r.count,
       hoursPerWeek: Math.round((acc.hoursPerWeek + r.hoursPerWeek) * 10) / 10,
       totalHoursYear: acc.totalHoursYear + r.totalHoursYear,
-      leckoCount: acc.leckoCount + r.leckoCount,
+      accompCount: acc.accompCount + r.accompCount,
     }),
-    { count: 0, hoursPerWeek: 0, totalHoursYear: 0, leckoCount: 0 }
+    { count: 0, hoursPerWeek: 0, totalHoursYear: 0, accompCount: 0 }
   );
 
   return (
@@ -185,7 +185,7 @@ function SummaryTable({ chantiers }: { chantiers: Chantier[] }) {
                 <td className="text-right px-4 py-2 font-mono text-sm">{r.count}</td>
                 <td className="text-right px-4 py-2 font-mono text-sm">{r.hoursPerWeek}h</td>
                 <td className="text-right px-4 py-2 font-mono text-sm">{r.totalHoursYear}h</td>
-                <td className="text-right px-4 py-2 font-mono text-sm">{r.leckoCount}</td>
+                <td className="text-right px-4 py-2 font-mono text-sm">{r.accompCount}</td>
               </tr>
             ))}
             <tr className="border-t-2 border-mission-border bg-mission-alt font-semibold">
@@ -193,7 +193,7 @@ function SummaryTable({ chantiers }: { chantiers: Chantier[] }) {
               <td className="text-right px-4 py-2 font-mono">{totals.count}</td>
               <td className="text-right px-4 py-2 font-mono">{totals.hoursPerWeek}h</td>
               <td className="text-right px-4 py-2 font-mono">{totals.totalHoursYear}h</td>
-              <td className="text-right px-4 py-2 font-mono">{totals.leckoCount}</td>
+              <td className="text-right px-4 py-2 font-mono">{totals.accompCount}</td>
             </tr>
           </tbody>
         </table>
@@ -313,7 +313,7 @@ export default function Roadmap() {
         {!loading && !error && chantiers.length === 0 && (
           <div className="text-center py-16">
             <p className="text-foreground-muted mb-2">Aucun chantier identifié pour cette mission.</p>
-            <Link to={`/missions/${id}`} className="text-sm text-lecko-blue hover:underline">
+            <Link to={`/missions/${id}`} className="text-sm text-brand-blue hover:underline">
               Retour à la mission
             </Link>
           </div>

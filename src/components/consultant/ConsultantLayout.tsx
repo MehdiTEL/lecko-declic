@@ -83,7 +83,7 @@ export default function ConsultantLayout({
         {mission && (
           <div className="px-4 py-4 border-b border-consultant-border">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-lecko-blue/20 text-lecko-blue text-xs font-bold font-mono flex-shrink-0">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-brand-blue/20 text-brand-blue text-xs font-bold font-mono flex-shrink-0">
                 {mission.client_organisation.slice(0, 2).toUpperCase()}
               </div>
               <div className="min-w-0">
@@ -106,7 +106,7 @@ export default function ConsultantLayout({
               </div>
               <div className="h-1 bg-consultant-border rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-lecko-blue rounded-full transition-all duration-700"
+                  className="h-full bg-brand-blue rounded-full transition-all duration-700"
                   style={{
                     width: `${Math.round(
                       (nbEntretiensTermines / Math.max(nbEntretiensTotal, 1)) * 100
@@ -258,14 +258,14 @@ function NavItem({
       className={cn(
         "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all",
         active
-          ? "bg-lecko-blue/15 text-consultant-text font-medium"
+          ? "bg-brand-blue/15 text-consultant-text font-medium"
           : "text-consultant-muted hover:text-consultant-text hover:bg-consultant-hover"
       )}
     >
-      <Icon size={15} strokeWidth={1.5} className={active ? "text-lecko-blue" : ""} />
+      <Icon size={15} strokeWidth={1.5} className={active ? "text-brand-blue" : ""} />
       <span className="flex-1">{label}</span>
       {badge !== undefined && badge > 0 && (
-        <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-lecko-blue/20 text-lecko-blue">
+        <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-brand-blue/20 text-brand-blue">
           {badge}
         </span>
       )}

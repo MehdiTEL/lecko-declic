@@ -3,7 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 // CORS — restrict to production domain, allow localhost in dev
 const allowedOrigin = Deno.env.get("ENVIRONMENT") === "development"
   ? "http://localhost:5173"
-  : "https://declic.lecko.fr";
+  : "https://declic.fr";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": allowedOrigin,

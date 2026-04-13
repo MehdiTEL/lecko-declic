@@ -68,7 +68,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
       style={{ background: "hsl(var(--background))" }}
     >
       <h2 className="text-xl font-bold font-heading text-foreground mb-5 flex items-center gap-2">
-        💰 ROI agrégé de l'<span className="text-lecko-orange">équipe</span>
+        💰 ROI agrégé de l'<span className="text-brand-orange">équipe</span>
       </h2>
 
       {/* Per-job table */}
@@ -119,7 +119,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
       {/* KPIs row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         {[
-          { icon: "banknote", label: "/ semaine", value: totalWeekEur, color: "text-lecko-orange" },
+          { icon: "banknote", label: "/ semaine", value: totalWeekEur, color: "text-brand-orange" },
           { icon: "calendar", label: "/ mois", value: totalMonthEur, color: "text-primary" },
           { icon: "calendarDays", label: "/ an", value: totalYearEur, color: "text-primary" },
         ].map((k, i) => (
@@ -128,7 +128,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="lecko-card p-4 flex flex-col items-center text-center gap-1"
+            className="brand-card p-4 flex flex-col items-center text-center gap-1"
           >
             <span className="text-xl mb-0.5">{k.icon}</span>
             <span className={`font-bold text-2xl ${k.color}`}>{formatEur(k.value)}</span>
@@ -139,7 +139,7 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.24 }}
-          className="lecko-card p-4 flex flex-col items-center text-center gap-1"
+          className="brand-card p-4 flex flex-col items-center text-center gap-1"
         >
           <span className="text-xl mb-0.5">·</span>
           <span className="font-bold text-2xl text-gr33t-500">{totalEtp.toFixed(1)}</span>
@@ -149,13 +149,13 @@ export default function RoiCalculatorEquipe({ results, onRatesChange }: RoiCalcu
 
       {/* Comparison */}
       {totalYearEur > 0 && (
-        <div className="rounded-xl border border-lecko-orange/20 bg-lecko-orange/5 px-5 py-4">
+        <div className="rounded-xl border border-brand-orange/20 bg-brand-orange/5 px-5 py-4">
           <div className="flex items-start gap-3">
             <span className="text-xl shrink-0"></span>
             <div>
               <p className="text-sm font-semibold text-foreground mb-0.5">
                 Économie annuelle de{" "}
-                <span className="text-lecko-orange">{formatEur(totalYearEur)}</span> ={" "}
+                <span className="text-brand-orange">{formatEur(totalYearEur)}</span> ={" "}
                 {comparison}.
               </p>
             </div>

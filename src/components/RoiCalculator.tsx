@@ -99,12 +99,12 @@ function RoiKpi({ label, sublabel, value, accent, large, delay = 0 }: RoiKpiProp
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay }}
-      className="lecko-card p-4 flex flex-col gap-1"
+      className="brand-card p-4 flex flex-col gap-1"
     >
       <p className="label-uppercase text-[10px] mb-1">{label}</p>
       <span
         className={`font-bold ${large ? "text-2xl" : "text-xl"}`}
-        style={{ color: accent ? "hsl(var(--lecko-orange))" : "hsl(var(--primary))" }}
+        style={{ color: accent ? "hsl(var(--brand-orange))" : "hsl(var(--primary))" }}
       >
         <AnimatedValue value={value} delay={delay} />
       </span>
@@ -153,7 +153,7 @@ export default function RoiCalculator({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4 }}
-      className="lecko-card p-6 md:p-8"
+      className="brand-card p-6 md:p-8"
     >
       {/* Title */}
       <p className="label-uppercase mb-1 text-[11px]">Calculateur</p>
@@ -192,7 +192,7 @@ export default function RoiCalculator({
         <motion.div
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.18 }}
-          className="lecko-card p-4 flex flex-col gap-1"
+          className="brand-card p-4 flex flex-col gap-1"
         >
           <p className="label-uppercase text-[10px] mb-1">Équivalent ETP</p>
           <span className="font-bold text-xl text-gr33t-500">{etp.toFixed(1)}</span>
@@ -207,7 +207,7 @@ export default function RoiCalculator({
           className="callout-orange"
         >
           <p className="font-semibold mb-0.5">
-            Votre économie annuelle de <span style={{ color: "hsl(var(--lecko-orange))" }}>{formatEur(yearEur)}</span> représente :
+            Votre économie annuelle de <span style={{ color: "hsl(var(--brand-orange))" }}>{formatEur(yearEur)}</span> représente :
           </p>
           <p>{comparison}</p>
         </motion.div>

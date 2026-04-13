@@ -4,16 +4,16 @@
 @tailwind utilities;
 
 /* =====================================================
-   DÉCLIC DESIGN SYSTEM — Gr33t-inspired
-   White-dominant, modern SaaS, green accents
+   DÉCLIC DESIGN SYSTEM
+   Indépendant • Cartographie IA pour les métiers
 ===================================================== */
 
 @layer base {
   :root {
-    /* Lecko Brand — bleu primary conservé */
-    --lecko-blue: 221 83% 53%;        /* #2563EB */
-    --lecko-orange: 38 92% 50%;       /* #F59E0B */
-    --lecko-green: 160 84% 39%;       /* Gr33t green — teal/émeraude vif */
+    /* DÉCLIC Brand — indigo profond + corail chaud */
+    --brand-blue: 244 75% 58%;        /* #4F46E5 indigo-600 — couleur signature */
+    --brand-orange: 14 91% 60%;       /* #F46E3F corail chaud */
+    --brand-green: 160 84% 39%;       /* émeraude vif */
 
     /* Surfaces — white dominant avec alternance gris très clair */
     --background: 0 0% 100%;          /* #FFFFFF */
@@ -32,30 +32,30 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 221 83% 53%;
+    --primary: 244 75% 58%;
     --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 98%;
-    --secondary-foreground: 221 83% 53%;
+    --secondary-foreground: 244 75% 58%;
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-    --accent: 38 92% 50%;
+    --accent: 14 91% 60%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 214 32% 93%;            /* plus subtil, quasi invisible */
     --input: 214 32% 91%;
-    --ring: 221 83% 53%;
+    --ring: 244 75% 58%;
     --radius: 1rem;                   /* 16px — plus généreux */
 
     /* Sidebar */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 215 25% 27%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary: 244 75% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 96%;
     --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 214 32% 93%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-ring: 244 75% 58%;
 
     /* Semantic badge backgrounds — Gr33t style pills */
     --badge-auto-bg: 152 81% 96%;     /* emerald-50 plus vif */
@@ -70,26 +70,26 @@
     --accent-green-text: 160 72% 30%;
     --accent-violet-bg: 271 91% 97%;
     --accent-violet-text: 271 55% 45%;
-    --accent-blue-bg: 214 100% 97%;
-    --accent-blue-text: 221 83% 40%;
+    --accent-blue-bg: 244 100% 97%;
+    --accent-blue-text: 244 75% 50%;
     --accent-amber-bg: 48 100% 96%;
     --accent-amber-text: 32 95% 35%;
     --accent-rose-bg: 0 72% 97%;
     --accent-rose-text: 0 72% 40%;
 
-    /* Shadows — plus douces, teinte bleu au hover */
+    /* Shadows — plus douces, teinte indigo au hover */
     --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.04), 0 1px 2px -1px hsl(222 47% 11% / 0.03);
-    --shadow-card-hover: 0 8px 24px -4px hsl(221 83% 53% / 0.10), 0 2px 8px -2px hsl(222 47% 11% / 0.06);
+    --shadow-card-hover: 0 8px 24px -4px hsl(244 75% 58% / 0.12), 0 2px 8px -2px hsl(222 47% 11% / 0.06);
     --shadow-elevated: 0 4px 24px -4px hsl(222 47% 11% / 0.08);
-    --shadow-float: 0 12px 40px -8px hsl(221 83% 53% / 0.15);
+    --shadow-float: 0 12px 40px -8px hsl(244 75% 58% / 0.18);
 
     /* ── Espace consultant ── */
-    --consultant-sidebar-bg: 222 47% 5%;
-    --consultant-sidebar-border: 220 13% 15%;
+    --consultant-sidebar-bg: 244 35% 8%;
+    --consultant-sidebar-border: 244 20% 18%;
     --consultant-sidebar-text: 213 31% 91%;
     --consultant-sidebar-muted: 215 20% 55%;
-    --consultant-sidebar-active: 221 83% 53%;
-    --consultant-sidebar-hover: 222 47% 11%;
+    --consultant-sidebar-active: 244 75% 65%;
+    --consultant-sidebar-hover: 244 30% 14%;
 
     /* ── Surfaces mission ── */
     --mission-surface: 0 0% 100%;
@@ -102,8 +102,8 @@
     --statut-critique: 0 84% 55%;
     --statut-haute-bg: 38 100% 96%;
     --statut-haute: 32 95% 44%;
-    --statut-normale-bg: 214 100% 97%;
-    --statut-normale: 221 83% 53%;
+    --statut-normale-bg: 244 100% 97%;
+    --statut-normale: 244 75% 58%;
     --statut-basse-bg: 220 9% 96%;
     --statut-basse: 220 9% 46%;
 
@@ -115,9 +115,9 @@
   }
 
   .dark {
-    --lecko-blue: 221 83% 60%;
-    --lecko-orange: 38 92% 55%;
-    --lecko-green: 160 84% 50%;
+    --brand-blue: 244 75% 65%;
+    --brand-orange: 14 91% 65%;
+    --brand-green: 160 84% 50%;
 
     --background: 222 47% 11%;        /* #0F172A slate-900 */
     --surface-alt: 215 28% 17%;       /* #1E293B slate-800 */
@@ -133,35 +133,35 @@
     --card-foreground: 210 40% 96%;
     --popover: 215 28% 17%;
     --popover-foreground: 210 40% 96%;
-    --primary: 221 83% 60%;
+    --primary: 244 75% 65%;
     --primary-foreground: 0 0% 100%;
     --secondary: 215 25% 27%;
     --secondary-foreground: 210 40% 96%;
     --muted: 215 25% 22%;
     --muted-foreground: 215 16% 57%;
-    --accent: 38 92% 55%;
+    --accent: 14 91% 65%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 210 40% 98%;
     --border: 215 25% 25%;
     --input: 215 25% 27%;
-    --ring: 221 83% 60%;
+    --ring: 244 75% 65%;
 
-    --sidebar-background: 222 47% 11%;
+    --sidebar-background: 244 35% 8%;
     --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 221 83% 60%;
+    --sidebar-primary: 244 75% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent: 244 30% 14%;
     --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 215 25% 25%;
-    --sidebar-ring: 221 83% 60%;
+    --sidebar-border: 244 20% 18%;
+    --sidebar-ring: 244 75% 65%;
 
     --accent-green-bg: 160 50% 12%;
     --accent-green-text: 160 72% 65%;
     --accent-violet-bg: 271 40% 15%;
     --accent-violet-text: 271 91% 75%;
-    --accent-blue-bg: 221 45% 14%;
-    --accent-blue-text: 221 83% 75%;
+    --accent-blue-bg: 244 45% 14%;
+    --accent-blue-text: 244 75% 78%;
     --accent-amber-bg: 30 62% 12%;
     --accent-amber-text: 38 92% 70%;
     --accent-rose-bg: 0 40% 14%;
@@ -175,9 +175,9 @@
     --badge-hard-text: 215 16% 57%;
 
     --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.25);
-    --shadow-card-hover: 0 8px 24px -4px hsl(221 83% 60% / 0.18);
+    --shadow-card-hover: 0 8px 24px -4px hsl(244 75% 65% / 0.22);
     --shadow-elevated: 0 4px 24px -4px hsl(0 0% 0% / 0.3);
-    --shadow-float: 0 12px 40px -8px hsl(221 83% 60% / 0.25);
+    --shadow-float: 0 12px 40px -8px hsl(244 75% 65% / 0.30);
   }
 }
 
@@ -227,34 +227,34 @@
 }
 
 @layer components {
-  /* Gr33t-style card — rounded-2xl, shadow douce, pas de bordure visible */
-  .lecko-card {
+  /* Brand card — rounded-2xl, shadow douce, pas de bordure visible */
+  .brand-card {
     @apply bg-card rounded-2xl;
     border: 1px solid hsl(var(--border) / 0.5);
     box-shadow: var(--shadow-card);
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
   }
 
-  .lecko-card:hover {
+  .brand-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-card-hover);
   }
 
-  /* Section accent decorator — blue left bar */
+  /* Section accent decorator — indigo left bar */
   .section-accent-bar {
     @apply relative pl-4;
   }
   .section-accent-bar::before {
     content: '';
     @apply absolute left-0 top-0 bottom-0 w-1 rounded-full;
-    background-color: hsl(var(--lecko-blue));
+    background-color: hsl(var(--brand-blue));
   }
 
-  /* Section label — Gr33t style uppercase badge */
+  /* Section label — uppercase badge */
   .section-label {
     @apply inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full;
-    background-color: hsl(var(--lecko-blue) / 0.08);
-    color: hsl(var(--lecko-blue));
+    background-color: hsl(var(--brand-blue) / 0.08);
+    color: hsl(var(--brand-blue));
   }
 
   /* Legacy alias */
@@ -266,7 +266,7 @@
   /* Underline accent decoration */
   .underline-orange {
     text-decoration: underline;
-    text-decoration-color: hsl(var(--lecko-orange));
+    text-decoration-color: hsl(var(--brand-orange));
     text-decoration-thickness: 3px;
     text-underline-offset: 4px;
   }
@@ -289,9 +289,9 @@
   /* Callout — orange border */
   .callout-orange {
     @apply rounded-xl px-4 py-3 text-sm;
-    border-left: 3px solid hsl(var(--lecko-orange));
-    background-color: hsl(38 100% 97%);
-    color: hsl(32 95% 28%);
+    border-left: 3px solid hsl(var(--brand-orange));
+    background-color: hsl(14 100% 97%);
+    color: hsl(14 91% 30%);
   }
 
   .dark .callout-orange {
@@ -299,23 +299,23 @@
     color: hsl(38 92% 70%);
   }
 
-  /* Callout — blue border */
+  /* Callout — indigo border */
   .callout-blue {
     @apply rounded-xl px-4 py-3 text-sm;
-    border-left: 3px solid hsl(var(--lecko-blue));
-    background-color: hsl(214 100% 97%);
-    color: hsl(221 55% 28%);
+    border-left: 3px solid hsl(var(--brand-blue));
+    background-color: hsl(244 100% 97%);
+    color: hsl(244 60% 30%);
   }
 
   .dark .callout-blue {
-    background-color: hsl(221 45% 14%);
-    color: hsl(221 83% 75%);
+    background-color: hsl(244 45% 14%);
+    color: hsl(244 75% 78%);
   }
 
-  /* Callout — green (Gr33t) */
+  /* Callout — green */
   .callout-green {
     @apply rounded-xl px-4 py-3 text-sm;
-    border-left: 3px solid hsl(var(--lecko-green));
+    border-left: 3px solid hsl(var(--brand-green));
     background-color: hsl(152 81% 96%);
     color: hsl(160 84% 25%);
   }
@@ -325,14 +325,14 @@
     color: hsl(152 76% 74%);
   }
 
-  /* Gr33t-style progress bar gradient */
-  .progress-gr33t {
+  /* Brand progress bar gradient */
+  .progress-brand {
     @apply rounded-full overflow-hidden;
     background: hsl(var(--muted));
   }
-  .progress-gr33t .bar {
+  .progress-brand .bar {
     @apply h-full rounded-full;
-    background: linear-gradient(90deg, hsl(160 84% 45%), hsl(160 84% 35%));
+    background: linear-gradient(90deg, hsl(244 75% 65%), hsl(244 75% 50%));
   }
 
   /* Pill button utility */
@@ -379,9 +379,9 @@
 /* ── DÉCLIC decorative elements ── */
 .declic-dot {
   @apply inline-block w-1.5 h-1.5 rounded-full;
-  background-color: hsl(var(--lecko-orange));
+  background-color: hsl(var(--brand-orange));
 }
 .declic-dot-lg {
   @apply inline-block w-2.5 h-2.5 rounded-full;
-  background-color: hsl(var(--lecko-orange));
+  background-color: hsl(var(--brand-orange));
 }

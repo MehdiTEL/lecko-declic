@@ -52,18 +52,10 @@ export default function DeclicLogo({ size = "md", className = "" }: DeclicLogoPr
   );
 }
 
-export function ByLecko({ className = "" }: { className?: string }) {
+export function BrandTagline({ className = "" }: { className?: string }) {
   return (
-    <span className={`text-[10px] font-medium text-foreground-muted tracking-wide ${className}`}>
-      by{" "}
-      <a
-        href="https://lecko.fr"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hover:text-primary transition-colors"
-      >
-        Lecko
-      </a>
+    <span className={`text-[10px] font-medium text-foreground-muted tracking-widest uppercase ${className}`}>
+      Cartographie IA
     </span>
   );
 }

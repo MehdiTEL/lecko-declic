@@ -1,8 +1,8 @@
 {
   "name": "declic",
   "version": "0.1.0",
-  "description": "D\u00c9CLIC \u2014 Plateforme de diagnostic et d'automatisation IA par m\u00e9tier. M\u00e9thodologie D\u00c9CLIC de Lecko.",
-  "author": "Lecko",
+  "description": "D\u00c9CLIC \u2014 Plateforme de cartographie IA par m\u00e9tier. Identifiez, priorisez, automatisez.",
+  "author": "DÉCLIC",
   "license": "MIT",
   "private": false,
   "homepage": "https://github.com/MehdiTEL/lecko-declic",
@@ -15,7 +15,7 @@
     "ia",
     "diagnostic",
     "metier",
-    "lecko",
+    "cartographie",
     "declic",
     "react",
     "typescript"

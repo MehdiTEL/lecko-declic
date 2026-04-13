@@ -14,7 +14,7 @@ interface DeclicCTAProps {
   onVisible?: (visible: boolean) => void;
 }
 
-const CALENDLY_URL = "https://calendly.com/lecko/decouverte";
+const CALENDLY_URL = "https://calendly.com/declic/decouverte";
 
 declare global {
   interface Window {
@@ -81,7 +81,7 @@ function FallbackForm({ metier, score, typeAnalyse, onClose }: FallbackFormProps
       if (error) throw error;
       setSent(true);
     } catch {
-      setErr("Une erreur est survenue. Réessayez ou contactez-nous à contact@lecko.fr");
+      setErr("Une erreur est survenue. Réessayez ou contactez-nous à contact@declic.fr");
     } finally {
       setSending(false);
     }

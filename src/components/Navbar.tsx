@@ -36,15 +36,15 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 h-14 bg-slate-950 border-b border-slate-800
+      <header className="sticky top-0 z-50 h-14 bg-[hsl(244,35%,8%)] border-b border-indigo-950/60
                          flex items-center px-6 gap-6">
         <Link to="/missions" className="flex items-center gap-3 shrink-0 group">
           <img src="/logo-declic.png" alt="DÉCLIC"
             style={{ height: "24px", filter: "brightness(0) invert(1)" }}
             className="transition-opacity group-hover:opacity-75" />
-          <span className="hidden sm:block text-slate-600 text-xs font-mono
-                           border-l border-slate-800 pl-3">
-            Espace consultant
+          <span className="hidden sm:block text-indigo-300/60 text-xs font-mono
+                           border-l border-indigo-950/80 pl-3">
+            Cartographie IA
           </span>
         </Link>
 
@@ -54,11 +54,11 @@ export default function Navbar() {
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all",
                 isActive(to)
-                  ? "bg-blue-600/15 text-white font-medium"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800"
+                  ? "bg-indigo-600/20 text-white font-medium"
+                  : "text-slate-400 hover:text-white hover:bg-indigo-950/40"
               )}>
               <Icon size={15} strokeWidth={1.5}
-                className={isActive(to) ? "text-blue-400" : ""} />
+                className={isActive(to) ? "text-indigo-300" : ""} />
               {label}
             </Link>
           ))}
@@ -67,7 +67,7 @@ export default function Navbar() {
         <div className="ml-auto flex items-center gap-2">
           <button onClick={toggleTheme}
             className="w-8 h-8 rounded-lg flex items-center justify-center
-                       text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all">
+                       text-slate-500 hover:text-slate-300 hover:bg-indigo-950/40 transition-all">
             {theme === "dark"
               ? <Sun size={15} strokeWidth={1.5} />
               : <Moon size={15} strokeWidth={1.5} />}
@@ -77,9 +77,9 @@ export default function Navbar() {
             <div className="relative">
               <button onClick={() => setUserMenuOpen(v => !v)}
                 className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg
-                           text-slate-300 hover:bg-slate-800 transition-all text-sm">
-                <div className="w-6 h-6 rounded-md bg-blue-600/25 flex items-center
-                                justify-center text-blue-400 text-[10px] font-bold font-mono">
+                           text-slate-300 hover:bg-indigo-950/40 transition-all text-sm">
+                <div className="w-6 h-6 rounded-md bg-indigo-600/30 flex items-center
+                                justify-center text-indigo-300 text-[10px] font-bold font-mono">
                   {initials}
                 </div>
                 <span className="hidden sm:block text-sm">{profile.prenom}</span>
@@ -90,23 +90,23 @@ export default function Navbar() {
                 <>
                   <div className="fixed inset-0 z-40"
                     onClick={() => setUserMenuOpen(false)} />
-                  <div className="absolute right-0 top-full mt-1.5 w-52 bg-slate-900
-                                  border border-slate-800 rounded-xl shadow-2xl z-50 overflow-hidden">
-                    <div className="px-4 py-3 border-b border-slate-800">
+                  <div className="absolute right-0 top-full mt-1.5 w-52 bg-[hsl(244,30%,12%)]
+                                  border border-indigo-950/60 rounded-xl shadow-2xl z-50 overflow-hidden">
+                    <div className="px-4 py-3 border-b border-indigo-950/60">
                       <p className="text-sm font-semibold text-white">
                         {profile.prenom} {profile.nom}
                       </p>
-                      <p className="text-[11px] text-slate-500 font-mono">Consultant Lecko</p>
+                      <p className="text-[11px] text-indigo-300/60 font-mono">Consultant indépendant</p>
                     </div>
                     <Link to="/parametres" onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 text-sm
-                                 text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                                 text-slate-400 hover:text-white hover:bg-indigo-950/40 transition-all">
                       <Settings size={14} strokeWidth={1.5} />Paramètres
                     </Link>
                     <button onClick={handleSignOut}
                       className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm
                                  text-slate-400 hover:text-red-400 hover:bg-red-950/30
-                                 transition-all border-t border-slate-800">
+                                 transition-all border-t border-indigo-950/60">
                       <LogOut size={14} strokeWidth={1.5} />Déconnexion
                     </button>
                   </div>
@@ -117,19 +117,19 @@ export default function Navbar() {
 
           <button onClick={() => setMenuOpen(v => !v)}
             className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center
-                       text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                       text-slate-400 hover:text-white hover:bg-indigo-950/40 transition-all">
             {menuOpen ? <X size={16} /> : <Menu size={16} />}
           </button>
         </div>
       </header>
 
       {menuOpen && (
-        <div className="md:hidden bg-slate-950 border-b border-slate-800
+        <div className="md:hidden bg-[hsl(244,35%,8%)] border-b border-indigo-950/60
                         px-4 py-3 space-y-1 z-40">
           {navLinks.map(({ to, label, icon: Icon }) => (
             <Link key={to} to={to} onClick={() => setMenuOpen(false)}
               className={cn("flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm",
-                isActive(to) ? "bg-blue-600/15 text-white" : "text-slate-400"
+                isActive(to) ? "bg-indigo-600/20 text-white" : "text-slate-400"
               )}>
               <Icon size={15} strokeWidth={1.5} />{label}
             </Link>

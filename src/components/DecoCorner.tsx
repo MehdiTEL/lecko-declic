@@ -12,7 +12,7 @@ export default function DecoCorner({ position = "bottom-left", size = "sm" }: De
   return (
     <div
       className={`${sizeClass} ${posClass} rounded-lg pointer-events-none`}
-      style={{ backgroundColor: "hsl(var(--lecko-orange))",  }}
+      style={{ backgroundColor: "hsl(var(--brand-orange))",  }}
       aria-hidden
     />
   );

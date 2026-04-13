@@ -72,7 +72,7 @@ export default function PhaseAnalyse({ analyzing, progress, results, error, onRe
             animate={{ rotate: 360 }}
             transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
           >
-            <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-lecko-blue" />
+            <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-brand-blue" />
           </motion.div>
           {/* Middle ring */}
           <motion.div
@@ -88,12 +88,12 @@ export default function PhaseAnalyse({ analyzing, progress, results, error, onRe
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Brain size={36} className="text-lecko-blue" />
+              <Brain size={36} className="text-brand-blue" />
             </motion.div>
           </div>
           {/* Pulse ring */}
           <motion.div
-            className="absolute inset-0 rounded-full border border-lecko-blue/30"
+            className="absolute inset-0 rounded-full border border-brand-blue/30"
             animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
@@ -114,7 +114,7 @@ export default function PhaseAnalyse({ analyzing, progress, results, error, onRe
           </AnimatePresence>
 
           {progress.currentMetier && (
-            <p className="text-lecko-blue text-sm font-mono">
+            <p className="text-brand-blue text-sm font-mono">
               {progress.currentMetier}
             </p>
           )}
@@ -127,7 +127,7 @@ export default function PhaseAnalyse({ analyzing, progress, results, error, onRe
             </div>
             <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-lecko-blue to-blue-400 rounded-full"
+                className="h-full bg-gradient-to-r from-brand-blue to-blue-400 rounded-full"
                 animate={{ width: `${(progress.current / Math.max(progress.total, 1)) * 100}%` }}
                 transition={{ duration: 0.5 }}
               />
@@ -155,7 +155,7 @@ export default function PhaseAnalyse({ analyzing, progress, results, error, onRe
           </button>
           <button
             onClick={onRetry}
-            className="px-5 py-2.5 rounded-xl bg-lecko-blue text-white text-sm font-semibold hover:bg-blue-500 transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-brand-blue text-white text-sm font-semibold hover:bg-blue-500 transition-colors"
           >
             Réessayer
           </button>
@@ -199,7 +199,7 @@ export default function PhaseAnalyse({ analyzing, progress, results, error, onRe
           >
             {/* Métier header */}
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-lecko-blue to-blue-700 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-blue-700 flex items-center justify-center">
                 <span className="text-white font-bold text-lg">{r.score_global}%</span>
               </div>
               <div>

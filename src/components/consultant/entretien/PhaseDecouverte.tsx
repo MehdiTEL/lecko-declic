@@ -101,7 +101,7 @@ export default function PhaseDecouverte({ serviceName, metiers, data, onChange }
         </h1>
         <div className="flex items-center justify-center gap-3 flex-wrap">
           {metiers.map((m) => (
-            <span key={m} className="bg-lecko-blue/20 text-lecko-blue text-sm font-mono px-3 py-1 rounded-lg">
+            <span key={m} className="bg-brand-blue/20 text-brand-blue text-sm font-mono px-3 py-1 rounded-lg">
               {m}
             </span>
           ))}
@@ -162,10 +162,10 @@ export default function PhaseDecouverte({ serviceName, metiers, data, onChange }
                     min={1} max={200} step={1}
                     value={data.nbPersonnes}
                     onChange={(e) => update("nbPersonnes", Number(e.target.value))}
-                    className="flex-1 accent-lecko-blue h-2 rounded-full"
+                    className="flex-1 accent-brand-blue h-2 rounded-full"
                   />
                   <div className="bg-slate-800 rounded-xl px-5 py-3 min-w-[80px] text-center">
-                    <span className="text-3xl font-bold text-lecko-blue font-consultant">{data.nbPersonnes}</span>
+                    <span className="text-3xl font-bold text-brand-blue font-consultant">{data.nbPersonnes}</span>
                     <span className="text-slate-400 text-xs block font-mono">pers.</span>
                   </div>
                 </div>
@@ -213,7 +213,7 @@ export default function PhaseDecouverte({ serviceName, metiers, data, onChange }
                       className={cn(
                         "py-4 rounded-xl text-center transition-all border-2",
                         data.pourcentageRepetitif === pct
-                          ? "bg-lecko-blue/20 border-lecko-blue text-white"
+                          ? "bg-brand-blue/20 border-brand-blue text-white"
                           : "bg-slate-800 border-slate-700 text-slate-300 hover:border-slate-600"
                       )}
                     >

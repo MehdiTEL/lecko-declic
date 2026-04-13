@@ -160,7 +160,7 @@ export default function EntretienAsync() {
             Questionnaire d'analyse
           </h1>
           <p className="text-sm text-slate-500">
-            Ce formulaire vous est envoyé par votre consultant Lecko
+            Ce formulaire vous est envoyé par votre consultant DÉCLIC
           </p>
           {entretien?.service_nom && (
             <span className="inline-block bg-blue-100 text-blue-700 text-xs font-medium px-3 py-1 rounded-full">

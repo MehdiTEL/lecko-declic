@@ -52,7 +52,7 @@ export default function KPICard({ value, label, suffix = "", icon, delay = 0, su
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay }}
-      className="lecko-card p-6 relative overflow-hidden group"
+      className="brand-card p-6 relative overflow-hidden group"
     >
       {/* Subtle trend indicator */}
       {value > 0 && (

@@ -91,7 +91,7 @@ export default function Bibliotheque() {
           </div>
           <button
             onClick={() => navigate("/bibliotheque/questionnaire/nouveau")}
-            className="flex items-center gap-2 h-10 px-5 rounded-xl bg-lecko-blue text-white
+            className="flex items-center gap-2 h-10 px-5 rounded-xl bg-brand-blue text-white
                        text-sm font-semibold hover:bg-blue-600 transition-all shadow-sm"
           >
             <Plus size={15} />
@@ -110,7 +110,7 @@ export default function Bibliotheque() {
               placeholder="Rechercher un template..."
               className="w-full h-10 pl-9 pr-4 bg-white border border-mission-border rounded-xl
                          text-sm text-foreground placeholder:text-foreground-muted/50
-                         outline-none focus:border-lecko-blue transition-colors"
+                         outline-none focus:border-brand-blue transition-colors"
             />
           </div>
         )}
@@ -120,13 +120,13 @@ export default function Bibliotheque() {
       <div className="px-8 py-6">
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <Loader2 size={24} className="animate-spin text-lecko-blue" />
+            <Loader2 size={24} className="animate-spin text-brand-blue" />
           </div>
         ) : templates.length === 0 ? (
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-lecko-blue/8 flex items-center justify-center mb-5">
-              <Library size={28} className="text-lecko-blue/50" strokeWidth={1.5} />
+            <div className="w-16 h-16 rounded-2xl bg-brand-blue/8 flex items-center justify-center mb-5">
+              <Library size={28} className="text-brand-blue/50" strokeWidth={1.5} />
             </div>
             <h3 className="font-consultant font-semibold text-foreground mb-2">
               Aucun template de questionnaire
@@ -136,7 +136,7 @@ export default function Bibliotheque() {
             </p>
             <button
               onClick={() => navigate("/bibliotheque/questionnaire/nouveau")}
-              className="flex items-center gap-2 h-10 px-5 rounded-xl bg-lecko-blue text-white
+              className="flex items-center gap-2 h-10 px-5 rounded-xl bg-brand-blue text-white
                          text-sm font-semibold hover:bg-blue-600 transition-all"
             >
               <Plus size={15} />
@@ -162,13 +162,13 @@ export default function Bibliotheque() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="group relative bg-white border border-mission-border rounded-2xl p-5
-                             hover:border-lecko-blue/30 hover:shadow-sm transition-all cursor-pointer"
+                             hover:border-brand-blue/30 hover:shadow-sm transition-all cursor-pointer"
                   onClick={() => navigate(`/bibliotheque/questionnaire/${t.id}`)}
                 >
                   {/* Icon + Menu */}
                   <div className="flex items-start justify-between mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-lecko-blue/8 flex items-center justify-center">
-                      <FileText size={18} className="text-lecko-blue" strokeWidth={1.5} />
+                    <div className="w-10 h-10 rounded-xl bg-brand-blue/8 flex items-center justify-center">
+                      <FileText size={18} className="text-brand-blue" strokeWidth={1.5} />
                     </div>
                     <div className="relative">
                       <button

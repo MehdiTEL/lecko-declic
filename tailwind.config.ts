@@ -12,8 +12,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        // heading: Inter — modernite, lisibilite haute densite (titres)
-        // sans: Source Sans 3 — charte Lecko, corps de texte
+        // heading: Inter — modernité, lisibilité haute densité (titres)
+        // sans: Source Sans 3 — charte DÉCLIC, corps de texte
         sans: ["'Source Sans 3'", "Calibri", "sans-serif"],
         heading: ["'Inter'", "system-ui", "sans-serif"],
         // Espace consultant
@@ -42,14 +42,14 @@ export default {
         surface: "hsl(var(--surface))",
         "surface-alt": "hsl(var(--surface-alt))",
         "surface-accent": "hsl(var(--surface-accent))",
-        lecko: {
-          blue: "hsl(var(--lecko-blue))",
-          orange: "hsl(var(--lecko-orange))",
-          green: "hsl(var(--lecko-green))",
+        brand: {
+          blue: "hsl(var(--brand-blue))",
+          orange: "hsl(var(--brand-orange))",
+          green: "hsl(var(--brand-green))",
         },
-        /* Gr33t green as semantic color */
+        /* Semantic green */
         gr33t: {
-          DEFAULT: "hsl(var(--lecko-green))",
+          DEFAULT: "hsl(var(--brand-green))",
           50: "hsl(152 81% 96%)",
           100: "hsl(149 80% 90%)",
           200: "hsl(152 76% 80%)",

@@ -297,7 +297,7 @@ export default function QuestionnaireEditor() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-mission-surface">
-        <Loader2 size={24} className="animate-spin text-lecko-blue" />
+        <Loader2 size={24} className="animate-spin text-brand-blue" />
       </div>
     );
   }
@@ -309,7 +309,7 @@ export default function QuestionnaireEditor() {
         <p className="text-foreground font-semibold mb-1">Questionnaire introuvable</p>
         <button
           onClick={() => navigate("/bibliotheque")}
-          className="text-sm text-lecko-blue hover:underline mt-2"
+          className="text-sm text-brand-blue hover:underline mt-2"
         >
           Retour à la bibliothèque
         </button>
@@ -346,7 +346,7 @@ export default function QuestionnaireEditor() {
             className={cn(
               "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all",
               showPreview
-                ? "bg-lecko-blue/10 text-lecko-blue font-medium"
+                ? "bg-brand-blue/10 text-brand-blue font-medium"
                 : "text-foreground-muted hover:bg-slate-100"
             )}
           >
@@ -361,7 +361,7 @@ export default function QuestionnaireEditor() {
             className={cn(
               "flex items-center gap-2 h-9 px-4 rounded-xl text-sm font-semibold transition-all",
               hasChanges
-                ? "bg-lecko-blue text-white hover:bg-blue-600 shadow-sm"
+                ? "bg-brand-blue text-white hover:bg-blue-600 shadow-sm"
                 : "bg-slate-100 text-foreground-muted"
             )}
           >
@@ -415,7 +415,7 @@ export default function QuestionnaireEditor() {
                     placeholder="Ex : Diagnostic maturité IA"
                     className="w-full h-11 px-4 bg-white border border-mission-border rounded-xl
                                text-sm text-foreground placeholder:text-foreground-muted/50
-                               outline-none focus:border-lecko-blue transition-colors"
+                               outline-none focus:border-brand-blue transition-colors"
                   />
                 </div>
                 <div>
@@ -429,7 +429,7 @@ export default function QuestionnaireEditor() {
                     placeholder="Courte description du template..."
                     className="w-full h-11 px-4 bg-white border border-mission-border rounded-xl
                                text-sm text-foreground placeholder:text-foreground-muted/50
-                               outline-none focus:border-lecko-blue transition-colors"
+                               outline-none focus:border-brand-blue transition-colors"
                   />
                 </div>
               </div>
@@ -440,7 +440,7 @@ export default function QuestionnaireEditor() {
                   onClick={() => { setIsPublic(!isPublic); markChanged(); }}
                   className={cn(
                     "relative w-10 h-5 rounded-full transition-colors",
-                    isPublic ? "bg-lecko-blue" : "bg-slate-200"
+                    isPublic ? "bg-brand-blue" : "bg-slate-200"
                   )}
                 >
                   <div
@@ -568,7 +568,7 @@ export default function QuestionnaireEditor() {
                             onClick={() => addQuestion(section.id)}
                             className="w-full mt-3 flex items-center justify-center gap-2 py-2.5
                                        rounded-xl border border-dashed border-slate-300 text-sm
-                                       text-foreground-muted hover:text-lecko-blue hover:border-lecko-blue/40
+                                       text-foreground-muted hover:text-brand-blue hover:border-brand-blue/40
                                        transition-all"
                           >
                             <Plus size={14} />
@@ -587,7 +587,7 @@ export default function QuestionnaireEditor() {
               onClick={addSection}
               className="w-full mt-4 flex items-center justify-center gap-2 py-3.5
                          rounded-2xl border-2 border-dashed border-slate-200 text-sm font-medium
-                         text-foreground-muted hover:text-lecko-blue hover:border-lecko-blue/30
+                         text-foreground-muted hover:text-brand-blue hover:border-brand-blue/30
                          transition-all"
             >
               <Plus size={16} />
@@ -669,7 +669,7 @@ function QuestionEditor({
               setShowTypeSelector(showTypeSelector === question.id ? null : question.id)
             }
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border
-                       border-slate-200 text-xs text-foreground-muted hover:border-lecko-blue
+                       border-slate-200 text-xs text-foreground-muted hover:border-brand-blue
                        transition-colors"
           >
             <TypeIcon size={12} strokeWidth={1.5} />
@@ -700,7 +700,7 @@ function QuestionEditor({
                     className={cn(
                       "w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors",
                       question.type === qt.type
-                        ? "bg-lecko-blue/5 text-lecko-blue"
+                        ? "bg-brand-blue/5 text-brand-blue"
                         : "text-foreground hover:bg-slate-50"
                     )}
                   >
@@ -758,7 +758,7 @@ function QuestionEditor({
                 onChange={(e) => updateOption(sectionId, question.id, i, e.target.value)}
                 placeholder={`Option ${i + 1}`}
                 className="flex-1 h-8 px-3 bg-white border border-slate-200 rounded-lg text-xs
-                           text-foreground outline-none focus:border-lecko-blue transition-colors"
+                           text-foreground outline-none focus:border-brand-blue transition-colors"
               />
               {(question.options?.length ?? 0) > 2 && (
                 <button
@@ -772,7 +772,7 @@ function QuestionEditor({
           ))}
           <button
             onClick={() => addOption(sectionId, question.id)}
-            className="text-xs text-lecko-blue hover:underline ml-6"
+            className="text-xs text-brand-blue hover:underline ml-6"
           >
             + Ajouter une option
           </button>
@@ -791,7 +791,7 @@ function QuestionEditor({
                 updateQuestion(sectionId, question.id, { min: Number(e.target.value) })
               }
               className="w-16 h-8 px-2 bg-white border border-slate-200 rounded-lg text-xs
-                         text-foreground text-center outline-none focus:border-lecko-blue"
+                         text-foreground text-center outline-none focus:border-brand-blue"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -803,7 +803,7 @@ function QuestionEditor({
                 updateQuestion(sectionId, question.id, { max: Number(e.target.value) })
               }
               className="w-16 h-8 px-2 bg-white border border-slate-200 rounded-lg text-xs
-                         text-foreground text-center outline-none focus:border-lecko-blue"
+                         text-foreground text-center outline-none focus:border-brand-blue"
             />
           </div>
           {question.type !== "rating" && (
@@ -817,7 +817,7 @@ function QuestionEditor({
                 }
                 placeholder="Ex: 0"
                 className="w-24 h-8 px-2 bg-white border border-slate-200 rounded-lg text-xs
-                           text-foreground outline-none focus:border-lecko-blue"
+                           text-foreground outline-none focus:border-brand-blue"
               />
             </div>
           )}
@@ -835,7 +835,7 @@ function QuestionEditor({
             }
             placeholder="Placeholder (optionnel)"
             className="w-full h-8 px-3 bg-white border border-slate-200 rounded-lg text-xs
-                       text-foreground-muted outline-none focus:border-lecko-blue transition-colors"
+                       text-foreground-muted outline-none focus:border-brand-blue transition-colors"
           />
         </div>
       )}
@@ -916,7 +916,7 @@ function PreviewMode({
                           type={q.type === "radio" ? "radio" : "checkbox"}
                           disabled
                           name={q.id}
-                          className="accent-lecko-blue"
+                          className="accent-brand-blue"
                         />
                         {o || `Option ${i + 1}`}
                       </label>
@@ -950,7 +950,7 @@ function PreviewMode({
                       disabled
                       min={q.min ?? 0}
                       max={q.max ?? 100}
-                      className="flex-1 accent-lecko-blue"
+                      className="flex-1 accent-brand-blue"
                     />
                     <span className="text-xs text-foreground-muted font-mono">{q.max ?? 100}</span>
                   </div>

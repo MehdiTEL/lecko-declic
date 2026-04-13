@@ -202,7 +202,7 @@ export default function ResultsDashboard({ result, initialRate, initialPeople, o
             {[
               { label: "Heures / semaine", value: `${stats.effectiveHours.toFixed(1)}h`, icon: Clock, color: "text-primary" },
               { label: "Économie / mois", value: formatEur(stats.monthEur), icon: Euro, color: "text-foreground" },
-              { label: "Économie / an", value: formatEur(stats.yearEur), icon: TrendingUp, color: "text-lecko-orange" },
+              { label: "Économie / an", value: formatEur(stats.yearEur), icon: TrendingUp, color: "text-brand-orange" },
               { label: "Équivalent ETP", value: stats.etp.toFixed(2), icon: Users, color: "text-primary" },
             ].map(kpi => {
               const Icon = kpi.icon;
@@ -339,7 +339,7 @@ export default function ResultsDashboard({ result, initialRate, initialPeople, o
                 <span className="flex-1 text-xs font-bold text-foreground">Total</span>
                 <span className="text-xs font-bold text-primary w-14 text-right">{stats.effectiveHours.toFixed(1)}h</span>
                 <span className="text-xs font-bold text-primary w-20 text-right">{Math.round(stats.weekEur).toLocaleString("fr-FR")}€</span>
-                <span className="text-xs font-bold text-lecko-orange w-20 text-right">{Math.round(stats.yearEur).toLocaleString("fr-FR")}€</span>
+                <span className="text-xs font-bold text-brand-orange w-20 text-right">{Math.round(stats.yearEur).toLocaleString("fr-FR")}€</span>
               </div>
             </div>
           </div>

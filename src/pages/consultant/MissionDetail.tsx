@@ -251,7 +251,7 @@ export default function MissionDetail() {
             <p className="text-foreground font-medium">{error || "Mission introuvable"}</p>
             <Link
               to="/missions"
-              className="text-sm text-lecko-blue hover:underline mt-3 inline-block"
+              className="text-sm text-brand-blue hover:underline mt-3 inline-block"
             >
               Retour aux missions
             </Link>
@@ -269,7 +269,7 @@ export default function MissionDetail() {
   const totalHeuresSem = chantiers.reduce((s, c) => s + c.temps_gagne_heures_semaine, 0);
 
   const inputCls =
-    "w-full bg-card border-2 border-border rounded-xl px-4 py-3 text-sm outline-none focus:border-lecko-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
+    "w-full bg-card border-2 border-border rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
 
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
@@ -416,7 +416,7 @@ export default function MissionDetail() {
               action={
                 <button
                   onClick={() => setShowEntretienModal(true)}
-                  className="flex items-center gap-2 h-9 px-4 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:bg-blue-700 transition-all"
+                  className="flex items-center gap-2 h-9 px-4 rounded-xl text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-all"
                 >
                   <Plus size={14} /> Ajouter
                 </button>
@@ -434,7 +434,7 @@ export default function MissionDetail() {
             {entretiens.map((ent) => (
               <div
                 key={ent.id}
-                className="bg-card border border-border rounded-xl p-4 space-y-3 hover:border-lecko-blue/20 transition-colors"
+                className="bg-card border border-border rounded-xl p-4 space-y-3 hover:border-brand-blue/20 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -497,7 +497,7 @@ export default function MissionDetail() {
                     <>
                       <button
                         onClick={() => navigate(`/missions/${id}/entretien/${ent.id}`)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-lecko-blue text-white hover:bg-blue-700 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-brand-blue text-white hover:bg-blue-700 transition-all"
                       >
                         <ExternalLink size={12} /> Lancer
                       </button>
@@ -552,7 +552,7 @@ export default function MissionDetail() {
             </p>
             <Link
               to={`/missions/${id}/roadmap`}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:bg-blue-700 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-all"
             >
               <ExternalLink size={14} /> Ouvrir la feuille de route
             </Link>
@@ -667,7 +667,7 @@ export default function MissionDetail() {
                       onClick={() => setEntretienForm((f) => ({ ...f, mode }))}
                       className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border-2 transition-all ${
                         entretienForm.mode === mode
-                          ? "border-lecko-blue bg-lecko-blue/5 text-lecko-blue"
+                          ? "border-brand-blue bg-brand-blue/5 text-brand-blue"
                           : "border-border text-foreground-muted hover:text-foreground"
                       }`}
                     >
@@ -679,7 +679,7 @@ export default function MissionDetail() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-2.5 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:bg-blue-700 transition-all disabled:opacity-50"
+                className="w-full py-2.5 rounded-xl text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-all disabled:opacity-50"
               >
                 {submitting ? "Ajout..." : "Ajouter l'entretien"}
               </button>

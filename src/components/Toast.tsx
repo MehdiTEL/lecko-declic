@@ -17,9 +17,9 @@ export function Toast({ message, type = "success", onClose }: ToastProps) {
     <div className="fixed bottom-6 right-6 z-50 animate-slide-in-bottom">
       <div className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3 shadow-elevated">
         {type === "success" ? (
-          <Check size={16} className="text-lecko-green shrink-0" />
+          <Check size={16} className="text-brand-green shrink-0" />
         ) : (
-          <AlertTriangle size={16} className="text-lecko-orange shrink-0" />
+          <AlertTriangle size={16} className="text-brand-orange shrink-0" />
         )}
         <span className="text-sm text-foreground-secondary">{message}</span>
         <button

@@ -108,14 +108,14 @@ export default function PhaseZoomMetier({ metiers, data, onChange }: Props) {
                 className={cn(
                   "flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all",
                   i === activeMetierIdx
-                    ? "bg-lecko-blue/20 text-lecko-blue border border-lecko-blue/30"
+                    ? "bg-brand-blue/20 text-brand-blue border border-brand-blue/30"
                     : "bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700"
                 )}
               >
                 <User2 size={15} />
                 {m}
                 {hasTaches && (
-                  <span className="text-[10px] font-mono bg-lecko-blue/30 text-lecko-blue px-1.5 py-0.5 rounded-full">
+                  <span className="text-[10px] font-mono bg-brand-blue/30 text-brand-blue px-1.5 py-0.5 rounded-full">
                     {metierData.taches.length}
                   </span>
                 )}
@@ -145,7 +145,7 @@ export default function PhaseZoomMetier({ metiers, data, onChange }: Props) {
           {/* Journée type */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <Clock size={18} className="text-lecko-blue" />
+              <Clock size={18} className="text-brand-blue" />
               <p className="text-white text-lg font-medium">
                 À quoi ressemble une journée type ?
               </p>
@@ -154,7 +154,7 @@ export default function PhaseZoomMetier({ metiers, data, onChange }: Props) {
               rows={3}
               value={current.journeeType}
               onChange={(e) => updateMetier(activeMetierIdx, { journeeType: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white text-base placeholder:text-slate-600 outline-none focus:border-lecko-blue transition-colors resize-none leading-relaxed"
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white text-base placeholder:text-slate-600 outline-none focus:border-brand-blue transition-colors resize-none leading-relaxed"
               placeholder="Ex: 8h-9h traitement des mails et demandes urgentes, 9h-11h saisie et vérification des dossiers..."
             />
           </div>
@@ -270,7 +270,7 @@ export default function PhaseZoomMetier({ metiers, data, onChange }: Props) {
 
               <button
                 onClick={() => addTache(activeMetierIdx)}
-                className="w-full py-3 rounded-xl border-2 border-dashed border-slate-700 text-slate-400 text-sm hover:border-lecko-blue hover:text-lecko-blue transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl border-2 border-dashed border-slate-700 text-slate-400 text-sm hover:border-brand-blue hover:text-brand-blue transition-all flex items-center justify-center gap-2"
               >
                 <Plus size={15} />
                 Ajouter une tâche
@@ -287,7 +287,7 @@ export default function PhaseZoomMetier({ metiers, data, onChange }: Props) {
               rows={2}
               value={current.fluxDonnees}
               onChange={(e) => updateMetier(activeMetierIdx, { fluxDonnees: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white text-base placeholder:text-slate-600 outline-none focus:border-lecko-blue transition-colors resize-none leading-relaxed"
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white text-base placeholder:text-slate-600 outline-none focus:border-brand-blue transition-colors resize-none leading-relaxed"
               placeholder="Ex: Les données arrivent par mail, sont saisies dans SAP, puis exportées en Excel pour le DAF..."
             />
           </div>

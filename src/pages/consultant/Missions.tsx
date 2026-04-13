@@ -123,7 +123,7 @@ export default function Missions() {
   }
 
   const inputCls =
-    "w-full bg-card border-2 border-border rounded-xl px-4 py-3 text-sm outline-none focus:border-lecko-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
+    "w-full bg-card border-2 border-border rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-blue transition-all placeholder:text-foreground-muted/40 text-foreground";
 
   return (
     <ConsultantLayout activeSection="missions">
@@ -147,7 +147,7 @@ export default function Missions() {
               setError(null);
               setCreateOpen(true);
             }}
-            className="flex items-center gap-2 h-10 px-5 rounded-xl bg-lecko-blue text-white text-sm font-semibold hover:bg-blue-700 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
+            className="flex items-center gap-2 h-10 px-5 rounded-xl bg-brand-blue text-white text-sm font-semibold hover:bg-blue-700 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
           >
             <Plus size={15} strokeWidth={2} />
             Nouvelle mission
@@ -183,8 +183,8 @@ export default function Missions() {
       {/* EMPTY STATE */}
       {!loading && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-lecko-blue/8 flex items-center justify-center mb-5">
-            <Briefcase size={28} className="text-lecko-blue/50" strokeWidth={1.5} />
+          <div className="w-16 h-16 rounded-2xl bg-brand-blue/8 flex items-center justify-center mb-5">
+            <Briefcase size={28} className="text-brand-blue/50" strokeWidth={1.5} />
           </div>
           <h3 className="font-consultant font-semibold text-foreground mb-2">
             Aucune mission active
@@ -199,7 +199,7 @@ export default function Missions() {
               setError(null);
               setCreateOpen(true);
             }}
-            className="flex items-center gap-2 h-10 px-5 rounded-xl bg-lecko-blue text-white text-sm font-semibold hover:bg-blue-700 transition-all"
+            className="flex items-center gap-2 h-10 px-5 rounded-xl bg-brand-blue text-white text-sm font-semibold hover:bg-blue-700 transition-all"
           >
             <Plus size={15} />
             Créer une mission
@@ -227,7 +227,7 @@ export default function Missions() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 onClick={() => navigate(`/missions/${mission.id}`)}
-                className="group relative bg-card border border-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:border-lecko-blue/30 hover:shadow-lg hover:shadow-lecko-blue/5 hover:-translate-y-0.5"
+                className="group relative bg-card border border-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:border-brand-blue/30 hover:shadow-lg hover:shadow-brand-blue/5 hover:-translate-y-0.5"
               >
                 {/* Indicateur statut — barre colorée en haut */}
                 <div
@@ -240,7 +240,7 @@ export default function Missions() {
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3 mt-1">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lecko-blue bg-lecko-blue/8 text-sm font-bold font-mono flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-brand-blue bg-brand-blue/8 text-sm font-bold font-mono flex-shrink-0">
                       {mission.client_organisation.slice(0, 2).toUpperCase()}
                     </div>
                     <div>
@@ -255,7 +255,7 @@ export default function Missions() {
                   <ArrowRight
                     size={14}
                     strokeWidth={1.5}
-                    className="text-foreground-muted/40 group-hover:text-lecko-blue group-hover:translate-x-0.5 transition-all mt-1"
+                    className="text-foreground-muted/40 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all mt-1"
                   />
                 </div>
 
@@ -289,7 +289,7 @@ export default function Missions() {
                     </div>
                     <div className="h-1 bg-mission-alt rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-lecko-blue rounded-full transition-all"
+                        className="h-full bg-brand-blue rounded-full transition-all"
                         style={{
                           width: `${(nbTermines / nbEntretiensTotal) * 100}%`,
                         }}
@@ -488,7 +488,7 @@ export default function Missions() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold bg-lecko-blue text-white hover:bg-blue-700 transition-all disabled:opacity-60"
+                  className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold bg-brand-blue text-white hover:bg-blue-700 transition-all disabled:opacity-60"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
                   Créer la mission

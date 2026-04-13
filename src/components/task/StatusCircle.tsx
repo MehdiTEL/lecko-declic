@@ -24,8 +24,8 @@ export default function StatusCircle({ status, onChange }: StatusCircleProps) {
       transition={{ duration: 0.3 }}
       className="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer"
       style={{
-        borderColor: status === "done" ? "hsl(var(--accent-green-text))" : status === "in_progress" ? "hsl(var(--lecko-blue))" : "hsl(var(--border))",
-        backgroundColor: status === "done" ? "hsl(var(--accent-green-text))" : status === "in_progress" ? "hsl(var(--lecko-blue) / 0.12)" : "transparent",
+        borderColor: status === "done" ? "hsl(var(--accent-green-text))" : status === "in_progress" ? "hsl(var(--brand-blue))" : "hsl(var(--border))",
+        backgroundColor: status === "done" ? "hsl(var(--accent-green-text))" : status === "in_progress" ? "hsl(var(--brand-blue) / 0.12)" : "transparent",
       }}
       title={status === "todo" ? "Marquer en cours" : status === "in_progress" ? "Marquer comme fait" : "Remettre a faire"}
     >
