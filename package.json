@@ -5,10 +5,10 @@
   "author": "DÉCLIC",
   "license": "MIT",
   "private": false,
-  "homepage": "https://github.com/MehdiTEL/lecko-declic",
+  "homepage": "https://github.com/MehdiTEL/declic",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MehdiTEL/lecko-declic.git"
+    "url": "https://github.com/MehdiTEL/declic.git"
   },
   "keywords": [
     "automatisation",
