@@ -1,0 +1,52 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
+  try {
+    const { scores, niveaux, domaines_evalues } = await req.json();
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": ANTHROPIC_API_KEY!,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 512,
+        system: "Tu es un conseiller en formation IA. Donne des recommandations personnalisées basées sur les scores de diagnostic. Sois concis (3-4 phrases max), pratique et encourageant. Réponds en français.",
+        messages: [
+          {
+            role: "user",
+            content: `Voici les résultats du diagnostic IA d'un professionnel :\n\nDomaines évalués : ${domaines_evalues.join(", ")}\nScores : ${JSON.stringify(scores)}\nNiveaux : ${JSON.stringify(niveaux)}\n\nDonne une recommandation personnalisée courte sur les prochaines étapes.`,
+          },
+        ],
+      }),
+    });
+
+    const data = await response.json();
+
+    return new Response(
+      JSON.stringify({
+        recommendation: data.content?.[0]?.text ?? "Continuez à explorer les formations proposées.",
+      }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ recommendation: "Continuez à explorer les formations proposées." }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+});

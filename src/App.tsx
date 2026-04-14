@@ -1,63 +1,50 @@
-import React, { lazy, Suspense } from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
 
-const Missions            = lazy(() => import("./pages/consultant/Missions"));
-const MissionDetail       = lazy(() => import("./pages/consultant/MissionDetail"));
-const EntretienLive       = lazy(() => import("./pages/consultant/EntretienLive"));
-const RoadmapPage         = lazy(() => import("./pages/consultant/Roadmap"));
-const Bibliotheque        = lazy(() => import("./pages/consultant/Bibliotheque"));
-const QuestionnaireEditor = lazy(() => import("./pages/consultant/QuestionnaireEditor"));
-const Settings            = lazy(() => import("./pages/Settings"));
-const EntretienAsync      = lazy(() => import("./pages/EntretienAsync"));
-const PortailClient       = lazy(() => import("./pages/PortailClient"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const DiagnosticPage = lazy(() => import("./pages/DiagnosticPage"));
+const DiagnosticTestPage = lazy(() => import("./pages/DiagnosticTestPage"));
+const DiagnosticResultsPage = lazy(() => import("./pages/DiagnosticResultsPage"));
+const FormationsPage = lazy(() => import("./pages/FormationsPage"));
+const FormationDetailPage = lazy(() => import("./pages/FormationDetailPage"));
+const ModulePage = lazy(() => import("./pages/ModulePage"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage"));
+const ConnexionPage = lazy(() => import("./pages/ConnexionPage"));
 
 const queryClient = new QueryClient();
 
-const Spinner = () => (
-  <div className="min-h-screen flex items-center justify-center bg-slate-950">
-    <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-  </div>
-);
+function Spinner() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0A0F]">
+      <div className="w-6 h-6 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster /><Sonner />
+        <Toaster />
+        <Sonner />
         <BrowserRouter>
-          <AuthProvider>
-            <Suspense fallback={<Spinner />}>
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/entretien/:token" element={<EntretienAsync />} />
-                <Route path="/client/:token" element={<PortailClient />} />
-                <Route path="/missions"
-                  element={<ProtectedRoute><Missions /></ProtectedRoute>} />
-                <Route path="/missions/:id"
-                  element={<ProtectedRoute><MissionDetail /></ProtectedRoute>} />
-                <Route path="/missions/:id/entretien/:entretienId"
-                  element={<ProtectedRoute><EntretienLive /></ProtectedRoute>} />
-                <Route path="/missions/:id/roadmap"
-                  element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
-                <Route path="/bibliotheque"
-                  element={<ProtectedRoute><Bibliotheque /></ProtectedRoute>} />
-                <Route path="/bibliotheque/questionnaire/:id"
-                  element={<ProtectedRoute><QuestionnaireEditor /></ProtectedRoute>} />
-                <Route path="/parametres"
-                  element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                <Route path="/" element={<Navigate to="/missions" replace />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </AuthProvider>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/diagnostic" element={<DiagnosticPage />} />
+              <Route path="/diagnostic/test" element={<DiagnosticTestPage />} />
+              <Route path="/diagnostic/resultats" element={<DiagnosticResultsPage />} />
+              <Route path="/formations" element={<FormationsPage />} />
+              <Route path="/formations/:slug" element={<FormationDetailPage />} />
+              <Route path="/formations/:slug/:moduleId" element={<ModulePage />} />
+              <Route path="/tableau-de-bord" element={<DashboardPage />} />
+              <Route path="/connexion" element={<ConnexionPage />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
